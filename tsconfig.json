@@ -1,0 +1,23 @@
+{
+    "compilerOptions": {
+        "outDir": "build",
+        "target": "es2018",
+        "lib": [
+            "es2018",
+            "dom"
+        ],
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "declaration": true,
+        "checkJs": false,
+        "strict": true,
+        "noImplicitReturns": true,
+        "skipLibCheck": true,
+        "allowSyntheticDefaultImports": true,
+        "esModuleInterop": true,
+        "typeRoots": [
+            "./node_modules/@types/",
+            "./types"
+        ]
+    }
+}

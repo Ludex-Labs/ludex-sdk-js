@@ -1,0 +1,15 @@
+{
+  "name": "ludex-sdk-js",
+  "version": "1.0.0",
+  "description": "",
+  "main": "types/index.ts",
+  "scripts": {
+    "build": "tsc",
+    "postinstall": "npm run build"
+  },
+  "author": "",
+  "license": "",
+  "devDependencies": {
+    "typescript": "^4.4.4"
+  }
+}
