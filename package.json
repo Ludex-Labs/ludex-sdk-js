@@ -1,6 +1,15 @@
 {
   "name": "ludex-sdk-js",
   "version": "1.0.0",
+  "repository": {
+    "directory": "packages/@ludex-labs/ludex-sdk-js",
+    "type": "git",
+    "url": "https://github.com/Ludex-Labs/ludex-sdk-js.git"
+  },
+  "publishConfig": {
+    "registry":"https://npm.pkg.github.com"
+  },
+  "private": false,
   "description": "",
   "main": "types/index.ts",
   "scripts": {
