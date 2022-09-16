@@ -2138,15 +2138,10 @@ import { getAssociatedTokenAddress, NATIVE_MINT, TOKEN_PROGRAM_ID } from '@solan
 import { _ludexChallengeApi, poll, transferWrappedSol, ApiConfig } from './utils';
 
 
-export class ChallengeClient {
-  programAddress: anchor.web3.PublicKey;
+export class ChallengeAPIClient {
   ludexChallengeApi: <T>(config: ApiConfig) => Promise<T>
-  connection: anchor.web3.Connection;
-  constructor(apiKey: string, isMainnet: boolean) {
+  constructor(apiKey: string) {
     this.ludexChallengeApi = _ludexChallengeApi(apiKey);
-    this.connection = new anchor.web3.Connection(isMainnet ? 'https://api.mainnet-beta.solana.com' : 'https://api.devnet.solana.com');
-    this.programAddress = new anchor.web3.PublicKey(isMainnet ? "BuPvutSnk9NdTZHFiA6UZm6oPwGszp6ozMwoAgJMDBGR"
-      : "CoiJYvDgj8BqQr8MEBjyXKfsQFrYQSYdwEuzjivE2D7")
   }
 
   async _apiCreateChallenge(payoutId: number) {
@@ -2212,22 +2207,18 @@ export class ChallengeClient {
   }
 
   async resolveWithPayment(id: string, payment: { to: string, amount: number }[], skipConfirmation?: boolean) { }
-
-  client(id: string, connection: anchor.web3.Connection = this.connection, programAddress: anchor.web3.PublicKey = this.programAddress) {
-    const client = new ChallengeTX(programAddress, connection, id);
-    return client;
-  }
 }
 
-export class ChallengeTX {
+export class ChallengeTXClient {
   tx = new anchor.web3.Transaction();
   challengeKey: anchor.web3.PublicKey;
   programAddress: anchor.web3.PublicKey;
   connection: anchor.web3.Connection;
-  constructor(programAddress: anchor.web3.PublicKey, connection: anchor.web3.Connection, challengeKey: string) {
+  constructor(isMainnet: boolean, connection: anchor.web3.Connection, challengeKey: string) {
     this.challengeKey = new anchor.web3.PublicKey(challengeKey);
     this.connection = connection;
-    this.programAddress = programAddress;
+    this.programAddress = new anchor.web3.PublicKey(isMainnet ? "BuPvutSnk9NdTZHFiA6UZm6oPwGszp6ozMwoAgJMDBGR"
+      : "CoiJYvDgj8BqQr8MEBjyXKfsQFrYQSYdwEuzjivE2D7");
   }
 
   async join(_user: string) {
