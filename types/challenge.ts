@@ -2150,7 +2150,8 @@ export class ChallengeAPIClient {
 
   async _apiGetChallenge(id: number) {
     return this.ludexChallengeApi<{
-      id: number, chainId?: string,
+      id: number,
+      blockchainAddress?: string,
       creatingAt?: string,
       createdAt?: string,
       endedAt?: string,
@@ -2181,8 +2182,8 @@ export class ChallengeAPIClient {
 
   async create(payoutId: number) {
     const challengeId = (await this._apiCreateChallenge(payoutId)).id;
-    const challenge = await poll(() => this._apiGetChallenge(challengeId), ({ chainId }) => chainId !== undefined, 1000);
-    return { challengeId, ChainId: challenge.chainId! };
+    const challenge = await poll(() => this._apiGetChallenge(challengeId), ({ blockchainAddress }) => blockchainAddress !== undefined, 1000);
+    return { challengeId, blockchainAddress: challenge.blockchainAddress! };
   }
 
   async lock(id: number, skipConfirmation: boolean = false) {
