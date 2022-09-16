@@ -2131,3 +2131,159 @@ export const IDL: Challenge = {
     }
   ]
 };
+
+import * as anchor from '@project-serum/anchor'
+import { Program } from '@project-serum/anchor';
+import { getAssociatedTokenAddress, NATIVE_MINT, TOKEN_PROGRAM_ID } from '@solana/spl-token';
+import { _ludexChallengeApi, poll, transferWrappedSol, ApiConfig } from './utils';
+
+
+export class ChallengeClient {
+  programAddress: anchor.web3.PublicKey;
+  ludexChallengeApi: <T>(config: ApiConfig) => Promise<T>
+  connection: anchor.web3.Connection;
+  constructor(apiKey: string, isMainnet: boolean) {
+    this.ludexChallengeApi = _ludexChallengeApi(apiKey);
+    this.connection = new anchor.web3.Connection(isMainnet ? 'https://api.mainnet-beta.solana.com' : 'https://api.devnet.solana.com');
+    this.programAddress = new anchor.web3.PublicKey(isMainnet ? "BuPvutSnk9NdTZHFiA6UZm6oPwGszp6ozMwoAgJMDBGR"
+      : "CoiJYvDgj8BqQr8MEBjyXKfsQFrYQSYdwEuzjivE2D7")
+  }
+
+  async _apiCreateChallenge(payoutId: number) {
+    return this.ludexChallengeApi<{ id: number }>({ method: 'POST', body: JSON.stringify({ payoutId }) });
+  }
+
+  async _apiGetChallenge(id: number) {
+    return this.ludexChallengeApi<{
+      id: number, chainId?: string,
+      creatingAt?: string,
+      createdAt?: string,
+      endedAt?: string,
+      lockingAt?: string,
+      lockedAt?: string,
+      cancelingAt?: string,
+      canceledAt?: string,
+      resolvingAt?: string,
+      resolvedAt?: string,
+      verifyingAt?: string,
+      verifiedAt?: string,
+      redeemingAt?: string,
+      redeemedAt?: string,
+    }>({ method: 'GET', path: id.toString() });
+  }
+
+  async _apiLockChallenge(id: number) {
+    await this.ludexChallengeApi({ method: 'HEAD', path: `${id}?action=lock` });
+  }
+
+  async _apiCancelChallenge(id: number) {
+    await this.ludexChallengeApi({ method: 'HEAD', path: `${id}?action=cancel` });
+  }
+
+  async _apiResolveChallenge(id: number, winner: string, lock: boolean = false) {
+    await this.ludexChallengeApi({ method: 'HEAD', path: `${id}?action=resolve&winner=${winner}&lock=${lock.toString()}` });
+  }
+
+  async create(payoutId: number) {
+    const challengeId = (await this._apiCreateChallenge(payoutId)).id;
+    const challenge = await poll(() => this._apiGetChallenge(challengeId), ({ chainId }) => chainId !== undefined, 1000);
+    return { challengeId, ChainId: challenge.chainId! };
+  }
+
+  async lock(id: number, skipConfirmation: boolean = false) {
+    await this._apiLockChallenge(id);
+    if (!skipConfirmation) {
+      await poll(() => this._apiGetChallenge(Number(id)), ({ lockedAt }) => lockedAt === undefined, 1000);
+    }
+  }
+
+  async cancel(id: number, skipConfirmation: boolean = false) {
+    await this._apiCancelChallenge(id);
+    if (!skipConfirmation) {
+      await poll(() => this._apiGetChallenge(Number(id)), ({ canceledAt }) => canceledAt === undefined, 1000);
+    }
+  }
+
+  async resolve(id: number, winner: string, skipConfirmation: boolean = false) {
+    await this._apiResolveChallenge(id, winner);
+    if (!skipConfirmation) {
+      await poll(() => this._apiGetChallenge(Number(id)), ({ resolvedAt }) => resolvedAt === undefined, 1000);
+    }
+  }
+
+  async resolveWithPayment(id: string, payment: { to: string, amount: number }[], skipConfirmation?: boolean) { }
+
+  client(id: string, connection: anchor.web3.Connection = this.connection, programAddress: anchor.web3.PublicKey = this.programAddress) {
+    const client = new ChallengeTX(programAddress, connection, id);
+    return client;
+  }
+}
+
+export class ChallengeTX {
+  tx = new anchor.web3.Transaction();
+  challengeKey: anchor.web3.PublicKey;
+  programAddress: anchor.web3.PublicKey;
+  connection: anchor.web3.Connection;
+  constructor(programAddress: anchor.web3.PublicKey, connection: anchor.web3.Connection, challengeKey: string) {
+    this.challengeKey = new anchor.web3.PublicKey(challengeKey);
+    this.connection = connection;
+    this.programAddress = programAddress;
+  }
+
+  async join(_user: string) {
+    const program = new Program<Challenge>(
+      IDL,
+      this.programAddress,
+    );
+    const user = new anchor.web3.PublicKey(_user);
+    const [player, _pbump] = await anchor.web3.PublicKey.findProgramAddress(
+      [
+        this.challengeKey.toBuffer(),
+        user.toBuffer(),
+      ],
+      this.programAddress
+    );
+
+    const challenge = await program.account.challenge.fetch(this.challengeKey);
+    const pool = await program.account.pool.fetch(challenge.pool);
+    const provider = await program.account.provider.fetch(challenge.provider);
+    let userTokenAccount: anchor.web3.PublicKey;
+
+    userTokenAccount = await getAssociatedTokenAddress(user, pool.mint);
+    if (pool.mint === NATIVE_MINT) {
+      transferWrappedSol(user, userTokenAccount, challenge.entryFee.toNumber(), this.tx);
+    }
+
+    this.tx.add(await program.methods.join().accounts({
+      provider: challenge.provider,
+      pool: challenge.pool,
+      poolTokenAccount: pool.tokenAccount,
+      challenge: this.challengeKey,
+      player: player,
+      providerAuthority: provider.authority,
+      user: user,
+      userTokenAccount: userTokenAccount,
+      payer: user,
+      mint: pool.mint,
+      tokenProgram: TOKEN_PROGRAM_ID,
+      systemProgram: anchor.web3.SystemProgram.programId
+    }).instruction());
+
+    return this;
+  }
+
+  async send(signers: anchor.web3.Signer[]) {
+    const sig = await this.connection.sendTransaction(this.tx, signers);
+    const latestBlockHash =
+      await this.connection.getLatestBlockhash();
+    this.connection.confirmTransaction({
+      signature: sig, blockhash: latestBlockHash.blockhash,
+      lastValidBlockHeight: latestBlockHash.lastValidBlockHeight,
+    });
+    return sig;
+  }
+
+  getTx() {
+    return this.tx.serialize().toString();
+  }
+}

@@ -1,6 +1,6 @@
-export type NftWager = {
+export type NftChallenge = {
   "version": "0.1.0",
-  "name": "nft_wager",
+  "name": "nft_challenge",
   "instructions": [
     {
       "name": "initializeProvider",
@@ -635,9 +635,9 @@ export type NftWager = {
   ]
 };
 
-export const IDL: NftWager = {
+export const IDL: NftChallenge = {
   "version": "0.1.0",
-  "name": "nft_wager",
+  "name": "nft_challenge",
   "instructions": [
     {
       "name": "initializeProvider",
