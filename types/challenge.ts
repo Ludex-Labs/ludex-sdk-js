@@ -2141,7 +2141,7 @@ import { _ludexChallengeApi, poll, transferWrappedSol, ApiConfig } from './utils
 export class ChallengeAPIClient {
   ludexChallengeApi: <T>(config: ApiConfig) => Promise<T>
   constructor(apiKey: string) {
-    this.ludexChallengeApi = _ludexChallengeApi(apiKey);
+    this.ludexChallengeApi = _ludexChallengeApi(apiKey, 'challenge');
   }
 
   async _apiCreateChallenge(payoutId: number) {
@@ -2207,6 +2207,7 @@ export class ChallengeAPIClient {
     }
   }
 
+  /* TODO: Coming soon with applying your own specific payments */
   async resolveWithPayment(id: string, payment: { to: string, amount: number }[], skipConfirmation?: boolean) { }
 }
 

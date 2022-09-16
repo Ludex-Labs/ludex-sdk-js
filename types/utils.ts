@@ -23,8 +23,8 @@ export const transferWrappedSol = (
 }
 
 export type ApiConfig = RequestInit & { path?: string };
-export const _ludexChallengeApi = (bearerToken: string) => async <T>(config: ApiConfig): Promise<T> => {
-    const response = await fetch(`https://api.ludex.gg/challenge/${config.path || ""}`, { ...config, headers: { ...config.headers, "Content-Type": "application/json", 'Authorization': `Bearer ${bearerToken}` } });
+export const _ludexChallengeApi = (bearerToken: string, api: string) => async <T>(config: ApiConfig): Promise<T> => {
+    const response = await fetch(`https://api.ludex.gg/${api}/${config.path || ""}`, { ...config, headers: { ...config.headers, "Content-Type": "application/json", 'Authorization': `Bearer ${bearerToken}` } });
     const data = await response.json();
     return data as T;
 }
