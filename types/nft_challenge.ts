@@ -1271,3 +1271,5 @@ export const IDL: NftChallenge = {
     }
   ]
 };
+
+
