@@ -1276,7 +1276,7 @@ export const IDL: NftChallenge = {
 import * as anchor from '@project-serum/anchor'
 import { Program } from '@project-serum/anchor';
 import { getAssociatedTokenAddress, NATIVE_MINT, TOKEN_PROGRAM_ID } from '@solana/spl-token';
-import { _ludexChallengeApi, poll, transferWrappedSol, ApiConfig } from './utils';
+import { _ludexChallengeApi, poll, transferWrappedSol, ApiConfig } from '../common/utils';
 
 
 /* TODO: COMING SOON */

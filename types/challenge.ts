@@ -2135,7 +2135,7 @@ export const IDL: Challenge = {
 import * as anchor from '@project-serum/anchor'
 import { Program } from '@project-serum/anchor';
 import { getAssociatedTokenAddress, NATIVE_MINT, TOKEN_PROGRAM_ID } from '@solana/spl-token';
-import { _ludexChallengeApi, poll, transferWrappedSol, ApiConfig } from './utils';
+import { _ludexChallengeApi, poll, transferWrappedSol, ApiConfig } from '../common/utils';
 
 
 export class ChallengeAPIClient {
@@ -2144,8 +2144,8 @@ export class ChallengeAPIClient {
     this.ludexChallengeApi = _ludexChallengeApi(apiKey, 'challenge');
   }
 
-  async _apiCreateChallenge(payoutId: number) {
-    return this.ludexChallengeApi<{ id: number }>({ method: 'POST', body: JSON.stringify({ payoutId }) });
+  async _apiCreateChallenge(payoutId: number, limit: number = 2) {
+    return this.ludexChallengeApi<{ id: number }>({ method: 'POST', body: JSON.stringify({ payoutId, limit }) });
   }
 
   async _apiGetChallenge(id: number) {
@@ -2180,8 +2180,8 @@ export class ChallengeAPIClient {
     await this.ludexChallengeApi({ method: 'HEAD', path: `${id}?action=resolve&winner=${winner}&lock=${lock.toString()}` });
   }
 
-  async create(payoutId: number) {
-    const challengeId = (await this._apiCreateChallenge(payoutId)).id;
+  async create(payoutId: number, limit: number = 2) {
+    const challengeId = (await this._apiCreateChallenge(payoutId, limit)).id;
     const challenge = await poll(() => this._apiGetChallenge(challengeId), ({ blockchainAddress }) => blockchainAddress !== undefined, 1000);
     return { challengeId, blockchainAddress: challenge.blockchainAddress! };
   }
@@ -2265,6 +2265,39 @@ export class ChallengeTXClient {
     return this;
   }
 
+  async leave(_user: string) {
+    const program = new Program<Challenge>(
+      IDL,
+      this.programAddress,
+    );
+    const user = new anchor.web3.PublicKey(_user);
+    const [player, _pbump] = await anchor.web3.PublicKey.findProgramAddress(
+      [
+        this.challengeKey.toBuffer(),
+        user.toBuffer(),
+      ],
+      this.programAddress
+    );
+
+    const challenge = await program.account.challenge.fetch(this.challengeKey);
+    const pool = await program.account.pool.fetch(challenge.pool);
+    let userTokenAccount: anchor.web3.PublicKey;
+
+    userTokenAccount = await getAssociatedTokenAddress(user, pool.mint);
+    this.tx.add(await program.methods.leave().accounts({
+      provider: challenge.provider,
+      pool: challenge.pool,
+      poolTokenAccount: pool.tokenAccount,
+      challenge: this.challengeKey,
+      player: new anchor.web3.PublicKey(_user),
+      user: user,
+      userTokenAccount: userTokenAccount,
+      mint: pool.mint,
+      tokenProgram: TOKEN_PROGRAM_ID,
+      systemProgram: anchor.web3.SystemProgram.programId
+    }).instruction());
+  }
+
   async send(signers: anchor.web3.Signer[]) {
     const sig = await this.connection.sendTransaction(this.tx, signers);
     const latestBlockHash =
@@ -2277,6 +2310,6 @@ export class ChallengeTXClient {
   }
 
   getTx() {
-    return this.tx.serialize().toString();
+    return this.tx;
   }
 }
