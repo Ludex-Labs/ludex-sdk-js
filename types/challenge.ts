@@ -2270,33 +2270,48 @@ export class ChallengeAPIClient {
 export class ChallengeTXClient {
   tx = new anchor.web3.Transaction();
   challengeKey: anchor.web3.PublicKey;
-  programAddress: anchor.web3.PublicKey;
+  program: Program<Challenge>;
   connection: anchor.web3.Connection;
   constructor(
     isMainnet: boolean,
     connection: anchor.web3.Connection,
-    challengeKey: string
+    challengeKey: string,
+    wallet?: anchor.Wallet
   ) {
     this.challengeKey = new anchor.web3.PublicKey(challengeKey);
     this.connection = connection;
-    this.programAddress = new anchor.web3.PublicKey(
+    const programAddress = new anchor.web3.PublicKey(
       isMainnet
         ? "BuPvutSnk9NdTZHFiA6UZm6oPwGszp6ozMwoAgJMDBGR"
         : "CoiJYvDgj8BqQr8MEBjyXKfsQFrYQSYdwEuzjivE2D7"
     );
+    this.program = new Program<Challenge>(
+      IDL,
+      programAddress,
+      wallet
+        ? new anchor.AnchorProvider(
+            connection,
+            wallet,
+            anchor.AnchorProvider.defaultOptions()
+          )
+        : undefined
+    );
   }
 
   async join(_user: string) {
-    const program = new Program<Challenge>(IDL, this.programAddress);
     const user = new anchor.web3.PublicKey(_user);
     const [player, _pbump] = await anchor.web3.PublicKey.findProgramAddress(
       [this.challengeKey.toBuffer(), user.toBuffer()],
-      this.programAddress
+      this.program.programId
     );
 
-    const challenge = await program.account.challenge.fetch(this.challengeKey);
-    const pool = await program.account.pool.fetch(challenge.pool);
-    const provider = await program.account.provider.fetch(challenge.provider);
+    const challenge = await this.program.account.challenge.fetch(
+      this.challengeKey
+    );
+    const pool = await this.program.account.pool.fetch(challenge.pool);
+    const provider = await this.program.account.provider.fetch(
+      challenge.provider
+    );
     let userTokenAccount: anchor.web3.PublicKey;
 
     userTokenAccount = await getAssociatedTokenAddress(user, pool.mint);
@@ -2310,7 +2325,7 @@ export class ChallengeTXClient {
     }
 
     this.tx.add(
-      await program.methods
+      await this.program.methods
         .join()
         .accounts({
           provider: challenge.provider,
@@ -2333,27 +2348,28 @@ export class ChallengeTXClient {
   }
 
   async leave(_user: string) {
-    const program = new Program<Challenge>(IDL, this.programAddress);
     const user = new anchor.web3.PublicKey(_user);
     const [player, _pbump] = await anchor.web3.PublicKey.findProgramAddress(
       [this.challengeKey.toBuffer(), user.toBuffer()],
-      this.programAddress
+      this.program.programId
     );
 
-    const challenge = await program.account.challenge.fetch(this.challengeKey);
-    const pool = await program.account.pool.fetch(challenge.pool);
+    const challenge = await this.program.account.challenge.fetch(
+      this.challengeKey
+    );
+    const pool = await this.program.account.pool.fetch(challenge.pool);
     let userTokenAccount: anchor.web3.PublicKey;
 
     userTokenAccount = await getAssociatedTokenAddress(user, pool.mint);
     this.tx.add(
-      await program.methods
+      await this.program.methods
         .leave()
         .accounts({
           provider: challenge.provider,
           pool: challenge.pool,
           poolTokenAccount: pool.tokenAccount,
           challenge: this.challengeKey,
-          player: new anchor.web3.PublicKey(_user),
+          player: player,
           user: user,
           userTokenAccount: userTokenAccount,
           mint: pool.mint,
