@@ -2,7 +2,8 @@
   "name": "ludex-sdk-js",
   "version": "1.0.0",
   "description": "",
-  "main": "types/index.ts",
+  "main": "dist/types/index.js",
+  "types": "dist/types/index.d.ts",
   "scripts": {
     "build": "tsc",
     "postinstall": "npm run build"
