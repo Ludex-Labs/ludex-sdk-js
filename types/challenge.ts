@@ -150,7 +150,7 @@ export type Challenge = {
         },
         {
           name: "limit";
-          type: "u8";
+          type: "u16";
         },
         {
           name: "mediatorRake";
@@ -162,7 +162,11 @@ export type Challenge = {
         },
         {
           name: "expected";
-          type: "u8";
+          type: "u16";
+        },
+        {
+          name: "verified";
+          type: "bool";
         }
       ];
     },
@@ -305,6 +309,72 @@ export type Challenge = {
       args: [];
     },
     {
+      name: "verifiedJoin";
+      accounts: [
+        {
+          name: "provider";
+          isMut: false;
+          isSigner: false;
+        },
+        {
+          name: "pool";
+          isMut: false;
+          isSigner: false;
+        },
+        {
+          name: "poolTokenAccount";
+          isMut: true;
+          isSigner: false;
+        },
+        {
+          name: "challenge";
+          isMut: true;
+          isSigner: false;
+        },
+        {
+          name: "player";
+          isMut: true;
+          isSigner: false;
+        },
+        {
+          name: "payer";
+          isMut: true;
+          isSigner: true;
+        },
+        {
+          name: "providerAuthority";
+          isMut: true;
+          isSigner: true;
+        },
+        {
+          name: "user";
+          isMut: true;
+          isSigner: true;
+        },
+        {
+          name: "userTokenAccount";
+          isMut: true;
+          isSigner: false;
+        },
+        {
+          name: "mint";
+          isMut: false;
+          isSigner: false;
+        },
+        {
+          name: "tokenProgram";
+          isMut: false;
+          isSigner: false;
+        },
+        {
+          name: "systemProgram";
+          isMut: false;
+          isSigner: false;
+        }
+      ];
+      args: [];
+    },
+    {
       name: "leave";
       accounts: [
         {
@@ -329,7 +399,12 @@ export type Challenge = {
         },
         {
           name: "player";
-          isMut: false;
+          isMut: true;
+          isSigner: false;
+        },
+        {
+          name: "playerPayer";
+          isMut: true;
           isSigner: false;
         },
         {
@@ -567,7 +642,7 @@ export type Challenge = {
           isSigner: false;
         },
         {
-          name: "playerAuth";
+          name: "playerPayer";
           isMut: true;
           isSigner: false;
         },
@@ -680,6 +755,205 @@ export type Challenge = {
         }
       ];
       args: [];
+    },
+    {
+      name: "partialResolve";
+      accounts: [
+        {
+          name: "challenge";
+          isMut: false;
+          isSigner: false;
+        },
+        {
+          name: "payment";
+          isMut: true;
+          isSigner: false;
+        },
+        {
+          name: "authority";
+          isMut: true;
+          isSigner: true;
+        }
+      ];
+      args: [
+        {
+          name: "payments";
+          type: {
+            defined: "PaymentArgAcc";
+          };
+        }
+      ];
+    },
+    {
+      name: "startPartialResolve";
+      accounts: [
+        {
+          name: "challenge";
+          isMut: false;
+          isSigner: false;
+        },
+        {
+          name: "payment";
+          isMut: true;
+          isSigner: false;
+        },
+        {
+          name: "authority";
+          isMut: true;
+          isSigner: true;
+        },
+        {
+          name: "payer";
+          isMut: true;
+          isSigner: true;
+        },
+        {
+          name: "rent";
+          isMut: false;
+          isSigner: false;
+        },
+        {
+          name: "systemProgram";
+          isMut: false;
+          isSigner: false;
+        }
+      ];
+      args: [];
+    },
+    {
+      name: "merkleResolve";
+      accounts: [
+        {
+          name: "challenge";
+          isMut: false;
+          isSigner: false;
+        },
+        {
+          name: "payment";
+          isMut: true;
+          isSigner: false;
+        },
+        {
+          name: "authority";
+          isMut: true;
+          isSigner: true;
+        },
+        {
+          name: "payer";
+          isMut: true;
+          isSigner: true;
+        },
+        {
+          name: "rent";
+          isMut: false;
+          isSigner: false;
+        },
+        {
+          name: "systemProgram";
+          isMut: false;
+          isSigner: false;
+        }
+      ];
+      args: [
+        {
+          name: "root";
+          type: {
+            array: ["u8", 32];
+          };
+        },
+        {
+          name: "isCancel";
+          type: "bool";
+        }
+      ];
+    },
+    {
+      name: "redeemPaymentNode";
+      accounts: [
+        {
+          name: "provider";
+          isMut: false;
+          isSigner: false;
+        },
+        {
+          name: "pool";
+          isMut: false;
+          isSigner: false;
+        },
+        {
+          name: "poolTokenAccount";
+          isMut: true;
+          isSigner: false;
+        },
+        {
+          name: "challenge";
+          isMut: true;
+          isSigner: false;
+        },
+        {
+          name: "payment";
+          isMut: true;
+          isSigner: false;
+        },
+        {
+          name: "paymentStatus";
+          isMut: true;
+          isSigner: false;
+        },
+        {
+          name: "player";
+          isMut: true;
+          isSigner: false;
+        },
+        {
+          name: "playerPayer";
+          isMut: true;
+          isSigner: false;
+        },
+        {
+          name: "playerTokenAccount";
+          isMut: true;
+          isSigner: false;
+        },
+        {
+          name: "payer";
+          isMut: true;
+          isSigner: true;
+        },
+        {
+          name: "tokenProgram";
+          isMut: false;
+          isSigner: false;
+        },
+        {
+          name: "rent";
+          isMut: false;
+          isSigner: false;
+        },
+        {
+          name: "systemProgram";
+          isMut: false;
+          isSigner: false;
+        }
+      ];
+      args: [
+        {
+          name: "amount";
+          type: "u64";
+        },
+        {
+          name: "index";
+          type: "u64";
+        },
+        {
+          name: "proof";
+          type: {
+            vec: {
+              array: ["u8", 32];
+            };
+          };
+        }
+      ];
     }
   ];
   accounts: [
@@ -750,11 +1024,11 @@ export type Challenge = {
           },
           {
             name: "playersLimit";
-            type: "u8";
+            type: "u16";
           },
           {
             name: "playersJoined";
-            type: "u8";
+            type: "u16";
           },
           {
             name: "mediatorRake";
@@ -766,15 +1040,19 @@ export type Challenge = {
           },
           {
             name: "expected";
-            type: "u8";
+            type: "u16";
           },
           {
             name: "expectedCreated";
-            type: "u8";
+            type: "u16";
           },
           {
             name: "expectedJoined";
-            type: "u8";
+            type: "u16";
+          },
+          {
+            name: "verified";
+            type: "bool";
           }
         ];
       };
@@ -803,6 +1081,10 @@ export type Challenge = {
           {
             name: "amount";
             type: "u64";
+          },
+          {
+            name: "payer";
+            type: "publicKey";
           }
         ];
       };
@@ -843,6 +1125,10 @@ export type Challenge = {
           {
             name: "isCancel";
             type: "bool";
+          },
+          {
+            name: "partial";
+            type: "bool";
           }
         ];
       };
@@ -862,6 +1148,60 @@ export type Challenge = {
           },
           {
             name: "selfBump";
+            type: "u8";
+          }
+        ];
+      };
+    },
+    {
+      name: "merklePayment";
+      type: {
+        kind: "struct";
+        fields: [
+          {
+            name: "payer";
+            type: "publicKey";
+          },
+          {
+            name: "challenge";
+            type: "publicKey";
+          },
+          {
+            name: "merkleRoot";
+            type: {
+              array: ["u8", 32];
+            };
+          },
+          {
+            name: "isCancel";
+            type: "bool";
+          },
+          {
+            name: "selfBump";
+            type: "u8";
+          }
+        ];
+      };
+    },
+    {
+      name: "paymentStatus";
+      type: {
+        kind: "struct";
+        fields: [
+          {
+            name: "isClaimed";
+            type: "bool";
+          },
+          {
+            name: "claimedBy";
+            type: "publicKey";
+          },
+          {
+            name: "amount";
+            type: "u64";
+          },
+          {
+            name: "bump";
             type: "u8";
           }
         ];
@@ -1061,6 +1401,61 @@ export type Challenge = {
       code: 6026;
       name: "PaymentAlreadyPaid";
       msg: "Payment already paid";
+    },
+    {
+      code: 6027;
+      name: "PoolMismatch";
+      msg: "Pool mismatch";
+    },
+    {
+      code: 6028;
+      name: "IncorrectPaymentAmount";
+      msg: "Payment doesn't match total entry fees paid";
+    },
+    {
+      code: 6029;
+      name: "NoPayments";
+      msg: "No payments provided in request";
+    },
+    {
+      code: 6030;
+      name: "TooManyPayments";
+      msg: "Too many payments were provided";
+    },
+    {
+      code: 6031;
+      name: "PlayerNotInChallenge";
+      msg: "Player isn't in the challenge";
+    },
+    {
+      code: 6032;
+      name: "PaymentAlreadyMigrated";
+      msg: "The payment is already migrated";
+    },
+    {
+      code: 6033;
+      name: "InvalidProof";
+      msg: "Invalid proof";
+    },
+    {
+      code: 6034;
+      name: "ProofsMissing";
+      msg: "Missing proofs";
+    },
+    {
+      code: 6035;
+      name: "ProofsAccountLengthMismatch";
+      msg: "Proofs and account count mismatch";
+    },
+    {
+      code: 6036;
+      name: "VerifiedJoin";
+      msg: "Must be a verified Join";
+    },
+    {
+      code: 6037;
+      name: "InvalidPlayerPayer";
+      msg: "Invalid player payer";
     }
   ];
 };
@@ -1217,7 +1612,7 @@ export const IDL: Challenge = {
         },
         {
           name: "limit",
-          type: "u8",
+          type: "u16",
         },
         {
           name: "mediatorRake",
@@ -1229,7 +1624,11 @@ export const IDL: Challenge = {
         },
         {
           name: "expected",
-          type: "u8",
+          type: "u16",
+        },
+        {
+          name: "verified",
+          type: "bool",
         },
       ],
     },
@@ -1372,6 +1771,72 @@ export const IDL: Challenge = {
       args: [],
     },
     {
+      name: "verifiedJoin",
+      accounts: [
+        {
+          name: "provider",
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: "pool",
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: "poolTokenAccount",
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: "challenge",
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: "player",
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: "payer",
+          isMut: true,
+          isSigner: true,
+        },
+        {
+          name: "providerAuthority",
+          isMut: true,
+          isSigner: true,
+        },
+        {
+          name: "user",
+          isMut: true,
+          isSigner: true,
+        },
+        {
+          name: "userTokenAccount",
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: "mint",
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: "tokenProgram",
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: "systemProgram",
+          isMut: false,
+          isSigner: false,
+        },
+      ],
+      args: [],
+    },
+    {
       name: "leave",
       accounts: [
         {
@@ -1396,7 +1861,12 @@ export const IDL: Challenge = {
         },
         {
           name: "player",
-          isMut: false,
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: "playerPayer",
+          isMut: true,
           isSigner: false,
         },
         {
@@ -1634,7 +2104,7 @@ export const IDL: Challenge = {
           isSigner: false,
         },
         {
-          name: "playerAuth",
+          name: "playerPayer",
           isMut: true,
           isSigner: false,
         },
@@ -1748,6 +2218,205 @@ export const IDL: Challenge = {
       ],
       args: [],
     },
+    {
+      name: "partialResolve",
+      accounts: [
+        {
+          name: "challenge",
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: "payment",
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: "authority",
+          isMut: true,
+          isSigner: true,
+        },
+      ],
+      args: [
+        {
+          name: "payments",
+          type: {
+            defined: "PaymentArgAcc",
+          },
+        },
+      ],
+    },
+    {
+      name: "startPartialResolve",
+      accounts: [
+        {
+          name: "challenge",
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: "payment",
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: "authority",
+          isMut: true,
+          isSigner: true,
+        },
+        {
+          name: "payer",
+          isMut: true,
+          isSigner: true,
+        },
+        {
+          name: "rent",
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: "systemProgram",
+          isMut: false,
+          isSigner: false,
+        },
+      ],
+      args: [],
+    },
+    {
+      name: "merkleResolve",
+      accounts: [
+        {
+          name: "challenge",
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: "payment",
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: "authority",
+          isMut: true,
+          isSigner: true,
+        },
+        {
+          name: "payer",
+          isMut: true,
+          isSigner: true,
+        },
+        {
+          name: "rent",
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: "systemProgram",
+          isMut: false,
+          isSigner: false,
+        },
+      ],
+      args: [
+        {
+          name: "root",
+          type: {
+            array: ["u8", 32],
+          },
+        },
+        {
+          name: "isCancel",
+          type: "bool",
+        },
+      ],
+    },
+    {
+      name: "redeemPaymentNode",
+      accounts: [
+        {
+          name: "provider",
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: "pool",
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: "poolTokenAccount",
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: "challenge",
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: "payment",
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: "paymentStatus",
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: "player",
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: "playerPayer",
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: "playerTokenAccount",
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: "payer",
+          isMut: true,
+          isSigner: true,
+        },
+        {
+          name: "tokenProgram",
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: "rent",
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: "systemProgram",
+          isMut: false,
+          isSigner: false,
+        },
+      ],
+      args: [
+        {
+          name: "amount",
+          type: "u64",
+        },
+        {
+          name: "index",
+          type: "u64",
+        },
+        {
+          name: "proof",
+          type: {
+            vec: {
+              array: ["u8", 32],
+            },
+          },
+        },
+      ],
+    },
   ],
   accounts: [
     {
@@ -1817,11 +2486,11 @@ export const IDL: Challenge = {
           },
           {
             name: "playersLimit",
-            type: "u8",
+            type: "u16",
           },
           {
             name: "playersJoined",
-            type: "u8",
+            type: "u16",
           },
           {
             name: "mediatorRake",
@@ -1833,15 +2502,19 @@ export const IDL: Challenge = {
           },
           {
             name: "expected",
-            type: "u8",
+            type: "u16",
           },
           {
             name: "expectedCreated",
-            type: "u8",
+            type: "u16",
           },
           {
             name: "expectedJoined",
-            type: "u8",
+            type: "u16",
+          },
+          {
+            name: "verified",
+            type: "bool",
           },
         ],
       },
@@ -1870,6 +2543,10 @@ export const IDL: Challenge = {
           {
             name: "amount",
             type: "u64",
+          },
+          {
+            name: "payer",
+            type: "publicKey",
           },
         ],
       },
@@ -1911,6 +2588,10 @@ export const IDL: Challenge = {
             name: "isCancel",
             type: "bool",
           },
+          {
+            name: "partial",
+            type: "bool",
+          },
         ],
       },
     },
@@ -1929,6 +2610,60 @@ export const IDL: Challenge = {
           },
           {
             name: "selfBump",
+            type: "u8",
+          },
+        ],
+      },
+    },
+    {
+      name: "merklePayment",
+      type: {
+        kind: "struct",
+        fields: [
+          {
+            name: "payer",
+            type: "publicKey",
+          },
+          {
+            name: "challenge",
+            type: "publicKey",
+          },
+          {
+            name: "merkleRoot",
+            type: {
+              array: ["u8", 32],
+            },
+          },
+          {
+            name: "isCancel",
+            type: "bool",
+          },
+          {
+            name: "selfBump",
+            type: "u8",
+          },
+        ],
+      },
+    },
+    {
+      name: "paymentStatus",
+      type: {
+        kind: "struct",
+        fields: [
+          {
+            name: "isClaimed",
+            type: "bool",
+          },
+          {
+            name: "claimedBy",
+            type: "publicKey",
+          },
+          {
+            name: "amount",
+            type: "u64",
+          },
+          {
+            name: "bump",
             type: "u8",
           },
         ],
@@ -2129,6 +2864,61 @@ export const IDL: Challenge = {
       name: "PaymentAlreadyPaid",
       msg: "Payment already paid",
     },
+    {
+      code: 6027,
+      name: "PoolMismatch",
+      msg: "Pool mismatch",
+    },
+    {
+      code: 6028,
+      name: "IncorrectPaymentAmount",
+      msg: "Payment doesn't match total entry fees paid",
+    },
+    {
+      code: 6029,
+      name: "NoPayments",
+      msg: "No payments provided in request",
+    },
+    {
+      code: 6030,
+      name: "TooManyPayments",
+      msg: "Too many payments were provided",
+    },
+    {
+      code: 6031,
+      name: "PlayerNotInChallenge",
+      msg: "Player isn't in the challenge",
+    },
+    {
+      code: 6032,
+      name: "PaymentAlreadyMigrated",
+      msg: "The payment is already migrated",
+    },
+    {
+      code: 6033,
+      name: "InvalidProof",
+      msg: "Invalid proof",
+    },
+    {
+      code: 6034,
+      name: "ProofsMissing",
+      msg: "Missing proofs",
+    },
+    {
+      code: 6035,
+      name: "ProofsAccountLengthMismatch",
+      msg: "Proofs and account count mismatch",
+    },
+    {
+      code: 6036,
+      name: "VerifiedJoin",
+      msg: "Must be a verified Join",
+    },
+    {
+      code: 6037,
+      name: "InvalidPlayerPayer",
+      msg: "Invalid player payer",
+    },
   ],
 };
 
@@ -2285,17 +3075,7 @@ export class ChallengeTXClient {
         ? "BuPvutSnk9NdTZHFiA6UZm6oPwGszp6ozMwoAgJMDBGR"
         : "CoiJYvDgj8BqQr8MEBjyXKfsQFrYQSYdwEuzjivE2D7"
     );
-    this.program = new Program<Challenge>(
-      IDL,
-      programAddress,
-      wallet
-        ? new anchor.AnchorProvider(
-            connection,
-            wallet,
-            anchor.AnchorProvider.defaultOptions()
-          )
-        : undefined
-    );
+    this.program = new Program<Challenge>(IDL, programAddress);
   }
 
   async join(_user: string) {
