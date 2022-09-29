@@ -163,6 +163,10 @@ export type Challenge = {
         {
           name: "expected";
           type: "u16";
+        },
+        {
+          name: "verified";
+          type: "bool";
         }
       ];
     },
@@ -305,6 +309,72 @@ export type Challenge = {
       args: [];
     },
     {
+      name: "verifiedJoin";
+      accounts: [
+        {
+          name: "provider";
+          isMut: false;
+          isSigner: false;
+        },
+        {
+          name: "pool";
+          isMut: false;
+          isSigner: false;
+        },
+        {
+          name: "poolTokenAccount";
+          isMut: true;
+          isSigner: false;
+        },
+        {
+          name: "challenge";
+          isMut: true;
+          isSigner: false;
+        },
+        {
+          name: "player";
+          isMut: true;
+          isSigner: false;
+        },
+        {
+          name: "payer";
+          isMut: true;
+          isSigner: true;
+        },
+        {
+          name: "providerAuthority";
+          isMut: true;
+          isSigner: true;
+        },
+        {
+          name: "user";
+          isMut: true;
+          isSigner: true;
+        },
+        {
+          name: "userTokenAccount";
+          isMut: true;
+          isSigner: false;
+        },
+        {
+          name: "mint";
+          isMut: false;
+          isSigner: false;
+        },
+        {
+          name: "tokenProgram";
+          isMut: false;
+          isSigner: false;
+        },
+        {
+          name: "systemProgram";
+          isMut: false;
+          isSigner: false;
+        }
+      ];
+      args: [];
+    },
+    {
       name: "leave";
       accounts: [
         {
@@ -329,7 +399,12 @@ export type Challenge = {
         },
         {
           name: "player";
-          isMut: false;
+          isMut: true;
+          isSigner: false;
+        },
+        {
+          name: "playerPayer";
+          isMut: true;
           isSigner: false;
         },
         {
@@ -567,7 +642,7 @@ export type Challenge = {
           isSigner: false;
         },
         {
-          name: "playerAuth";
+          name: "playerPayer";
           isMut: true;
           isSigner: false;
         },
@@ -831,7 +906,7 @@ export type Challenge = {
           isSigner: false;
         },
         {
-          name: "playerAuth";
+          name: "playerPayer";
           isMut: true;
           isSigner: false;
         },
@@ -974,6 +1049,10 @@ export type Challenge = {
           {
             name: "expectedJoined";
             type: "u16";
+          },
+          {
+            name: "verified";
+            type: "bool";
           }
         ];
       };
@@ -1002,6 +1081,10 @@ export type Challenge = {
           {
             name: "amount";
             type: "u64";
+          },
+          {
+            name: "payer";
+            type: "publicKey";
           }
         ];
       };
@@ -1363,6 +1446,16 @@ export type Challenge = {
       code: 6035;
       name: "ProofsAccountLengthMismatch";
       msg: "Proofs and account count mismatch";
+    },
+    {
+      code: 6036;
+      name: "VerifiedJoin";
+      msg: "Must be a verified Join";
+    },
+    {
+      code: 6037;
+      name: "InvalidPlayerPayer";
+      msg: "Invalid player payer";
     }
   ];
 };
@@ -1533,6 +1626,10 @@ export const IDL: Challenge = {
           name: "expected",
           type: "u16",
         },
+        {
+          name: "verified",
+          type: "bool",
+        },
       ],
     },
     {
@@ -1674,6 +1771,72 @@ export const IDL: Challenge = {
       args: [],
     },
     {
+      name: "verifiedJoin",
+      accounts: [
+        {
+          name: "provider",
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: "pool",
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: "poolTokenAccount",
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: "challenge",
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: "player",
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: "payer",
+          isMut: true,
+          isSigner: true,
+        },
+        {
+          name: "providerAuthority",
+          isMut: true,
+          isSigner: true,
+        },
+        {
+          name: "user",
+          isMut: true,
+          isSigner: true,
+        },
+        {
+          name: "userTokenAccount",
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: "mint",
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: "tokenProgram",
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: "systemProgram",
+          isMut: false,
+          isSigner: false,
+        },
+      ],
+      args: [],
+    },
+    {
       name: "leave",
       accounts: [
         {
@@ -1698,7 +1861,12 @@ export const IDL: Challenge = {
         },
         {
           name: "player",
-          isMut: false,
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: "playerPayer",
+          isMut: true,
           isSigner: false,
         },
         {
@@ -1936,7 +2104,7 @@ export const IDL: Challenge = {
           isSigner: false,
         },
         {
-          name: "playerAuth",
+          name: "playerPayer",
           isMut: true,
           isSigner: false,
         },
@@ -2200,7 +2368,7 @@ export const IDL: Challenge = {
           isSigner: false,
         },
         {
-          name: "playerAuth",
+          name: "playerPayer",
           isMut: true,
           isSigner: false,
         },
@@ -2344,6 +2512,10 @@ export const IDL: Challenge = {
             name: "expectedJoined",
             type: "u16",
           },
+          {
+            name: "verified",
+            type: "bool",
+          },
         ],
       },
     },
@@ -2371,6 +2543,10 @@ export const IDL: Challenge = {
           {
             name: "amount",
             type: "u64",
+          },
+          {
+            name: "payer",
+            type: "publicKey",
           },
         ],
       },
@@ -2732,6 +2908,16 @@ export const IDL: Challenge = {
       code: 6035,
       name: "ProofsAccountLengthMismatch",
       msg: "Proofs and account count mismatch",
+    },
+    {
+      code: 6036,
+      name: "VerifiedJoin",
+      msg: "Must be a verified Join",
+    },
+    {
+      code: 6037,
+      name: "InvalidPlayerPayer",
+      msg: "Invalid player payer",
     },
   ],
 };
