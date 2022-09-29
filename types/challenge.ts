@@ -11,8 +11,8 @@ import {
   transferWrappedSol,
   ApiConfig,
 } from "../common/utils";
-import { Challenge } from "./challenge_idl";
-export { Challenge } from "./challenge_idl";
+import { Challenge, IDL } from "./challenge_idl";
+export { Challenge, IDL } from "./challenge_idl";
 
 export class ChallengeAPIClient {
   ludexChallengeApi: <T>(config: ApiConfig) => Promise<T>;
