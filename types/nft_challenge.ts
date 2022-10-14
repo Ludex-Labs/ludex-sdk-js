@@ -5,6 +5,7 @@ import {
 } from "@metaplex-foundation/js";
 import * as anchor from "@project-serum/anchor";
 import { Program } from "@project-serum/anchor";
+import NodeWallet from "@project-serum/anchor/dist/cjs/nodewallet";
 import {
   getAssociatedTokenAddress,
   NATIVE_MINT,
@@ -17,6 +18,7 @@ import {
   ApiConfig,
 } from "../common/utils";
 import { IDL, NftWager } from "./nft_challenge_idl";
+export { IDL, NftWager } from "./nft_challenge_idl";
 
 export class NftChallengeAPIClient {
   ludexChallengeApi: <T>(config: ApiConfig) => Promise<T>;
@@ -114,15 +116,31 @@ export class NftChallengeTXClient {
   manager: anchor.web3.PublicKey;
   feevault: anchor.web3.PublicKey;
 
-  constructor(connection: anchor.web3.Connection, challengeKey: string) {
+  constructor(
+    connection: anchor.web3.Connection,
+    challengeKey: string,
+    wallet: anchor.web3.Keypair
+  ) {
     this.challengeKey = new anchor.web3.PublicKey(challengeKey);
     this.connection = connection;
     const programAddress = new anchor.web3.PublicKey(
       "5U2Y2YNyMRofJxMBZKfkvxeuXRjsJUpkG95pRVGLLXyj"
     );
-    this.manager = new anchor.web3.PublicKey("");
-    this.feevault = new anchor.web3.PublicKey("");
-    this.program = new Program<NftWager>(IDL, programAddress);
+    this.manager = new anchor.web3.PublicKey(
+      "FKvNWeB7RKowXNiTyz2rWBqQtqzfUijv4WVt5Kn22h6b"
+    );
+    this.feevault = new anchor.web3.PublicKey(
+      "8RGvc4CPXeS5uez27DUEah4qk7BSREEaa7AtzXvgZZa8"
+    );
+    this.program = new Program<NftWager>(
+      IDL,
+      programAddress,
+      new anchor.AnchorProvider(
+        this.connection,
+        new NodeWallet(wallet),
+        anchor.AnchorProvider.defaultOptions()
+      )
+    );
   }
 
   async join(_user: string) {
@@ -157,13 +175,15 @@ export class NftChallengeTXClient {
     const [offering] = await anchor.web3.PublicKey.findProgramAddress(
       [
         Buffer.from(anchor.utils.bytes.utf8.encode("offering")),
+        this.challengeKey.toBuffer(),
         user.toBuffer(),
       ],
       this.program.programId
     );
+
     this.tx.add(
       await this.program.methods
-        .addSolOffering(new anchor.BN(_amount * (10 ^ 9)))
+        .addSolOffering(new anchor.BN(1))
         .accounts({
           playerAuthority: user,
           player: player,
@@ -197,9 +217,11 @@ export class NftChallengeTXClient {
       this.program.programId
     );
 
-    const mx = Metaplex.make(this.program.provider.connection)
-      // .use(mockStorage())
-      .use(guestIdentity());
+    const mx = Metaplex.make(this.program.provider.connection).use(
+      guestIdentity()
+    );
+
+    // * TODO: check if this is an escrowless or escrowed offering
 
     const edition = (
       await mx.nfts().findByMint(nftMint)
@@ -262,7 +284,7 @@ export class NftChallengeTXClient {
   async send(signers: anchor.web3.Signer[]) {
     const sig = await this.connection.sendTransaction(this.tx, signers);
     const latestBlockHash = await this.connection.getLatestBlockhash();
-    this.connection.confirmTransaction({
+    await this.connection.confirmTransaction({
       signature: sig,
       blockhash: latestBlockHash.blockhash,
       lastValidBlockHeight: latestBlockHash.lastValidBlockHeight,
@@ -274,17 +296,30 @@ export class NftChallengeTXClient {
     return this.tx.serialize().toString();
   }
 
-  static async getOfferings(challengeKey: string) {
+  static async getOfferings(
+    connection: anchor.web3.Connection,
+    challengeKey: string,
+    wallet: anchor.web3.Keypair
+  ) {
     const programAddress = new anchor.web3.PublicKey(
       "5U2Y2YNyMRofJxMBZKfkvxeuXRjsJUpkG95pRVGLLXyj"
     );
-    const program = new Program<NftWager>(IDL, programAddress);
+    const program = new Program<NftWager>(
+      IDL,
+      programAddress,
+      new anchor.AnchorProvider(
+        connection,
+        new NodeWallet(wallet),
+        anchor.AnchorProvider.defaultOptions()
+      )
+    );
 
+    const challenge = new anchor.web3.PublicKey(challengeKey);
     const players = await program.account.player.all([
       {
         memcmp: {
           offset: 8,
-          bytes: new anchor.web3.PublicKey(challengeKey).toBase58(),
+          bytes: challenge.toBase58(),
         },
       },
     ]);
@@ -300,7 +335,14 @@ export class NftChallengeTXClient {
         },
       ])
     )) {
-      offeringsResult.push(offerings.map((o) => o));
+      offeringsResult.push(
+        offerings.map((o) => ({
+          ...o,
+          authority: players.find(
+            (p) => p.publicKey.toBase58() === o.account.player.toBase58()
+          )?.account.authority,
+        }))
+      );
     }
 
     return offeringsResult.reduce((acc, val) => acc.concat(val), []);

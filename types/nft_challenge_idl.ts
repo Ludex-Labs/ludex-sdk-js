@@ -463,6 +463,51 @@ export type NftWager = {
       ];
     },
     {
+      name: "createCancelPayment";
+      accounts: [
+        {
+          name: "authority";
+          isMut: false;
+          isSigner: true;
+        },
+        {
+          name: "payer";
+          isMut: true;
+          isSigner: true;
+        },
+        {
+          name: "game";
+          isMut: false;
+          isSigner: false;
+        },
+        {
+          name: "manager";
+          isMut: false;
+          isSigner: false;
+        },
+        {
+          name: "payment";
+          isMut: true;
+          isSigner: false;
+        },
+        {
+          name: "systemProgram";
+          isMut: false;
+          isSigner: false;
+        }
+      ];
+      args: [
+        {
+          name: "payments";
+          type: {
+            vec: {
+              defined: "PaymentArg";
+            };
+          };
+        }
+      ];
+    },
+    {
       name: "verifyPayment";
       accounts: [
         {
@@ -604,17 +649,22 @@ export type NftWager = {
           isSigner: false;
         },
         {
-          name: "player";
-          isMut: true;
-          isSigner: false;
-        },
-        {
           name: "offering";
           isMut: true;
           isSigner: false;
         },
         {
           name: "receiver";
+          isMut: true;
+          isSigner: false;
+        },
+        {
+          name: "player";
+          isMut: true;
+          isSigner: false;
+        },
+        {
+          name: "game";
           isMut: true;
           isSigner: false;
         },
@@ -1379,6 +1429,51 @@ export const IDL: NftWager = {
       ],
     },
     {
+      name: "createCancelPayment",
+      accounts: [
+        {
+          name: "authority",
+          isMut: false,
+          isSigner: true,
+        },
+        {
+          name: "payer",
+          isMut: true,
+          isSigner: true,
+        },
+        {
+          name: "game",
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: "manager",
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: "payment",
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: "systemProgram",
+          isMut: false,
+          isSigner: false,
+        },
+      ],
+      args: [
+        {
+          name: "payments",
+          type: {
+            vec: {
+              defined: "PaymentArg",
+            },
+          },
+        },
+      ],
+    },
+    {
       name: "verifyPayment",
       accounts: [
         {
@@ -1520,17 +1615,22 @@ export const IDL: NftWager = {
           isSigner: false,
         },
         {
-          name: "player",
-          isMut: true,
-          isSigner: false,
-        },
-        {
           name: "offering",
           isMut: true,
           isSigner: false,
         },
         {
           name: "receiver",
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: "player",
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: "game",
           isMut: true,
           isSigner: false,
         },
