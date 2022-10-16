@@ -11,12 +11,7 @@ import {
   NATIVE_MINT,
   TOKEN_PROGRAM_ID,
 } from "@solana/spl-token";
-import {
-  _ludexChallengeApi,
-  poll,
-  transferWrappedSol,
-  ApiConfig,
-} from "../common/utils";
+import { _ludexChallengeApi, poll, ApiConfig } from "../common/utils";
 import { IDL, NftWager } from "./nft_challenge_idl";
 export { IDL, NftWager } from "./nft_challenge_idl";
 
@@ -40,8 +35,6 @@ export class NftChallengeAPIClient {
       creatingAt?: string;
       createdAt?: string;
       endedAt?: string;
-      lockingAt?: string;
-      lockedAt?: string;
       cancelingAt?: string;
       canceledAt?: string;
       resolvingAt?: string;
@@ -72,11 +65,16 @@ export class NftChallengeAPIClient {
 
   async create(limit: number = 2) {
     const challengeId = (await this._apiCreateChallenge(limit)).id;
+    console.log(challengeId, "challengeId");
     const challenge = await poll(
       () => this._apiGetChallenge(challengeId),
-      ({ blockchainAddress }) => blockchainAddress !== undefined,
+      (c) => {
+        console.log(c, "ch");
+        return c.blockchainAddress != null;
+      },
       1000
     );
+    console.log(challenge, "challenge");
     return { challengeId, blockchainAddress: challenge.blockchainAddress! };
   }
 
@@ -85,7 +83,10 @@ export class NftChallengeAPIClient {
     if (!skipConfirmation) {
       await poll(
         () => this._apiGetChallenge(Number(id)),
-        ({ canceledAt }) => canceledAt === undefined,
+        (c) => {
+          console.log(c, "ch");
+          return c.canceledAt === undefined;
+        },
         1000
       );
     }
@@ -163,6 +164,7 @@ export class NftChallengeTXClient {
         })
         .instruction()
     );
+    this.tx.feePayer = user;
     return this;
   }
 
@@ -292,8 +294,14 @@ export class NftChallengeTXClient {
     return sig;
   }
 
-  getTx() {
-    return this.tx.serialize().toString();
+  async getTx() {
+    this.tx.recentBlockhash = (
+      await this.connection.getLatestBlockhash()
+    ).blockhash;
+
+    return this.tx
+      .serialize({ requireAllSignatures: false, verifySignatures: false })
+      .toString("base64");
   }
 
   static async getOfferings(
