@@ -36,7 +36,7 @@ export const _ludexChallengeApi =
   (bearerToken: string, api: string) =>
   async <T>(config: ApiConfig): Promise<T> => {
     const response = await fetch(
-      `http://localhost:4000/api/v1/${api}/${config.path || ""}`,
+      `https://api.ludex.gg/api/v1/${api}/${config.path || ""}`,
       {
         ...config,
         headers: {
