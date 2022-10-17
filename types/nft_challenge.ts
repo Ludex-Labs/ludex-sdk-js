@@ -65,16 +65,13 @@ export class NftChallengeAPIClient {
 
   async create(limit: number = 2) {
     const challengeId = (await this._apiCreateChallenge(limit)).id;
-    console.log(challengeId, "challengeId");
     const challenge = await poll(
       () => this._apiGetChallenge(challengeId),
       (c) => {
-        console.log(c, "ch");
         return c.blockchainAddress != null;
       },
       1000
     );
-    console.log(challenge, "challenge");
     return { challengeId, blockchainAddress: challenge.blockchainAddress! };
   }
 
@@ -84,15 +81,13 @@ export class NftChallengeAPIClient {
       await poll(
         () => this._apiGetChallenge(Number(id)),
         (c) => {
-          console.log(c, "ch");
-          return c.canceledAt === undefined;
+          return c.canceledAt != null;
         },
         1000
       );
     }
   }
 
-  /* TODO: Coming soon with applying your own specific payments */
   async resolveWithPayment(
     id: number,
     payment: { to: string; offering: string }[],
