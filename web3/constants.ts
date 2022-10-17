@@ -1,0 +1,5 @@
+export const LUDEX_CHALLENGE_PROGRAM_ID =
+  'BuPvutSnk9NdTZHFiA6UZm6oPwGszp6ozMwoAgJMDBGR';
+
+export const LUDEX_CHALLENGE_PROGRAM_ID_DEVNET =
+  'CoiJYvDgj8BqQr8MEBjyXKfsQFrYQSYdwEuzjivE2D7';
