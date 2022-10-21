@@ -12,13 +12,17 @@ import {
   TOKEN_PROGRAM_ID,
 } from "@solana/spl-token";
 import { _ludexChallengeApi, poll, ApiConfig } from "../common/utils";
-import { IDL, NftWager } from "./nft_challenge_idl";
-export { IDL, NftWager } from "./nft_challenge_idl";
+import { IDL, NftChallenge } from "./nft_challenge_idl";
+export { IDL, NftChallenge } from "./nft_challenge_idl";
 
 export class NftChallengeAPIClient {
   ludexChallengeApi: <T>(config: ApiConfig) => Promise<T>;
-  constructor(apiKey: string) {
-    this.ludexChallengeApi = _ludexChallengeApi(apiKey, "nftChallenge");
+  constructor(apiKey: string, baseUrl?: string) {
+    this.ludexChallengeApi = _ludexChallengeApi(
+      apiKey,
+      "nftChallenge",
+      baseUrl
+    );
   }
 
   async _apiCreateChallenge(limit: number = 2) {
@@ -107,10 +111,8 @@ export class NftChallengeAPIClient {
 export class NftChallengeTXClient {
   tx = new anchor.web3.Transaction();
   challengeKey: anchor.web3.PublicKey;
-  program: Program<NftWager>;
+  program: Program<NftChallenge>;
   connection: anchor.web3.Connection;
-  manager: anchor.web3.PublicKey;
-  feevault: anchor.web3.PublicKey;
 
   constructor(
     connection: anchor.web3.Connection,
@@ -122,13 +124,7 @@ export class NftChallengeTXClient {
     const programAddress = new anchor.web3.PublicKey(
       "5U2Y2YNyMRofJxMBZKfkvxeuXRjsJUpkG95pRVGLLXyj"
     );
-    this.manager = new anchor.web3.PublicKey(
-      "FKvNWeB7RKowXNiTyz2rWBqQtqzfUijv4WVt5Kn22h6b"
-    );
-    this.feevault = new anchor.web3.PublicKey(
-      "8RGvc4CPXeS5uez27DUEah4qk7BSREEaa7AtzXvgZZa8"
-    );
-    this.program = new Program<NftWager>(
+    this.program = new Program<NftChallenge>(
       IDL,
       programAddress,
       new anchor.AnchorProvider(
@@ -145,15 +141,18 @@ export class NftChallengeTXClient {
       [this.challengeKey.toBuffer(), user.toBuffer()],
       this.program.programId
     );
+    const game = await this.program.account.game.fetch(this.challengeKey);
+    const manager = await this.program.account.manager.fetch(game.manager);
     this.tx.add(
       await this.program.methods
         .join()
         .accounts({
           playerAuthority: user,
-          manager: this.manager,
+          manager: game.manager,
           player: player,
           game: this.challengeKey,
-          feeVault: this.feevault,
+          feeVault: manager.feeVault,
+          mediatorVault: game.mediatorVault,
           systemProgram: anchor.web3.SystemProgram.programId,
           tokenProgram: TOKEN_PROGRAM_ID,
         })
@@ -196,12 +195,28 @@ export class NftChallengeTXClient {
   async addNftOffering(
     _user: string,
     _nft_mint: string,
-    _nft_token_account: string,
-    _amount: number
+    _amount: number,
+    _nft_token_account?: string
   ) {
     const user = new anchor.web3.PublicKey(_user);
     const nftMint = new anchor.web3.PublicKey(_nft_mint);
-    const nftTokenAccount = new anchor.web3.PublicKey(_nft_token_account);
+    let nftTokenAccount: anchor.web3.PublicKey;
+    const mx = Metaplex.make(this.program.provider.connection).use(
+      guestIdentity()
+    );
+    const nft = await mx.nfts().findByMint(nftMint);
+    if (_nft_token_account) {
+      nftTokenAccount = new anchor.web3.PublicKey(_nft_token_account);
+    } else {
+      // This is only possible for an NFT. For SFT and FT we will have to figure something else out
+      const largestAccounts = await this.connection.getTokenLargestAccounts(
+        new anchor.web3.PublicKey(_nft_mint)
+      );
+      nftTokenAccount = new anchor.web3.PublicKey(
+        largestAccounts.value[0].address
+      );
+    }
+
     const [offering] = await anchor.web3.PublicKey.findProgramAddress(
       [
         Buffer.from(anchor.utils.bytes.utf8.encode("offering")),
@@ -214,15 +229,9 @@ export class NftChallengeTXClient {
       this.program.programId
     );
 
-    const mx = Metaplex.make(this.program.provider.connection).use(
-      guestIdentity()
-    );
-
     // * TODO: check if this is an escrowless or escrowed offering
 
-    const edition = (
-      await mx.nfts().findByMint(nftMint)
-    )?.editionTask?.getResult()?.publicKey;
+    const edition = nft?.editionTask?.getResult()?.publicKey;
 
     this.tx.add(
       await this.program.methods
@@ -307,7 +316,7 @@ export class NftChallengeTXClient {
     const programAddress = new anchor.web3.PublicKey(
       "5U2Y2YNyMRofJxMBZKfkvxeuXRjsJUpkG95pRVGLLXyj"
     );
-    const program = new Program<NftWager>(
+    const program = new Program<NftChallenge>(
       IDL,
       programAddress,
       new anchor.AnchorProvider(
