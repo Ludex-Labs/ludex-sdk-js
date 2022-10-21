@@ -33,10 +33,10 @@ export const transferWrappedSol = (
 
 export type ApiConfig = RequestInit & { path?: string };
 export const _ludexChallengeApi =
-  (bearerToken: string, api: string) =>
+  (bearerToken: string, api: string, baseUrl = "https://api.ludex.gg") =>
   async <T>(config: ApiConfig): Promise<T> => {
     const response = await fetch(
-      `https://api.ludex.gg/api/v1/${api}/${config.path || ""}`,
+      `${baseUrl}/api/v1/${api}/${config.path || ""}`,
       {
         ...config,
         headers: {

@@ -1,7 +1,13 @@
-export type NftWager = {
+export type NftChallenge = {
   version: "0.1.0";
-  name: "nft_wager";
+  name: "nft_challenge";
   instructions: [
+    {
+      name: "getVersion";
+      accounts: [];
+      args: [];
+      returns: "string";
+    },
     {
       name: "initializeProvider";
       accounts: [
@@ -52,6 +58,11 @@ export type NftWager = {
           isSigner: false;
         },
         {
+          name: "mediatorVault";
+          isMut: false;
+          isSigner: false;
+        },
+        {
           name: "game";
           isMut: true;
           isSigner: true;
@@ -66,6 +77,14 @@ export type NftWager = {
         {
           name: "limit";
           type: "u8";
+        },
+        {
+          name: "fee";
+          type: "u64";
+        },
+        {
+          name: "mediatorFee";
+          type: "u64";
         }
       ];
     },
@@ -94,6 +113,11 @@ export type NftWager = {
         },
         {
           name: "feeVault";
+          isMut: true;
+          isSigner: false;
+        },
+        {
+          name: "mediatorVault";
           isMut: true;
           isSigner: false;
         },
@@ -771,6 +795,18 @@ export type NftWager = {
           {
             name: "playersAccepted";
             type: "u8";
+          },
+          {
+            name: "mediatorVault";
+            type: "publicKey";
+          },
+          {
+            name: "fee";
+            type: "u64";
+          },
+          {
+            name: "mediatorFee";
+            type: "u64";
           }
         ];
       };
@@ -964,10 +1000,16 @@ export type NftWager = {
   ];
 };
 
-export const IDL: NftWager = {
+export const IDL: NftChallenge = {
   version: "0.1.0",
-  name: "nft_wager",
+  name: "nft_challenge",
   instructions: [
+    {
+      name: "getVersion",
+      accounts: [],
+      args: [],
+      returns: "string",
+    },
     {
       name: "initializeProvider",
       accounts: [
@@ -1018,6 +1060,11 @@ export const IDL: NftWager = {
           isSigner: false,
         },
         {
+          name: "mediatorVault",
+          isMut: false,
+          isSigner: false,
+        },
+        {
           name: "game",
           isMut: true,
           isSigner: true,
@@ -1032,6 +1079,14 @@ export const IDL: NftWager = {
         {
           name: "limit",
           type: "u8",
+        },
+        {
+          name: "fee",
+          type: "u64",
+        },
+        {
+          name: "mediatorFee",
+          type: "u64",
         },
       ],
     },
@@ -1060,6 +1115,11 @@ export const IDL: NftWager = {
         },
         {
           name: "feeVault",
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: "mediatorVault",
           isMut: true,
           isSigner: false,
         },
@@ -1737,6 +1797,18 @@ export const IDL: NftWager = {
           {
             name: "playersAccepted",
             type: "u8",
+          },
+          {
+            name: "mediatorVault",
+            type: "publicKey",
+          },
+          {
+            name: "fee",
+            type: "u64",
+          },
+          {
+            name: "mediatorFee",
+            type: "u64",
           },
         ],
       },
