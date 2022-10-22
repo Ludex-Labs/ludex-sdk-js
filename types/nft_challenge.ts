@@ -179,7 +179,7 @@ export class NftChallengeTXClient {
 
     this.tx.add(
       await this.program.methods
-        .addSolOffering(new anchor.BN(1))
+        .addSolOffering(new anchor.BN(_amount))
         .accounts({
           playerAuthority: user,
           player: player,
