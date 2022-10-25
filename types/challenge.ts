@@ -145,7 +145,7 @@ export class ChallengeTXClient {
     isMainnet: boolean,
     connection: anchor.web3.Connection,
     challengeKey: string,
-    wallet?: anchor.Wallet
+    wallet?: anchor.web3.Keypair
   ) {
     this.challengeKey = new anchor.web3.PublicKey(challengeKey);
     this.connection = connection;
