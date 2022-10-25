@@ -117,7 +117,7 @@ export class NftChallengeTXClient {
   constructor(
     connection: anchor.web3.Connection,
     challengeKey: string,
-    wallet: anchor.web3.Keypair
+    wallet?: anchor.web3.Keypair
   ) {
     this.challengeKey = new anchor.web3.PublicKey(challengeKey);
     this.connection = connection;
@@ -129,7 +129,7 @@ export class NftChallengeTXClient {
       programAddress,
       new anchor.AnchorProvider(
         this.connection,
-        new NodeWallet(wallet),
+        new NodeWallet(wallet ?? anchor.web3.Keypair.generate()),
         anchor.AnchorProvider.defaultOptions()
       )
     );

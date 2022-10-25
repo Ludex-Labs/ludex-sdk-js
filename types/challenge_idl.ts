@@ -3,6 +3,12 @@ export type Challenge = {
   name: "challenge";
   instructions: [
     {
+      name: "getVersion";
+      accounts: [];
+      args: [];
+      returns: "string";
+    },
+    {
       name: "initialize";
       accounts: [
         {
@@ -1464,6 +1470,12 @@ export const IDL: Challenge = {
   version: "0.1.0",
   name: "challenge",
   instructions: [
+    {
+      name: "getVersion",
+      accounts: [],
+      args: [],
+      returns: "string",
+    },
     {
       name: "initialize",
       accounts: [
