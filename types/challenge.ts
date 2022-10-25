@@ -11,6 +11,7 @@ import {
   transferWrappedSol,
   ApiConfig,
 } from "../common/utils";
+import NodeWallet from "@project-serum/anchor/dist/cjs/nodewallet";
 import { Challenge, IDL } from "./challenge_idl";
 export { Challenge, IDL } from "./challenge_idl";
 
@@ -153,7 +154,15 @@ export class ChallengeTXClient {
         ? "BuPvutSnk9NdTZHFiA6UZm6oPwGszp6ozMwoAgJMDBGR"
         : "CoiJYvDgj8BqQr8MEBjyXKfsQFrYQSYdwEuzjivE2D7"
     );
-    this.program = new Program<Challenge>(IDL, programAddress);
+    this.program = new Program<Challenge>(
+      IDL,
+      programAddress,
+      new anchor.AnchorProvider(
+        this.connection,
+        new NodeWallet(wallet ?? anchor.web3.Keypair.generate()),
+        anchor.AnchorProvider.defaultOptions()
+      )
+    );
   }
 
   async join(_user: string) {
