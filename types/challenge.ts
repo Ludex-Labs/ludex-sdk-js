@@ -170,7 +170,7 @@ export class ChallengeTXClient {
   join(_user: string) {
     const user = new anchor.web3.PublicKey(_user);
     this.tasks.push(
-      new Promise(async () => {
+      new Promise(async (resolve) => {
         const [player, _pbump] = await anchor.web3.PublicKey.findProgramAddress(
           [this.challengeKey.toBuffer(), user.toBuffer()],
           this.program.programId
@@ -195,23 +195,25 @@ export class ChallengeTXClient {
           );
         }
 
-        return this.program.methods
-          .join()
-          .accounts({
-            provider: challenge.provider,
-            pool: challenge.pool,
-            poolTokenAccount: pool.tokenAccount,
-            challenge: this.challengeKey,
-            player: player,
-            providerAuthority: provider.authority,
-            user: user,
-            userTokenAccount: userTokenAccount,
-            payer: user,
-            mint: pool.mint,
-            tokenProgram: TOKEN_PROGRAM_ID,
-            systemProgram: anchor.web3.SystemProgram.programId,
-          })
-          .instruction();
+        return resolve(
+          this.program.methods
+            .join()
+            .accounts({
+              provider: challenge.provider,
+              pool: challenge.pool,
+              poolTokenAccount: pool.tokenAccount,
+              challenge: this.challengeKey,
+              player: player,
+              providerAuthority: provider.authority,
+              user: user,
+              userTokenAccount: userTokenAccount,
+              payer: user,
+              mint: pool.mint,
+              tokenProgram: TOKEN_PROGRAM_ID,
+              systemProgram: anchor.web3.SystemProgram.programId,
+            })
+            .instruction()
+        );
       })
     );
     this.tx.feePayer = user;
@@ -221,7 +223,7 @@ export class ChallengeTXClient {
   leave(_user: string) {
     const user = new anchor.web3.PublicKey(_user);
     this.tasks.push(
-      new Promise(async () => {
+      new Promise(async (resolve) => {
         const [player, _pbump] = await anchor.web3.PublicKey.findProgramAddress(
           [this.challengeKey.toBuffer(), user.toBuffer()],
           this.program.programId
@@ -235,21 +237,23 @@ export class ChallengeTXClient {
 
         userTokenAccount = await getAssociatedTokenAddress(user, pool.mint);
 
-        return this.program.methods
-          .leave()
-          .accounts({
-            provider: challenge.provider,
-            pool: challenge.pool,
-            poolTokenAccount: pool.tokenAccount,
-            challenge: this.challengeKey,
-            player: player,
-            user: user,
-            userTokenAccount: userTokenAccount,
-            mint: pool.mint,
-            tokenProgram: TOKEN_PROGRAM_ID,
-            systemProgram: anchor.web3.SystemProgram.programId,
-          })
-          .instruction();
+        return resolve(
+          this.program.methods
+            .leave()
+            .accounts({
+              provider: challenge.provider,
+              pool: challenge.pool,
+              poolTokenAccount: pool.tokenAccount,
+              challenge: this.challengeKey,
+              player: player,
+              user: user,
+              userTokenAccount: userTokenAccount,
+              mint: pool.mint,
+              tokenProgram: TOKEN_PROGRAM_ID,
+              systemProgram: anchor.web3.SystemProgram.programId,
+            })
+            .instruction()
+        );
       })
     );
     this.tx.feePayer = user;
