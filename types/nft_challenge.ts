@@ -109,7 +109,8 @@ export class NftChallengeAPIClient {
 }
 
 export class NftChallengeTXClient {
-  tx = new anchor.web3.Transaction();
+  tx: anchor.web3.Transaction;
+  tasks: Promise<anchor.web3.TransactionInstruction>[] = [];
   challengeKey: anchor.web3.PublicKey;
   program: Program<NftChallenge>;
   connection: anchor.web3.Connection;
@@ -133,161 +134,187 @@ export class NftChallengeTXClient {
         anchor.AnchorProvider.defaultOptions()
       )
     );
+    this.tx = new anchor.web3.Transaction();
   }
 
-  async join(_user: string) {
+  join(_user: string) {
     const user = new anchor.web3.PublicKey(_user);
-    const [player] = await anchor.web3.PublicKey.findProgramAddress(
-      [this.challengeKey.toBuffer(), user.toBuffer()],
-      this.program.programId
-    );
-    const game = await this.program.account.game.fetch(this.challengeKey);
-    const manager = await this.program.account.manager.fetch(game.manager);
-    this.tx.add(
-      await this.program.methods
-        .join()
-        .accounts({
-          playerAuthority: user,
-          manager: game.manager,
-          player: player,
-          game: this.challengeKey,
-          feeVault: manager.feeVault,
-          mediatorVault: game.mediatorVault,
-          systemProgram: anchor.web3.SystemProgram.programId,
-          tokenProgram: TOKEN_PROGRAM_ID,
-        })
-        .instruction()
+    this.tasks.push(
+      new Promise(async () => {
+        const [player] = await anchor.web3.PublicKey.findProgramAddress(
+          [this.challengeKey.toBuffer(), user.toBuffer()],
+          this.program.programId
+        );
+        const game = await this.program.account.game.fetch(this.challengeKey);
+        const manager = await this.program.account.manager.fetch(game.manager);
+
+        return this.program.methods
+          .join()
+          .accounts({
+            playerAuthority: user,
+            manager: game.manager,
+            player: player,
+            game: this.challengeKey,
+            feeVault: manager.feeVault,
+            mediatorVault: game.mediatorVault,
+            systemProgram: anchor.web3.SystemProgram.programId,
+            tokenProgram: TOKEN_PROGRAM_ID,
+          })
+          .instruction();
+      })
     );
     this.tx.feePayer = user;
     return this;
   }
 
-  async addSolOffering(_user: string, _amount: number) {
-    const user = new anchor.web3.PublicKey(_user);
-    const [player] = await anchor.web3.PublicKey.findProgramAddress(
-      [this.challengeKey.toBuffer(), user.toBuffer()],
-      this.program.programId
+  addSolOffering(_user: string, _amount: number) {
+    return this.addLamportOffering(
+      _user,
+      _amount * anchor.web3.LAMPORTS_PER_SOL
     );
-    const [offering] = await anchor.web3.PublicKey.findProgramAddress(
-      [
-        Buffer.from(anchor.utils.bytes.utf8.encode("offering")),
-        this.challengeKey.toBuffer(),
-        user.toBuffer(),
-      ],
-      this.program.programId
-    );
+  }
 
-    this.tx.add(
-      await this.program.methods
-        .addSolOffering(new anchor.BN(_amount))
-        .accounts({
-          playerAuthority: user,
-          player: player,
-          game: this.challengeKey,
-          offering: offering,
-          systemProgram: anchor.web3.SystemProgram.programId,
-        })
-        .instruction()
+  addLamportOffering(_user: string, _amount: number) {
+    this.tasks.push(
+      new Promise(async () => {
+        const user = new anchor.web3.PublicKey(_user);
+        const [player] = await anchor.web3.PublicKey.findProgramAddress(
+          [this.challengeKey.toBuffer(), user.toBuffer()],
+          this.program.programId
+        );
+        const [offering] = await anchor.web3.PublicKey.findProgramAddress(
+          [
+            Buffer.from(anchor.utils.bytes.utf8.encode("offering")),
+            this.challengeKey.toBuffer(),
+            user.toBuffer(),
+          ],
+          this.program.programId
+        );
+
+        return this.program.methods
+          .addSolOffering(new anchor.BN(_amount))
+          .accounts({
+            playerAuthority: user,
+            player: player,
+            game: this.challengeKey,
+            offering: offering,
+            systemProgram: anchor.web3.SystemProgram.programId,
+          })
+          .instruction();
+      })
     );
     return this;
   }
 
-  async addNftOffering(
+  addNftOffering(
     _user: string,
     _nft_mint: string,
     _amount: number,
     _nft_token_account?: string
   ) {
-    const user = new anchor.web3.PublicKey(_user);
-    const nftMint = new anchor.web3.PublicKey(_nft_mint);
-    let nftTokenAccount: anchor.web3.PublicKey;
-    const mx = Metaplex.make(this.program.provider.connection).use(
-      guestIdentity()
-    );
-    const nft = await mx.nfts().findByMint(nftMint);
-    if (_nft_token_account) {
-      nftTokenAccount = new anchor.web3.PublicKey(_nft_token_account);
-    } else {
-      // This is only possible for an NFT. For SFT and FT we will have to figure something else out
-      const largestAccounts = await this.connection.getTokenLargestAccounts(
-        new anchor.web3.PublicKey(_nft_mint)
-      );
-      nftTokenAccount = new anchor.web3.PublicKey(
-        largestAccounts.value[0].address
-      );
-    }
+    this.tasks.push(
+      new Promise(async () => {
+        const user = new anchor.web3.PublicKey(_user);
+        const nftMint = new anchor.web3.PublicKey(_nft_mint);
+        let nftTokenAccount: anchor.web3.PublicKey;
+        const mx = Metaplex.make(this.program.provider.connection).use(
+          guestIdentity()
+        );
+        const nft = await mx.nfts().findByMint(nftMint);
+        if (_nft_token_account) {
+          nftTokenAccount = new anchor.web3.PublicKey(_nft_token_account);
+        } else {
+          // This is only possible for an NFT. For SFT and FT we will have to figure something else out
+          const largestAccounts = await this.connection.getTokenLargestAccounts(
+            new anchor.web3.PublicKey(_nft_mint)
+          );
+          nftTokenAccount = new anchor.web3.PublicKey(
+            largestAccounts.value[0].address
+          );
+        }
 
-    const [offering] = await anchor.web3.PublicKey.findProgramAddress(
-      [
-        Buffer.from(anchor.utils.bytes.utf8.encode("offering")),
-        nftTokenAccount.toBuffer(),
-      ],
-      this.program.programId
-    );
-    const [player] = await anchor.web3.PublicKey.findProgramAddress(
-      [this.challengeKey.toBuffer(), user.toBuffer()],
-      this.program.programId
-    );
+        const [offering] = await anchor.web3.PublicKey.findProgramAddress(
+          [
+            Buffer.from(anchor.utils.bytes.utf8.encode("offering")),
+            nftTokenAccount.toBuffer(),
+          ],
+          this.program.programId
+        );
+        const [player] = await anchor.web3.PublicKey.findProgramAddress(
+          [this.challengeKey.toBuffer(), user.toBuffer()],
+          this.program.programId
+        );
 
-    // * TODO: check if this is an escrowless or escrowed offering
+        // * TODO: check if this is an escrowless or escrowed offering
 
-    const edition = nft?.editionTask?.getResult()?.publicKey;
+        const edition = nft?.editionTask?.getResult()?.publicKey;
 
-    this.tx.add(
-      await this.program.methods
-        .addEscrowlessOffering(new anchor.BN(_amount))
-        .accounts({
-          playerAuthority: user,
-          player: player,
-          game: this.challengeKey,
-          offering: offering,
-          tokenAccount: nftTokenAccount,
-          tokenMint: nftMint,
-          tokenProgram: TOKEN_PROGRAM_ID,
-          systemProgram: anchor.web3.SystemProgram.programId,
-        })
-        .remainingAccounts(
-          edition
-            ? [
-                {
-                  pubkey: edition,
-                  isSigner: false,
-                  isWritable: false,
-                },
-                {
-                  pubkey: TokenMetadataProgram.publicKey,
-                  isSigner: false,
-                  isWritable: false,
-                },
-              ]
-            : []
-        )
-        .instruction()
+        return this.program.methods
+          .addEscrowlessOffering(new anchor.BN(_amount))
+          .accounts({
+            playerAuthority: user,
+            player: player,
+            game: this.challengeKey,
+            offering: offering,
+            tokenAccount: nftTokenAccount,
+            tokenMint: nftMint,
+            tokenProgram: TOKEN_PROGRAM_ID,
+            systemProgram: anchor.web3.SystemProgram.programId,
+          })
+          .remainingAccounts(
+            edition
+              ? [
+                  {
+                    pubkey: edition,
+                    isSigner: false,
+                    isWritable: false,
+                  },
+                  {
+                    pubkey: TokenMetadataProgram.publicKey,
+                    isSigner: false,
+                    isWritable: false,
+                  },
+                ]
+              : []
+          )
+          .instruction();
+      })
     );
     return this;
   }
 
-  async accept(_user: string) {
-    const user = new anchor.web3.PublicKey(_user);
-    const [player] = await anchor.web3.PublicKey.findProgramAddress(
-      [this.challengeKey.toBuffer(), user.toBuffer()],
-      this.program.programId
-    );
-    this.tx.add(
-      await this.program.methods
-        .accept()
-        .accounts({
-          playerAuthority: user,
-          player: player,
-          game: this.challengeKey,
-          systemProgram: anchor.web3.SystemProgram.programId,
-        })
-        .instruction()
+  accept(_user: string) {
+    this.tasks.push(
+      new Promise(async () => {
+        const user = new anchor.web3.PublicKey(_user);
+        const [player] = await anchor.web3.PublicKey.findProgramAddress(
+          [this.challengeKey.toBuffer(), user.toBuffer()],
+          this.program.programId
+        );
+
+        await this.program.methods
+          .accept()
+          .accounts({
+            playerAuthority: user,
+            player: player,
+            game: this.challengeKey,
+            systemProgram: anchor.web3.SystemProgram.programId,
+          })
+          .instruction();
+      })
     );
     return this;
+  }
+
+  async getTx() {
+    const instructions = await Promise.all(this.tasks);
+    this.tx.add(...instructions);
+    return this.tx;
   }
 
   async send(signers: anchor.web3.Signer[]) {
+    const instructions = await Promise.all(this.tasks);
+    this.tx.add(...instructions);
     const sig = await this.connection.sendTransaction(this.tx, signers);
     const latestBlockHash = await this.connection.getLatestBlockhash();
     await this.connection.confirmTransaction({
@@ -298,11 +325,12 @@ export class NftChallengeTXClient {
     return sig;
   }
 
-  async getTx() {
+  async getSerializedTx() {
+    const instructions = await Promise.all(this.tasks);
+    this.tx.add(...instructions);
     this.tx.recentBlockhash = (
       await this.connection.getLatestBlockhash()
     ).blockhash;
-
     return this.tx
       .serialize({ requireAllSignatures: false, verifySignatures: false })
       .toString("base64");
