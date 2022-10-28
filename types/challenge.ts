@@ -137,7 +137,8 @@ export class ChallengeAPIClient {
 }
 
 export class ChallengeTXClient {
-  tx = new anchor.web3.Transaction();
+  tx: anchor.web3.Transaction;
+  tasks: Promise<anchor.web3.TransactionInstruction>[] = [];
   challengeKey: anchor.web3.PublicKey;
   program: Program<Challenge>;
   connection: anchor.web3.Connection;
@@ -163,94 +164,114 @@ export class ChallengeTXClient {
         anchor.AnchorProvider.defaultOptions()
       )
     );
+    this.tx = new anchor.web3.Transaction();
   }
 
-  async join(_user: string) {
+  join(_user: string) {
     const user = new anchor.web3.PublicKey(_user);
-    const [player, _pbump] = await anchor.web3.PublicKey.findProgramAddress(
-      [this.challengeKey.toBuffer(), user.toBuffer()],
-      this.program.programId
-    );
+    this.tasks.push(
+      new Promise(async (resolve) => {
+        const [player, _pbump] = await anchor.web3.PublicKey.findProgramAddress(
+          [this.challengeKey.toBuffer(), user.toBuffer()],
+          this.program.programId
+        );
 
-    const challenge = await this.program.account.challenge.fetch(
-      this.challengeKey
-    );
-    const pool = await this.program.account.pool.fetch(challenge.pool);
-    const provider = await this.program.account.provider.fetch(
-      challenge.provider
-    );
-    let userTokenAccount: anchor.web3.PublicKey;
+        const challenge = await this.program.account.challenge.fetch(
+          this.challengeKey
+        );
+        const pool = await this.program.account.pool.fetch(challenge.pool);
+        const provider = await this.program.account.provider.fetch(
+          challenge.provider
+        );
+        let userTokenAccount: anchor.web3.PublicKey;
 
-    userTokenAccount = await getAssociatedTokenAddress(user, pool.mint);
-    if (pool.mint === NATIVE_MINT) {
-      transferWrappedSol(
-        user,
-        userTokenAccount,
-        challenge.entryFee.toNumber(),
-        this.tx
-      );
-    }
+        userTokenAccount = await getAssociatedTokenAddress(user, pool.mint);
+        if (pool.mint === NATIVE_MINT) {
+          transferWrappedSol(
+            user,
+            userTokenAccount,
+            challenge.entryFee.toNumber(),
+            this.tx
+          );
+        }
 
-    this.tx.add(
-      await this.program.methods
-        .join()
-        .accounts({
-          provider: challenge.provider,
-          pool: challenge.pool,
-          poolTokenAccount: pool.tokenAccount,
-          challenge: this.challengeKey,
-          player: player,
-          providerAuthority: provider.authority,
-          user: user,
-          userTokenAccount: userTokenAccount,
-          payer: user,
-          mint: pool.mint,
-          tokenProgram: TOKEN_PROGRAM_ID,
-          systemProgram: anchor.web3.SystemProgram.programId,
-        })
-        .instruction()
+        return resolve(
+          this.program.methods
+            .join()
+            .accounts({
+              provider: challenge.provider,
+              pool: challenge.pool,
+              poolTokenAccount: pool.tokenAccount,
+              challenge: this.challengeKey,
+              player: player,
+              providerAuthority: provider.authority,
+              user: user,
+              userTokenAccount: userTokenAccount,
+              payer: user,
+              mint: pool.mint,
+              tokenProgram: TOKEN_PROGRAM_ID,
+              systemProgram: anchor.web3.SystemProgram.programId,
+            })
+            .instruction()
+        );
+      })
     );
-
+    this.tx.feePayer = user;
     return this;
   }
 
-  async leave(_user: string) {
+  leave(_user: string) {
     const user = new anchor.web3.PublicKey(_user);
-    const [player, _pbump] = await anchor.web3.PublicKey.findProgramAddress(
-      [this.challengeKey.toBuffer(), user.toBuffer()],
-      this.program.programId
-    );
+    this.tasks.push(
+      new Promise(async (resolve) => {
+        const [player, _pbump] = await anchor.web3.PublicKey.findProgramAddress(
+          [this.challengeKey.toBuffer(), user.toBuffer()],
+          this.program.programId
+        );
 
-    const challenge = await this.program.account.challenge.fetch(
-      this.challengeKey
-    );
-    const pool = await this.program.account.pool.fetch(challenge.pool);
-    let userTokenAccount: anchor.web3.PublicKey;
+        const challenge = await this.program.account.challenge.fetch(
+          this.challengeKey
+        );
+        const pool = await this.program.account.pool.fetch(challenge.pool);
+        let userTokenAccount: anchor.web3.PublicKey;
 
-    userTokenAccount = await getAssociatedTokenAddress(user, pool.mint);
-    this.tx.add(
-      await this.program.methods
-        .leave()
-        .accounts({
-          provider: challenge.provider,
-          pool: challenge.pool,
-          poolTokenAccount: pool.tokenAccount,
-          challenge: this.challengeKey,
-          player: player,
-          user: user,
-          userTokenAccount: userTokenAccount,
-          mint: pool.mint,
-          tokenProgram: TOKEN_PROGRAM_ID,
-          systemProgram: anchor.web3.SystemProgram.programId,
-        })
-        .instruction()
+        userTokenAccount = await getAssociatedTokenAddress(user, pool.mint);
+
+        return resolve(
+          this.program.methods
+            .leave()
+            .accounts({
+              provider: challenge.provider,
+              pool: challenge.pool,
+              poolTokenAccount: pool.tokenAccount,
+              challenge: this.challengeKey,
+              player: player,
+              user: user,
+              userTokenAccount: userTokenAccount,
+              mint: pool.mint,
+              tokenProgram: TOKEN_PROGRAM_ID,
+              systemProgram: anchor.web3.SystemProgram.programId,
+            })
+            .instruction()
+        );
+      })
     );
+    this.tx.feePayer = user;
+    return this;
+  }
+
+  async getTx() {
+    const instructions = await Promise.all(this.tasks);
+    this.tx.add(...instructions);
+    return this.tx;
   }
 
   async send(signers: anchor.web3.Signer[]) {
+    const instructions = await Promise.all(this.tasks);
+    this.tx.add(...instructions);
     const sig = await this.connection.sendTransaction(this.tx, signers);
     const latestBlockHash = await this.connection.getLatestBlockhash();
-    this.connection.confirmTransaction({
+    await this.connection.confirmTransaction({
       signature: sig,
       blockhash: latestBlockHash.blockhash,
       lastValidBlockHeight: latestBlockHash.lastValidBlockHeight,
@@ -258,7 +279,14 @@ export class ChallengeTXClient {
     return sig;
   }
 
-  getTx() {
-    return this.tx;
+  async getSerializedTx() {
+    const instructions = await Promise.all(this.tasks);
+    this.tx.add(...instructions);
+    this.tx.recentBlockhash = (
+      await this.connection.getLatestBlockhash()
+    ).blockhash;
+    return this.tx
+      .serialize({ requireAllSignatures: false, verifySignatures: false })
+      .toString("base64");
   }
 }
