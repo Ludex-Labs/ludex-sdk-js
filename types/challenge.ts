@@ -17,8 +17,8 @@ export { Challenge, IDL } from "./challenge_idl";
 
 export class ChallengeAPIClient {
   ludexChallengeApi: <T>(config: ApiConfig) => Promise<T>;
-  constructor(apiKey: string) {
-    this.ludexChallengeApi = _ludexChallengeApi(apiKey, "challenge");
+  constructor(apiKey: string, baseUrl?: string) {
+    this.ludexChallengeApi = _ludexChallengeApi(apiKey, "challenge", baseUrl);
   }
 
   async _apiCreateChallenge(payoutId: number, limit: number = 2) {
