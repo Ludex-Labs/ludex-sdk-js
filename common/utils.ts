@@ -1,4 +1,4 @@
-import * as anchor from "@project-serum/anchor";
+import { web3 } from "@project-serum/anchor";
 import {
   ASSOCIATED_TOKEN_PROGRAM_ID,
   createAssociatedTokenAccountInstruction,
@@ -7,11 +7,13 @@ import {
   TOKEN_PROGRAM_ID,
 } from "@solana/spl-token";
 
+export * from "@project-serum/anchor";
+
 export const transferWrappedSol = (
-  user: anchor.web3.PublicKey,
-  associatedTokenAccount: anchor.web3.PublicKey,
+  user: web3.PublicKey,
+  associatedTokenAccount: web3.PublicKey,
   amount: number,
-  tx: anchor.web3.Transaction
+  tx: web3.Transaction
 ) => {
   tx.add(
     createAssociatedTokenAccountInstruction(
@@ -22,7 +24,7 @@ export const transferWrappedSol = (
       TOKEN_PROGRAM_ID,
       ASSOCIATED_TOKEN_PROGRAM_ID
     ),
-    anchor.web3.SystemProgram.transfer({
+    web3.SystemProgram.transfer({
       fromPubkey: user,
       toPubkey: associatedTokenAccount,
       lamports: amount,
