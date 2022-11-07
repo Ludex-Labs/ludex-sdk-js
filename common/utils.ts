@@ -7,8 +7,6 @@ import {
   TOKEN_PROGRAM_ID,
 } from "@solana/spl-token";
 
-export * from "@project-serum/anchor";
-
 export const transferWrappedSol = (
   user: web3.PublicKey,
   associatedTokenAccount: web3.PublicKey,

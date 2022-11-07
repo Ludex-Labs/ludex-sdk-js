@@ -1,5 +1,4 @@
-import * as anchor from "@project-serum/anchor";
-import { Program } from "@project-serum/anchor";
+import { Program, web3, AnchorProvider, Wallet } from "@project-serum/anchor";
 import {
   getAssociatedTokenAddress,
   NATIVE_MINT,
@@ -11,7 +10,6 @@ import {
   transferWrappedSol,
   ApiConfig,
 } from "../common/utils";
-import NodeWallet from "@project-serum/anchor/dist/cjs/nodewallet";
 import { Challenge, IDL } from "./challenge_idl";
 export { Challenge, IDL } from "./challenge_idl";
 
@@ -137,20 +135,20 @@ export class ChallengeAPIClient {
 }
 
 export class ChallengeTXClient {
-  tx: anchor.web3.Transaction;
-  tasks: Promise<anchor.web3.TransactionInstruction>[] = [];
-  challengeKey: anchor.web3.PublicKey;
+  tx: web3.Transaction;
+  tasks: Promise<web3.TransactionInstruction>[] = [];
+  challengeKey: web3.PublicKey;
   program: Program<Challenge>;
-  connection: anchor.web3.Connection;
+  connection: web3.Connection;
   constructor(
     isMainnet: boolean,
-    connection: anchor.web3.Connection,
+    connection: web3.Connection,
     challengeKey: string,
-    wallet?: anchor.web3.Keypair
+    wallet?: web3.Keypair
   ) {
-    this.challengeKey = new anchor.web3.PublicKey(challengeKey);
+    this.challengeKey = new web3.PublicKey(challengeKey);
     this.connection = connection;
-    const programAddress = new anchor.web3.PublicKey(
+    const programAddress = new web3.PublicKey(
       isMainnet
         ? "BuPvutSnk9NdTZHFiA6UZm6oPwGszp6ozMwoAgJMDBGR"
         : "CoiJYvDgj8BqQr8MEBjyXKfsQFrYQSYdwEuzjivE2D7"
@@ -158,20 +156,20 @@ export class ChallengeTXClient {
     this.program = new Program<Challenge>(
       IDL,
       programAddress,
-      new anchor.AnchorProvider(
+      new AnchorProvider(
         this.connection,
-        new NodeWallet(wallet ?? anchor.web3.Keypair.generate()),
-        anchor.AnchorProvider.defaultOptions()
+        new Wallet(wallet ?? web3.Keypair.generate()),
+        AnchorProvider.defaultOptions()
       )
     );
-    this.tx = new anchor.web3.Transaction();
+    this.tx = new web3.Transaction();
   }
 
   join(_user: string) {
-    const user = new anchor.web3.PublicKey(_user);
+    const user = new web3.PublicKey(_user);
     this.tasks.push(
       new Promise(async (resolve) => {
-        const [player, _pbump] = await anchor.web3.PublicKey.findProgramAddress(
+        const [player, _pbump] = await web3.PublicKey.findProgramAddress(
           [this.challengeKey.toBuffer(), user.toBuffer()],
           this.program.programId
         );
@@ -183,7 +181,7 @@ export class ChallengeTXClient {
         const provider = await this.program.account.provider.fetch(
           challenge.provider
         );
-        let userTokenAccount: anchor.web3.PublicKey;
+        let userTokenAccount: web3.PublicKey;
 
         userTokenAccount = await getAssociatedTokenAddress(user, pool.mint);
         if (pool.mint === NATIVE_MINT) {
@@ -210,7 +208,7 @@ export class ChallengeTXClient {
               payer: user,
               mint: pool.mint,
               tokenProgram: TOKEN_PROGRAM_ID,
-              systemProgram: anchor.web3.SystemProgram.programId,
+              systemProgram: web3.SystemProgram.programId,
             })
             .instruction()
         );
@@ -221,10 +219,10 @@ export class ChallengeTXClient {
   }
 
   leave(_user: string) {
-    const user = new anchor.web3.PublicKey(_user);
+    const user = new web3.PublicKey(_user);
     this.tasks.push(
       new Promise(async (resolve) => {
-        const [player, _pbump] = await anchor.web3.PublicKey.findProgramAddress(
+        const [player, _pbump] = await web3.PublicKey.findProgramAddress(
           [this.challengeKey.toBuffer(), user.toBuffer()],
           this.program.programId
         );
@@ -233,7 +231,7 @@ export class ChallengeTXClient {
           this.challengeKey
         );
         const pool = await this.program.account.pool.fetch(challenge.pool);
-        let userTokenAccount: anchor.web3.PublicKey;
+        let userTokenAccount: web3.PublicKey;
 
         userTokenAccount = await getAssociatedTokenAddress(user, pool.mint);
 
@@ -250,7 +248,7 @@ export class ChallengeTXClient {
               userTokenAccount: userTokenAccount,
               mint: pool.mint,
               tokenProgram: TOKEN_PROGRAM_ID,
-              systemProgram: anchor.web3.SystemProgram.programId,
+              systemProgram: web3.SystemProgram.programId,
             })
             .instruction()
         );
@@ -266,7 +264,7 @@ export class ChallengeTXClient {
     return this.tx;
   }
 
-  async send(signers: anchor.web3.Signer[]) {
+  async send(signers: web3.Signer[]) {
     const instructions = await Promise.all(this.tasks);
     this.tx.add(...instructions);
     const sig = await this.connection.sendTransaction(this.tx, signers);
