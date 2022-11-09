@@ -49,7 +49,9 @@ export const _ludexChallengeApi =
     let data;
     try {
       data = await response.json();
-    } catch (e) {}
+    } catch (e) {
+      throw e;
+    }
     return data as T;
   };
 
