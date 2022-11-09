@@ -46,10 +46,17 @@ export const _ludexChallengeApi =
         },
       }
     );
+
+    if (!response.ok) {
+      throw new Error((await response.json()).message);
+    }
+
     let data;
     try {
       data = await response.json();
-    } catch (e) {}
+    } catch (e) {
+      throw e;
+    }
     return data as T;
   };
 
