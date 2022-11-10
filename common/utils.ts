@@ -51,6 +51,10 @@ export const _ludexChallengeApi =
       throw new Error((await response.json()).message);
     }
 
+    if (config.method === "HEAD") {
+      return undefined as T;
+    }
+
     let data;
     try {
       data = await response.json();
