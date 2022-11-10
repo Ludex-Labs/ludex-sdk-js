@@ -52,7 +52,7 @@ export const _ludexChallengeApi =
     }
 
     if (config.method === "HEAD") {
-      return undefined as T;
+      return {} as T;
     }
 
     let data;
