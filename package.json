@@ -17,8 +17,8 @@
     "build": "tsc",
     "prepublish": "npm run build"
   },
-  "author": "",
-  "license": "",
+  "author": "Ludex-Labs",
+  "license": "MIT",
   "devDependencies": {
     "typescript": "^4.4.4"
   },
