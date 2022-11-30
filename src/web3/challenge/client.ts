@@ -1,7 +1,7 @@
 import { AnchorProvider, Program, Wallet, web3 } from '@project-serum/anchor';
 import { getAssociatedTokenAddress, NATIVE_MINT, TOKEN_PROGRAM_ID } from '@solana/spl-token';
 
-import { transferWrappedSol } from '../../utils';
+import { transferWrappedSol } from '../utils';
 import { Challenge, IDL } from './';
 
 export class ChallengeTXClient {
