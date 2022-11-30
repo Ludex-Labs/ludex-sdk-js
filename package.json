@@ -11,8 +11,12 @@
   },
   "private": false,
   "description": "",
-  "main": "dist/types/index.js",
-  "types": "dist/types/index.d.ts",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": "./dist/index.js",
+    "./*": "./dist/*"
+  },
   "scripts": {
     "build": "tsc",
     "prepublish": "npm run build"

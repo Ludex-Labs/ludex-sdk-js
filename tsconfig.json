@@ -3,7 +3,7 @@
     "outDir": "dist",
     "target": "es2018",
     "lib": ["es2018", "dom"],
-    "module": "commonjs",
+    "module": "CommonJS",
     "moduleResolution": "Node",
     "declaration": true,
     "checkJs": false,
@@ -13,5 +13,6 @@
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "typeRoots": ["./node_modules/@types/", "./types"]
-  }
+  },
+  "include": ["./src/**/*"]
 }
