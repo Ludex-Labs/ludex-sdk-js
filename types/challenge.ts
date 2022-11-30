@@ -1,16 +1,9 @@
-import { Program, web3, AnchorProvider, Wallet } from "@project-serum/anchor";
-import {
-  getAssociatedTokenAddress,
-  NATIVE_MINT,
-  TOKEN_PROGRAM_ID,
-} from "@solana/spl-token";
-import {
-  _ludexChallengeApi,
-  poll,
-  transferWrappedSol,
-  ApiConfig,
-} from "../common/utils";
-import { Challenge, IDL } from "./challenge_idl";
+import { AnchorProvider, Program, Wallet, web3 } from '@project-serum/anchor';
+import { getAssociatedTokenAddress, NATIVE_MINT, TOKEN_PROGRAM_ID } from '@solana/spl-token';
+
+import { _ludexChallengeApi, ApiConfig, transferWrappedSol } from '../common/utils';
+import { Challenge, IDL } from './challenge_idl';
+
 export { Challenge, IDL } from "./challenge_idl";
 
 export class ChallengeAPIClient {
@@ -58,9 +51,11 @@ export class ChallengeAPIClient {
   }
 
   async _apiResolveChallenge(id: number, winner: string) {
+    const payment = encodeURIComponent(`[{"to": "${winner}"}]`);
+
     await this.ludexChallengeApi({
       method: "HEAD",
-      path: `${id}?action=resolve&winner=${winner}`,
+      path: `${id}?action=resolve&payments=${payment}`,
     });
   }
 
@@ -76,45 +71,20 @@ export class ChallengeAPIClient {
 
   async create(payoutId: number, limit: number = 2) {
     const challengeId = (await this._apiCreateChallenge(payoutId, limit)).id;
-    const challenge = await poll(
-      () => this._apiGetChallenge(challengeId),
-      ({ blockchainAddress }) => blockchainAddress !== undefined,
-      1000
-    );
+    const challenge = await this._apiGetChallenge(challengeId);
     return { challengeId, blockchainAddress: challenge.blockchainAddress! };
   }
 
   async lock(id: number, skipConfirmation: boolean = false) {
     await this._apiLockChallenge(id);
-    if (!skipConfirmation) {
-      await poll(
-        () => this._apiGetChallenge(Number(id)),
-        ({ lockedAt }) => lockedAt === undefined,
-        1000
-      );
-    }
   }
 
   async cancel(id: number, skipConfirmation: boolean = false) {
     await this._apiCancelChallenge(id);
-    if (!skipConfirmation) {
-      await poll(
-        () => this._apiGetChallenge(Number(id)),
-        ({ canceledAt }) => canceledAt === undefined,
-        1000
-      );
-    }
   }
 
   async resolve(id: number, winner: string, skipConfirmation: boolean = false) {
     await this._apiResolveChallenge(id, winner);
-    if (!skipConfirmation) {
-      await poll(
-        () => this._apiGetChallenge(Number(id)),
-        ({ resolvedAt }) => resolvedAt === undefined,
-        1000
-      );
-    }
   }
 
   /* TODO: Coming soon with applying your own specific payments */
@@ -124,13 +94,6 @@ export class ChallengeAPIClient {
     skipConfirmation?: boolean
   ) {
     await this._apiResolveChallengeWithPayment(id, payment);
-    if (!skipConfirmation) {
-      await poll(
-        () => this._apiGetChallenge(Number(id)),
-        ({ resolvedAt }) => resolvedAt === undefined,
-        1000
-      );
-    }
   }
 }
 

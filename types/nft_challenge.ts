@@ -1,16 +1,10 @@
-import {
-  guestIdentity,
-  Metaplex,
-  TokenMetadataProgram,
-} from "@metaplex-foundation/js";
-import { Program, web3, AnchorProvider, Wallet, BN, utils } from "@project-serum/anchor";
-import {
-  getAssociatedTokenAddress,
-  NATIVE_MINT,
-  TOKEN_PROGRAM_ID,
-} from "@solana/spl-token";
-import { _ludexChallengeApi, poll, ApiConfig } from "../common/utils";
-import { IDL, NftChallenge } from "./nft_challenge_idl";
+import { guestIdentity, Metaplex, TokenMetadataProgram } from '@metaplex-foundation/js';
+import { AnchorProvider, BN, Program, utils, Wallet, web3 } from '@project-serum/anchor';
+import { getAssociatedTokenAddress, NATIVE_MINT, TOKEN_PROGRAM_ID } from '@solana/spl-token';
+
+import { _ludexChallengeApi, ApiConfig } from '../common/utils';
+import { IDL, NftChallenge } from './nft_challenge_idl';
+
 export { IDL, NftChallenge } from "./nft_challenge_idl";
 
 export class NftChallengeAPIClient {
@@ -67,27 +61,12 @@ export class NftChallengeAPIClient {
 
   async create(limit: number = 2) {
     const challengeId = (await this._apiCreateChallenge(limit)).id;
-    const challenge = await poll(
-      () => this._apiGetChallenge(challengeId),
-      (c) => {
-        return c.blockchainAddress != null;
-      },
-      1000
-    );
+    const challenge = await this._apiGetChallenge(challengeId);
     return { challengeId, blockchainAddress: challenge.blockchainAddress! };
   }
 
   async cancel(id: number, skipConfirmation: boolean = false) {
     await this._apiCancelChallenge(id);
-    if (!skipConfirmation) {
-      await poll(
-        () => this._apiGetChallenge(Number(id)),
-        (c) => {
-          return c.canceledAt != null;
-        },
-        1000
-      );
-    }
   }
 
   async resolveWithPayment(
@@ -96,13 +75,6 @@ export class NftChallengeAPIClient {
     skipConfirmation?: boolean
   ) {
     await this._apiResolveChallengeWithPayment(id, payment);
-    if (!skipConfirmation) {
-      await poll(
-        () => this._apiGetChallenge(Number(id)),
-        ({ resolvedAt }) => resolvedAt === undefined,
-        1000
-      );
-    }
   }
 }
 
@@ -168,10 +140,7 @@ export class NftChallengeTXClient {
   }
 
   addSolOffering(_user: string, _amount: number) {
-    return this.addLamportOffering(
-      _user,
-      _amount * web3.LAMPORTS_PER_SOL
-    );
+    return this.addLamportOffering(_user, _amount * web3.LAMPORTS_PER_SOL);
   }
 
   addLamportOffering(_user: string, _amount: number) {
