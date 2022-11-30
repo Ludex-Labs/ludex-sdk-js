@@ -3,9 +3,6 @@ import { AnchorProvider, BN, Program, utils, Wallet, web3 } from '@project-serum
 import { getAssociatedTokenAddress, NATIVE_MINT, TOKEN_PROGRAM_ID } from '@solana/spl-token';
 
 import { _ludexChallengeApi, ApiConfig } from '../common/utils';
-import { IDL, NftChallenge } from '../types/nft_challenge_idl';
-
-export { IDL, NftChallenge } from "../types/nft_challenge_idl";
 
 export class NftChallengeAPIClient {
   ludexChallengeApi: <T>(config: ApiConfig) => Promise<T>;
