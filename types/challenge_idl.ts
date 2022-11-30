@@ -1,5 +1,5 @@
 export type Challenge = {
-  "version": "0.1.13",
+  "version": "0.1.18",
   "name": "challenge",
   "instructions": [
     {
@@ -577,47 +577,6 @@ export type Challenge = {
           "isSigner": false
         },
         {
-          "name": "challenge",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "payment",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "player",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "systemProgram",
-          "isMut": false,
-          "isSigner": false
-        }
-      ],
-      "args": []
-    },
-    {
-      "name": "finishVerify",
-      "accounts": [
-        {
-          "name": "provider",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "pool",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "poolTokenAccount",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
           "name": "mediatorTokenAccount",
           "isMut": true,
           "isSigner": false
@@ -638,12 +597,17 @@ export type Challenge = {
           "isSigner": false
         },
         {
-          "name": "authority",
-          "isMut": true,
-          "isSigner": true
+          "name": "player",
+          "isMut": false,
+          "isSigner": false
         },
         {
           "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "rent",
           "isMut": false,
           "isSigner": false
         },
@@ -1526,17 +1490,12 @@ export type Challenge = {
       "code": 6038,
       "name": "WrongPayoutAccount",
       "msg": "Wrong payout account"
-    },
-    {
-      "code": 6039,
-      "name": "IncompleteVerify",
-      "msg": "Didn't verify player payments"
     }
   ]
 };
 
 export const IDL: Challenge = {
-  "version": "0.1.13",
+  "version": "0.1.18",
   "name": "challenge",
   "instructions": [
     {
@@ -2114,47 +2073,6 @@ export const IDL: Challenge = {
           "isSigner": false
         },
         {
-          "name": "challenge",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "payment",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "player",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "systemProgram",
-          "isMut": false,
-          "isSigner": false
-        }
-      ],
-      "args": []
-    },
-    {
-      "name": "finishVerify",
-      "accounts": [
-        {
-          "name": "provider",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "pool",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "poolTokenAccount",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
           "name": "mediatorTokenAccount",
           "isMut": true,
           "isSigner": false
@@ -2175,12 +2093,17 @@ export const IDL: Challenge = {
           "isSigner": false
         },
         {
-          "name": "authority",
-          "isMut": true,
-          "isSigner": true
+          "name": "player",
+          "isMut": false,
+          "isSigner": false
         },
         {
           "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "rent",
           "isMut": false,
           "isSigner": false
         },
@@ -3063,11 +2986,6 @@ export const IDL: Challenge = {
       "code": 6038,
       "name": "WrongPayoutAccount",
       "msg": "Wrong payout account"
-    },
-    {
-      "code": 6039,
-      "name": "IncompleteVerify",
-      "msg": "Didn't verify player payments"
     }
   ]
 };

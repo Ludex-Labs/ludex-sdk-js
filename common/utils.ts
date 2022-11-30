@@ -1,11 +1,8 @@
-import { web3 } from "@project-serum/anchor";
+import { web3 } from '@project-serum/anchor';
 import {
-  ASSOCIATED_TOKEN_PROGRAM_ID,
-  createAssociatedTokenAccountInstruction,
-  createSyncNativeInstruction,
-  NATIVE_MINT,
-  TOKEN_PROGRAM_ID,
-} from "@solana/spl-token";
+    ASSOCIATED_TOKEN_PROGRAM_ID, createAssociatedTokenAccountInstruction,
+    createSyncNativeInstruction, NATIVE_MINT, TOKEN_PROGRAM_ID
+} from '@solana/spl-token';
 
 export const transferWrappedSol = (
   user: web3.PublicKey,
@@ -48,6 +45,10 @@ export const _ludexChallengeApi =
     );
 
     if (!response.ok) {
+      if (config.method === "HEAD") {
+        throw new Error(response.statusText);
+      }
+
       throw new Error((await response.json()).message);
     }
 
@@ -63,21 +64,3 @@ export const _ludexChallengeApi =
     }
     return data as T;
   };
-
-export const poll = async <T>(
-  func: () => Promise<T>,
-  retryCondition: (Obj: T) => boolean,
-  interval: number,
-  numberOfRetry?: number
-) => {
-  let retry = 0;
-  while (numberOfRetry === undefined || retry < numberOfRetry) {
-    const result = await func();
-    if (retryCondition(result)) {
-      return result;
-    }
-    retry++;
-    await new Promise((resolve) => setTimeout(resolve, interval));
-  }
-  throw new Error("Timed out");
-};
