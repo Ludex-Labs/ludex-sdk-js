@@ -1,7 +1,6 @@
+import { _ludexChallengeApi, ApiConfig, transferWrappedSol } from '@ludex-labs/ludex-sdk-js/utils';
 import { AnchorProvider, Program, Wallet, web3 } from '@project-serum/anchor';
 import { getAssociatedTokenAddress, NATIVE_MINT, TOKEN_PROGRAM_ID } from '@solana/spl-token';
-
-import { _ludexChallengeApi, ApiConfig, transferWrappedSol } from '../common/utils';
 
 export class ChallengeAPIClient {
   ludexChallengeApi: <T>(config: ApiConfig) => Promise<T>;
