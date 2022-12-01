@@ -8,7 +8,6 @@ on:
 jobs:
   publish:
     name: Publish package
-    needs: build
     runs-on: ubuntu-latest
 
     steps:
@@ -22,7 +21,7 @@ jobs:
           node-version: 16
           registry-url: https://npm.pkg.github.com/
       - name: install and build
-        run: npm ci && npm build
+        run: npm ci && npm run build
       - name: publish
         run: npm publish
         env:
