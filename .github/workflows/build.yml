@@ -4,6 +4,11 @@ on:
   push:
     branch:
       - main
+  pull-request:
+    types:
+      - opened
+    braches:
+      - main
 
 jobs:
   publish:
