@@ -1,4 +1,5 @@
 export type ApiConfig = RequestInit & { path?: string };
+
 export const _ludexChallengeApi =
   (bearerToken: string, api: string, baseUrl = "https://api.ludex.gg") =>
   async <T>(config: ApiConfig): Promise<T> => {
