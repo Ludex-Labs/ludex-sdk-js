@@ -2,13 +2,12 @@ name: Version bump
 
 on:
   push:
-    tags:
-      - release
+    branch:
+      - main
 
 jobs:
   bump-version:
     name: "Bump Version on master"
-    needs: build
     runs-on: ubuntu-latest
 
     steps:
