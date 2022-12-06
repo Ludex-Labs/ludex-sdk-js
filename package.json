@@ -21,7 +21,7 @@
   "scripts": {
     "build": "tsc && tsc -p tsconfig.esm.json",
     "clean": "rm -r ./lib",
-    "prepublish": "npm run rebuild",
+    "prepublishOnly": "npm run rebuild",
     "rebuild": "npm run clean && npm run build"
   },
   "author": "Ludex-Labs",
