@@ -1,25 +1,28 @@
 {
   "name": "@ludex-labs/ludex-sdk-js",
-  "version": "1.6.1",
+  "version": "1.7.0",
   "repository": {
     "directory": "packages/@ludex-labs/ludex-sdk-js",
     "type": "git",
     "url": "https://github.com/Ludex-Labs/ludex-sdk-js.git"
   },
   "publishConfig": {
-    "registry": "https://npm.pkg.github.com"
+    "registry": "https://registry.npmjs.org/"
   },
   "private": false,
   "description": "",
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
-  "exports": {
-    ".": "./dist/index.js",
-    "./*": "./dist/*"
-  },
+  "types": "./lib/index.d.ts",
+  "module": "./lib/esm/index.js",
+  "main": "./lib/cjs/index.js",
+  "files": [
+    "src",
+    "lib"
+  ],
   "scripts": {
-    "build": "tsc",
-    "prepublish": "npm run build"
+    "build": "tsc && tsc -p tsconfig.esm.json",
+    "clean": "rm -r ./lib",
+    "prepublishOnly": "npm run rebuild",
+    "rebuild": "npm run clean && npm run build"
   },
   "author": "Ludex-Labs",
   "license": "MIT",

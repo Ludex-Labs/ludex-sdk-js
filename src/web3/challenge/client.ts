@@ -1,5 +1,6 @@
 import { AnchorProvider, Program, Wallet, web3 } from '@project-serum/anchor';
 import { getAssociatedTokenAddress, NATIVE_MINT, TOKEN_PROGRAM_ID } from '@solana/spl-token';
+import { WalletAdapterProps } from '@solana/wallet-adapter-base';
 
 import { transferWrappedSol } from '../utils';
 import { Challenge, IDL } from './';
@@ -145,6 +146,12 @@ export class ChallengeTXClient {
       lastValidBlockHeight: latestBlockHash.lastValidBlockHeight,
     });
     return sig;
+  }
+
+  async sendWithSendTranstion(
+    sendTransaction: WalletAdapterProps["sendTransaction"]
+  ) {
+    return sendTransaction(await this.getTx(), this.connection);
   }
 
   async getSerializedTx() {

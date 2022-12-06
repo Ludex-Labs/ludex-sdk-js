@@ -58,14 +58,14 @@ export class NftChallengeAPIClient {
     return { challengeId, blockchainAddress: challenge.blockchainAddress! };
   }
 
-  async cancel(id: number, skipConfirmation: boolean = false) {
+  async cancel(id: number, _: boolean = false) {
     await this._apiCancelChallenge(id);
   }
 
   async resolveWithPayment(
     id: number,
     payment: { to: string; offering: string }[],
-    skipConfirmation?: boolean
+    _?: boolean
   ) {
     await this._apiResolveChallengeWithPayment(id, payment);
   }
