@@ -1,18 +1,21 @@
 {
   "compilerOptions": {
-    "outDir": "dist",
+    "outDir": "lib/cjs",
     "target": "es2018",
-    "lib": ["es2018", "dom"],
     "module": "CommonJS",
     "moduleResolution": "Node",
-    "declaration": true,
-    "checkJs": false,
+    "declaration": false,
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
     "strict": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
     "noImplicitReturns": true,
+    "noUnusedParameters": true,
+    "noUnusedLocals": true,
     "skipLibCheck": true,
     "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true,
-    "typeRoots": ["./node_modules/@types/", "./types"]
+    "esModuleInterop": true
   },
-  "include": ["./src/**/*"]
+  "include": ["src"]
 }
