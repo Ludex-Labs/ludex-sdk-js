@@ -20,7 +20,7 @@
   ],
   "scripts": {
     "build": "tsc && tsc -p tsconfig.esm.json",
-    "clean": "rm -r ./lib",
+    "clean": "rm -rf ./lib",
     "prepublishOnly": "npm run rebuild",
     "rebuild": "npm run clean && npm run build"
   },
