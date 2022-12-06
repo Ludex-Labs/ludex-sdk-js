@@ -5,7 +5,7 @@
 ## Installation
 
 ```sh
-$ npm i --save ludex-sdk
+npm i @ludex-labs/ludex-sdk-js
 ```
 
 ## Usage
