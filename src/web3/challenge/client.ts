@@ -34,6 +34,7 @@ export class ChallengeTXClient {
     }
 
     if (!options.wallet) {
+      // TODO: This will fail in a browser
       const { Wallet: AnchorWallet } = require("@project-serum/anchor");
       options.wallet = new AnchorWallet(new Keypair()) as Wallet;
     }
