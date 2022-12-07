@@ -1,8 +1,9 @@
 import { guestIdentity, Metaplex, TokenMetadataProgram } from '@metaplex-foundation/js';
-import { AnchorProvider, BN, Program, utils, Wallet, web3 } from '@project-serum/anchor';
+import { AnchorProvider, BN, Program, utils, web3 } from '@project-serum/anchor';
 import { TOKEN_PROGRAM_ID } from '@solana/spl-token';
 import { Keypair } from '@solana/web3.js';
 
+import { Wallet } from '../utils';
 import { IDL, NftChallenge } from './';
 
 export type ChallengeClientOptions = {
@@ -255,7 +256,7 @@ export class NftChallengeTXClient {
   static async getOfferings(
     connection: web3.Connection,
     challengeKey: string,
-    wallet: web3.Keypair
+    wallet: Wallet
   ) {
     const programAddress = new web3.PublicKey(
       "5U2Y2YNyMRofJxMBZKfkvxeuXRjsJUpkG95pRVGLLXyj"
@@ -263,11 +264,7 @@ export class NftChallengeTXClient {
     const program = new Program<NftChallenge>(
       IDL,
       programAddress,
-      new AnchorProvider(
-        connection,
-        new Wallet(wallet),
-        AnchorProvider.defaultOptions()
-      )
+      new AnchorProvider(connection, wallet, AnchorProvider.defaultOptions())
     );
 
     const challenge = new web3.PublicKey(challengeKey);
