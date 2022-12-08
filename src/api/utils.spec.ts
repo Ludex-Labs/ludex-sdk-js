@@ -1,6 +1,6 @@
 import 'mocha';
 
-import rewire from 'rewire';
+import { expect } from 'chai';
 import sinon from 'sinon';
 
 import { _ludexChallengeApi } from './utils';
@@ -11,7 +11,14 @@ describe('API utils', function () {
     let spy: sinon.SinonSpy<any, any>;
 
     this.beforeEach(function () {
-      spy = sinon.spy();
+      spy = sinon.spy(() => {
+        const res = sinon.mock();
+        (res as any).ok = true;
+        (res as any).json = async () => {
+          return {};
+        };
+        return res;
+      });
 
       f = global.fetch;
       global.fetch = spy as any;
@@ -23,7 +30,17 @@ describe('API utils', function () {
 
     it('Should send fetch', async function () {
       const api = _ludexChallengeApi('token', 'ressource', 'baseurl');
+      await api({ path: 'path' });
 
-      await api({});
+      expect(
+        spy.calledWith('baseurl/api/v1/ressource/path', {
+          path: 'path',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Bearer token',
+          },
+        })
+      ).to.be.true;
+    });
   });
 });
