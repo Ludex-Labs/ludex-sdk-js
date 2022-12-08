@@ -1,9 +1,12 @@
 import { AnchorProvider, Program, web3 } from '@project-serum/anchor';
-import { getAssociatedTokenAddress, NATIVE_MINT, TOKEN_PROGRAM_ID } from '@solana/spl-token';
+import {
+    ASSOCIATED_TOKEN_PROGRAM_ID, createAssociatedTokenAccountInstruction, getAssociatedTokenAddress,
+    NATIVE_MINT, TOKEN_PROGRAM_ID
+} from '@solana/spl-token';
 import { WalletAdapterProps } from '@solana/wallet-adapter-base';
 import { Keypair, PublicKey } from '@solana/web3.js';
 
-import { transferWrappedSol, Wallet } from '../utils';
+import { accountExists, transferWrappedSol, Wallet } from '../utils';
 import { Challenge, IDL } from './';
 
 export const CHALLENGE_PROGRAM_ID =
@@ -79,6 +82,19 @@ export class ChallengeTXClient {
         let userTokenAccount: web3.PublicKey;
 
         userTokenAccount = await getAssociatedTokenAddress(pool.mint, user);
+        if (!(await accountExists(this.connection, userTokenAccount))) {
+          this.tx.add(
+            createAssociatedTokenAccountInstruction(
+              user,
+              userTokenAccount,
+              user,
+              pool.mint,
+              TOKEN_PROGRAM_ID,
+              ASSOCIATED_TOKEN_PROGRAM_ID
+            )
+          );
+        }
+
         if (NATIVE_MINT.equals(pool.mint)) {
           transferWrappedSol(
             user,

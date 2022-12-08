@@ -3,13 +3,32 @@ import {
     ASSOCIATED_TOKEN_PROGRAM_ID, createAssociatedTokenAccountInstruction,
     createSyncNativeInstruction, NATIVE_MINT, TOKEN_PROGRAM_ID
 } from '@solana/spl-token';
-import { PublicKey, Transaction } from '@solana/web3.js';
+import { Connection, PublicKey, SolanaJSONRPCError, Transaction } from '@solana/web3.js';
 
 export interface Wallet {
   signTransaction(tx: Transaction): Promise<Transaction>;
   signAllTransactions(txs: Transaction[]): Promise<Transaction[]>;
   publicKey: PublicKey;
 }
+
+export const accountExists = async (
+  connection: Connection,
+  account: PublicKey
+) => {
+  try {
+    if ((await connection.getAccountInfo(account)) === null) {
+      return false;
+    }
+  } catch (e: unknown) {
+    // -32602 is the error code for an account not found
+    if (e instanceof SolanaJSONRPCError && e.code && e.code === -32602) {
+      return false;
+    }
+    throw e;
+  }
+
+  return true;
+};
 
 export const transferWrappedSol = (
   user: web3.PublicKey,
@@ -18,19 +37,11 @@ export const transferWrappedSol = (
   tx: web3.Transaction
 ) => {
   tx.add(
-    createAssociatedTokenAccountInstruction(
-      user,
-      associatedTokenAccount,
-      user,
-      NATIVE_MINT,
-      TOKEN_PROGRAM_ID,
-      ASSOCIATED_TOKEN_PROGRAM_ID
-    ),
     web3.SystemProgram.transfer({
       fromPubkey: user,
       toPubkey: associatedTokenAccount,
       lamports: amount,
     }),
-    createSyncNativeInstruction(associatedTokenAccount, TOKEN_PROGRAM_ID)
+    createSyncNativeInstruction(associatedTokenAccount)
   );
 };
