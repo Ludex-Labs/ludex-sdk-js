@@ -1,0 +1,26 @@
+name: Build
+
+on:
+  push:
+    branch:
+      - main
+  pull_request:
+    types:
+      - opened
+    braches:
+      - main
+
+jobs:
+  publish:
+    name: Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: "Checkout source code"
+        uses: "actions/checkout@v2"
+        with:
+          ref: ${{ github.ref }}
+      - name: install
+        run: npm ci
+      - name: build
+        run: npm run build

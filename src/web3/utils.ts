@@ -3,6 +3,13 @@ import {
     ASSOCIATED_TOKEN_PROGRAM_ID, createAssociatedTokenAccountInstruction,
     createSyncNativeInstruction, NATIVE_MINT, TOKEN_PROGRAM_ID
 } from '@solana/spl-token';
+import { PublicKey, Transaction } from '@solana/web3.js';
+
+export interface Wallet {
+  signTransaction(tx: Transaction): Promise<Transaction>;
+  signAllTransactions(txs: Transaction[]): Promise<Transaction[]>;
+  publicKey: PublicKey;
+}
 
 export const transferWrappedSol = (
   user: web3.PublicKey,

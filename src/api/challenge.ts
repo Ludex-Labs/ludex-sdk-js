@@ -69,15 +69,15 @@ export class ChallengeAPIClient {
     return { challengeId, blockchainAddress: challenge.blockchainAddress! };
   }
 
-  async lock(id: number, skipConfirmation: boolean = false) {
+  async lock(id: number, _: boolean = false) {
     await this._apiLockChallenge(id);
   }
 
-  async cancel(id: number, skipConfirmation: boolean = false) {
+  async cancel(id: number, _: boolean = false) {
     await this._apiCancelChallenge(id);
   }
 
-  async resolve(id: number, winner: string, skipConfirmation: boolean = false) {
+  async resolve(id: number, winner: string, _: boolean = false) {
     await this._apiResolveChallenge(id, winner);
   }
 
@@ -85,7 +85,7 @@ export class ChallengeAPIClient {
   async resolveWithPayment(
     id: number,
     payment: { to: string; amount: number }[],
-    skipConfirmation?: boolean
+    _?: boolean
   ) {
     await this._apiResolveChallengeWithPayment(id, payment);
   }
