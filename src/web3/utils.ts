@@ -1,8 +1,5 @@
 import { web3 } from '@project-serum/anchor';
-import {
-    ASSOCIATED_TOKEN_PROGRAM_ID, createAssociatedTokenAccountInstruction,
-    createSyncNativeInstruction, NATIVE_MINT, TOKEN_PROGRAM_ID
-} from '@solana/spl-token';
+import { createSyncNativeInstruction } from '@solana/spl-token';
 import { Connection, PublicKey, SolanaJSONRPCError, Transaction } from '@solana/web3.js';
 
 export interface Wallet {
