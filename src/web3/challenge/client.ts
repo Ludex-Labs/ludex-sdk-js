@@ -63,7 +63,7 @@ export class ChallengeTXClient {
   join(_user: string) {
     const user = new web3.PublicKey(_user);
     this.tasks.push(
-      new Promise(async (resolve) => {
+      (async () => {
         const [player, _pbump] = await web3.PublicKey.findProgramAddress(
           [this.challengeKey.toBuffer(), user.toBuffer()],
           this.program.programId
@@ -78,8 +78,8 @@ export class ChallengeTXClient {
         );
         let userTokenAccount: web3.PublicKey;
 
-        userTokenAccount = await getAssociatedTokenAddress(user, pool.mint);
-        if (pool.mint === NATIVE_MINT) {
+        userTokenAccount = await getAssociatedTokenAddress(pool.mint, user);
+        if (NATIVE_MINT.equals(pool.mint)) {
           transferWrappedSol(
             user,
             userTokenAccount,
@@ -88,27 +88,26 @@ export class ChallengeTXClient {
           );
         }
 
-        return resolve(
-          this.program.methods
-            .join()
-            .accounts({
-              provider: challenge.provider,
-              pool: challenge.pool,
-              poolTokenAccount: pool.tokenAccount,
-              challenge: this.challengeKey,
-              player: player,
-              providerAuthority: provider.authority,
-              user: user,
-              userTokenAccount: userTokenAccount,
-              payer: user,
-              mint: pool.mint,
-              tokenProgram: TOKEN_PROGRAM_ID,
-              systemProgram: web3.SystemProgram.programId,
-            })
-            .instruction()
-        );
-      })
+        return this.program.methods
+          .join()
+          .accounts({
+            provider: challenge.provider,
+            pool: challenge.pool,
+            poolTokenAccount: pool.tokenAccount,
+            challenge: this.challengeKey,
+            player: player,
+            providerAuthority: provider.authority,
+            user: user,
+            userTokenAccount: userTokenAccount,
+            payer: user,
+            mint: pool.mint,
+            tokenProgram: TOKEN_PROGRAM_ID,
+            systemProgram: web3.SystemProgram.programId,
+          })
+          .instruction();
+      }).call(null)
     );
+
     this.tx.feePayer = user;
     return this;
   }
