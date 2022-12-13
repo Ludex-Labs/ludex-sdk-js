@@ -67,8 +67,9 @@ export class ChallengeAPIClient {
     });
   }
 
-  async create(payoutId: number, limit: number = 2) {
-    const challengeId = (await this._apiCreateChallenge(payoutId, limit)).id;
+  async create(payoutId: number, limit: number = 2, chain: string = "SOLANA") {
+    const challengeId = (await this._apiCreateChallenge(payoutId, limit, chain))
+      .id;
     const challenge = await this._apiGetChallenge(challengeId);
     return { challengeId, blockchainAddress: challenge.blockchainAddress! };
   }
