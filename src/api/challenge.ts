@@ -1,4 +1,4 @@
-import { _ludexChallengeApi, ApiConfig } from './utils';
+import { _ludexChallengeApi, ApiConfig } from "./utils";
 
 export class ChallengeAPIClient {
   ludexChallengeApi: <T>(config: ApiConfig) => Promise<T>;
@@ -6,10 +6,14 @@ export class ChallengeAPIClient {
     this.ludexChallengeApi = _ludexChallengeApi(apiKey, "challenge", baseUrl);
   }
 
-  async _apiCreateChallenge(payoutId: number, limit: number = 2) {
+  async _apiCreateChallenge(
+    payoutId: number,
+    limit: number = 2,
+    chain: string = "SOLANA"
+  ) {
     return this.ludexChallengeApi<{ id: number }>({
       method: "POST",
-      body: JSON.stringify({ payoutId, limit }),
+      body: JSON.stringify({ payoutId, limit, chain }),
     });
   }
 
