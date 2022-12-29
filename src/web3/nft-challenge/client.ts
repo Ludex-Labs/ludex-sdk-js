@@ -1,10 +1,25 @@
-import { guestIdentity, Metaplex, TokenMetadataProgram } from '@metaplex-foundation/js';
-import { AnchorProvider, BN, Program, utils, web3 } from '@project-serum/anchor';
-import { TOKEN_PROGRAM_ID } from '@solana/spl-token';
-import { Keypair } from '@solana/web3.js';
+import {
+  guestIdentity,
+  Metaplex,
+  TokenMetadataProgram,
+} from "@metaplex-foundation/js";
+import {
+  AnchorProvider,
+  BN,
+  Program,
+  utils,
+  web3,
+} from "@project-serum/anchor";
+import { TOKEN_PROGRAM_ID } from "@solana/spl-token";
+import {
+  Keypair,
+  TransactionInstruction,
+  PublicKey,
+  SystemProgram,
+} from "@solana/web3.js";
 
-import { Wallet } from '../utils';
-import { IDL, NftChallenge } from './';
+import { Wallet } from "../utils";
+import { IDL, NftChallenge } from "./";
 
 export type ChallengeClientOptions = {
   wallet?: Wallet;
@@ -12,7 +27,7 @@ export type ChallengeClientOptions = {
 
 export class NftChallengeTXClient {
   tx: web3.Transaction;
-  tasks: Promise<web3.TransactionInstruction>[] = [];
+  tasks: Promise<TransactionInstruction>[] = [];
   challengeKey: web3.PublicKey;
   program: Program<NftChallenge>;
   connection: web3.Connection;
@@ -221,6 +236,67 @@ export class NftChallengeTXClient {
       })
     );
     return this;
+  }
+
+  removeOffering(user: string, offering: string) {
+    this.tasks.push(
+      (async () => {
+        const userPublicKey = new PublicKey(user);
+        const offeringPublicKey = new PublicKey(offering);
+
+        const offeringAccount =
+          await this.program.account.offering.fetchNullable(offeringPublicKey);
+
+        if (!offeringAccount) {
+          throw new Error("Offering cannot be found");
+        }
+
+        const [playerPublicKey] = PublicKey.findProgramAddressSync(
+          [this.challengeKey.toBuffer(), userPublicKey.toBuffer()],
+          this.program.programId
+        );
+
+        let ix: TransactionInstruction;
+        if (offeringAccount.mint) {
+          if (offeringAccount.isEscrowed) {
+            throw new Error("Not implemented");
+          } else {
+            const tokenAccount = (
+              await this.connection.getTokenLargestAccounts(
+                offeringAccount.mint
+              )
+            ).value[0].address;
+
+            ix = await this.program.methods
+              .removeEscrowlessOffering()
+              .accounts({
+                playerAuthority: userPublicKey,
+                player: playerPublicKey,
+                game: this.challengeKey,
+                offering: offeringPublicKey,
+                tokenAccount: tokenAccount,
+                tokenMint: offeringAccount.mint,
+                tokenProgram: TOKEN_PROGRAM_ID,
+                systemProgram: SystemProgram.programId,
+              })
+              .instruction();
+          }
+        } else {
+          ix = await this.program.methods
+            .removeSolOffering()
+            .accounts({
+              playerAuthority: userPublicKey,
+              player: playerPublicKey,
+              game: this.challengeKey,
+              offering: offeringPublicKey,
+              systemProgram: SystemProgram.programId,
+            })
+            .instruction();
+        }
+
+        return ix;
+      })()
+    );
   }
 
   async getTx() {
