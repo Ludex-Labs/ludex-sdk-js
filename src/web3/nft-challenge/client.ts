@@ -1,25 +1,12 @@
+import { guestIdentity, Metaplex, TokenMetadataProgram } from '@metaplex-foundation/js';
+import { AnchorProvider, BN, Program, utils, web3 } from '@project-serum/anchor';
+import { TOKEN_PROGRAM_ID } from '@solana/spl-token';
 import {
-  guestIdentity,
-  Metaplex,
-  TokenMetadataProgram,
-} from "@metaplex-foundation/js";
-import {
-  AnchorProvider,
-  BN,
-  Program,
-  utils,
-  web3,
-} from "@project-serum/anchor";
-import { TOKEN_PROGRAM_ID } from "@solana/spl-token";
-import {
-  Keypair,
-  TransactionInstruction,
-  PublicKey,
-  SystemProgram,
-} from "@solana/web3.js";
+  Keypair, PublicKey, SystemProgram, Transaction, TransactionInstruction
+} from '@solana/web3.js';
 
-import { Wallet } from "../utils";
-import { IDL, NftChallenge } from "./";
+import { Wallet } from '../utils';
+import { IDL, NftChallenge } from './';
 
 export type ChallengeClientOptions = {
   wallet?: Wallet;
@@ -297,6 +284,8 @@ export class NftChallengeTXClient {
         return ix;
       })()
     );
+
+    return this;
   }
 
   async getTx() {
@@ -375,5 +364,53 @@ export class NftChallengeTXClient {
     }
 
     return offeringsResult.reduce((acc, val) => acc.concat(val), []);
+  }
+
+  static async getPlayerStatus(
+    connection: web3.Connection,
+    user: string | PublicKey,
+    challenge: string | PublicKey
+  ): Promise<"NOT_IN_GAME" | "ACCEPTED" | "JOINED"> {
+    if (typeof user === "string") {
+      user = new PublicKey(user);
+    }
+
+    if (typeof challenge === "string") {
+      challenge = new PublicKey(challenge);
+    }
+
+    const programId = new web3.PublicKey(
+      "5U2Y2YNyMRofJxMBZKfkvxeuXRjsJUpkG95pRVGLLXyj"
+    );
+
+    // we don't need an actual wallet since we're only trying to fetch accounts
+    const dummyWallet = {
+      publicKey: programId,
+      signTransaction: async (tx: Transaction) => tx,
+      signAllTransactions: async (txs: Transaction[]) => txs,
+    };
+
+    const program = new Program<NftChallenge>(
+      IDL,
+      programId,
+      new AnchorProvider(
+        connection,
+        dummyWallet,
+        AnchorProvider.defaultOptions()
+      )
+    );
+
+    const [playerPublicKey] = PublicKey.findProgramAddressSync(
+      [challenge.toBuffer(), user.toBuffer()],
+      programId
+    );
+
+    const player = await program.account.player.fetchNullable(playerPublicKey);
+
+    if (!player) {
+      return "NOT_IN_GAME";
+    }
+
+    return player.accepted ? "ACCEPTED" : "JOINED";
   }
 }
