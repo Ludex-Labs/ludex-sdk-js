@@ -2,7 +2,7 @@ import { guestIdentity, Metaplex, TokenMetadataProgram } from '@metaplex-foundat
 import { AnchorProvider, BN, Program, utils, web3 } from '@project-serum/anchor';
 import { TOKEN_PROGRAM_ID } from '@solana/spl-token';
 import {
-  Keypair, PublicKey, SystemProgram, Transaction, TransactionInstruction
+  Connection, Keypair, PublicKey, SystemProgram, Transaction, TransactionInstruction
 } from '@solana/web3.js';
 
 import { Wallet } from '../utils';
@@ -10,6 +10,18 @@ import { IDL, NftChallenge } from './';
 
 export type ChallengeClientOptions = {
   wallet?: Wallet;
+};
+
+const findEdition = async (connection: Connection, mint: PublicKey) => {
+  const mx = Metaplex.make(connection).use(guestIdentity());
+  const nft = await mx.nfts().findByMint(mint);
+
+  const edition = nft?.editionTask?.getResult()?.publicKey;
+  if (!edition) {
+    throw new Error("couldn't find edition");
+  }
+
+  return edition;
 };
 
 export class NftChallengeTXClient {
@@ -266,6 +278,21 @@ export class NftChallengeTXClient {
                 tokenProgram: TOKEN_PROGRAM_ID,
                 systemProgram: SystemProgram.programId,
               })
+              .remainingAccounts([
+                {
+                  pubkey: await findEdition(
+                    this.program.provider.connection,
+                    offeringAccount.mint
+                  ),
+                  isSigner: false,
+                  isWritable: false,
+                },
+                {
+                  pubkey: TokenMetadataProgram.publicKey,
+                  isSigner: false,
+                  isWritable: false,
+                },
+              ])
               .instruction();
           }
         } else {
