@@ -10,10 +10,14 @@ export class NftChallengeAPIClient {
     );
   }
 
-  async _apiCreateChallenge(limit: number = 2) {
+  async _apiCreateChallenge(
+    payoutId: number = 1,
+    limit: number = 2,
+    chain: string = "SOLANA"
+  ) {
     return this.ludexChallengeApi<{ id: number }>({
       method: "POST",
-      body: JSON.stringify({ limit }),
+      body: JSON.stringify({ payoutId, limit, chain }),
     });
   }
 
@@ -52,8 +56,13 @@ export class NftChallengeAPIClient {
     });
   }
 
-  async create(limit: number = 2) {
-    const challengeId = (await this._apiCreateChallenge(limit)).id;
+  async create(
+    payoutId: number = 1,
+    limit: number = 2,
+    chain: string = "SOLANA"
+  ) {
+    const challengeId = (await this._apiCreateChallenge(payoutId, limit, chain))
+      .id;
     const challenge = await this._apiGetChallenge(challengeId);
     return { challengeId, blockchainAddress: challenge.blockchainAddress! };
   }
