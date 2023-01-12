@@ -1,13 +1,13 @@
 import { AnchorProvider, Program, web3 } from '@project-serum/anchor';
 import {
-    ASSOCIATED_TOKEN_PROGRAM_ID, createAssociatedTokenAccountInstruction, getAssociatedTokenAddress,
-    NATIVE_MINT, TOKEN_PROGRAM_ID
+  ASSOCIATED_TOKEN_PROGRAM_ID, createAssociatedTokenAccountInstruction, getAssociatedTokenAddress,
+  NATIVE_MINT, TOKEN_PROGRAM_ID
 } from '@solana/spl-token';
 import { WalletAdapterProps } from '@solana/wallet-adapter-base';
-import { Keypair, PublicKey } from '@solana/web3.js';
+import { Connection, Keypair, PublicKey } from '@solana/web3.js';
 
 import { accountExists, transferWrappedSol, Wallet } from '../utils';
-import { Challenge, IDL } from './';
+import { Challenge as IDL_TYPE, IDL } from './';
 
 export const CHALLENGE_PROGRAM_ID =
   "BuPvutSnk9NdTZHFiA6UZm6oPwGszp6ozMwoAgJMDBGR";
@@ -22,7 +22,7 @@ export type ChallengeClientOptions = {
 
 export class ChallengeTXClient {
   challengeKey: web3.PublicKey;
-  program: Program<Challenge>;
+  program: Program<IDL_TYPE>;
   connection: web3.Connection;
 
   tx: web3.Transaction;
@@ -51,7 +51,7 @@ export class ChallengeTXClient {
     this.challengeKey = new web3.PublicKey(challengeKey);
     this.connection = connection;
 
-    this.program = new Program<Challenge>(
+    this.program = new Program<IDL_TYPE>(
       IDL,
       programAddress,
       new AnchorProvider(
@@ -204,3 +204,80 @@ export class ChallengeTXClient {
       .toString("base64");
   }
 }
+const parseOptions = (
+  options?: ChallengeClientOptions
+): { options: Required<ChallengeClientOptions>; programAddress: PublicKey } => {
+  if (!options) {
+    options = {};
+  }
+
+  if (!options.wallet) {
+    // TODO: This will fail in a browser
+    const { Wallet: AnchorWallet } = require("@project-serum/anchor");
+    options.wallet = new AnchorWallet(new Keypair()) as Wallet;
+  }
+
+  let programAddress = new PublicKey(CHALLENGE_PROGRAM_ID);
+
+  if (options.cluster && options.cluster.toUpperCase() === "DEVNET") {
+    programAddress = new PublicKey(DEVNET_CHALLENGE_PROGRAM_ID);
+  }
+
+  if (!options.cluster) {
+    options.cluster = "mainnet-beta";
+  }
+
+  return {
+    options: options as Required<ChallengeClientOptions>,
+    programAddress,
+  };
+};
+
+export type Challenge = {
+  publicKey: string;
+  mint: string;
+  entryFee: number;
+  maxPlayerCount: number;
+  currentPlayerCount: number;
+  providerRake: number;
+  mediatorRake: number;
+};
+
+export const getChallengeInfo = async (
+  connection: Connection,
+  challenge: string | PublicKey,
+  opts?: ChallengeClientOptions
+): Promise<Challenge> => {
+  const { options, programAddress } = parseOptions(opts);
+
+  const provider = new AnchorProvider(
+    connection,
+    options.wallet,
+    AnchorProvider.defaultOptions()
+  );
+  const program = new Program<IDL_TYPE>(IDL, programAddress, provider);
+
+  if (typeof challenge === "string") {
+    challenge = new PublicKey(challenge);
+  }
+
+  const challengeAccount = await program.account.challenge.fetchNullable(
+    challenge
+  );
+
+  if (!challengeAccount) {
+    throw new Error("Could not find challenge");
+  }
+
+  const pool = await program.account.pool.fetch(challengeAccount.pool);
+
+  return {
+    publicKey: challenge.toBase58(),
+    entryFee: challengeAccount.entryFee.toNumber(),
+    mint: pool?.mint?.toBase58(),
+    maxPlayerCount: challengeAccount.playersLimit,
+    currentPlayerCount: challengeAccount.playersJoined,
+    providerRake: challengeAccount.providerRake.toNumber(),
+    mediatorRake: challengeAccount.mediatorRake.toNumber(),
+  };
+};

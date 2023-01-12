@@ -5,6 +5,8 @@ import { ChallengeTXClient as ChallengeTXClientClass } from './web3/challenge/cl
 import { IDL as NFTChallengeIDL, NftChallenge as NFTChallengeType } from './web3/nft-challenge';
 import { NftChallengeTXClient as NftChallengeTXClientClass } from './web3/nft-challenge/client';
 
+export { Ludex } from "./api/ludex";
+
 export namespace Challenge {
   export type Challenge = ChallengeType;
   export const IDL = ChallengeIDL;
