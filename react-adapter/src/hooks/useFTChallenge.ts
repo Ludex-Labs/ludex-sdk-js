@@ -29,7 +29,7 @@ export const useFTChallenge = (challengeKey: string, cluster?: string) => {
         setLoading(false);
       })
       .catch(console.error);
-  }, [connection, wallet, challengeKey, setChallenge, setLoading]);
+  }, [connection, wallet, challengeKey, cluster, setChallenge, setLoading]);
 
   const joinChallenge = useCallback(() => {
     console.log("joining");
@@ -73,7 +73,15 @@ export const useFTChallenge = (challengeKey: string, cluster?: string) => {
         setJoined(true);
       })
       .catch(console.error);
-  }, [challenge, wallet, connection, setJoined, setLoading]);
+  }, [
+    challenge,
+    wallet,
+    connection,
+    challengeKey,
+    cluster,
+    setJoined,
+    setLoading,
+  ]);
 
   return { challenge, joinChallenge, joined, loading };
 };
