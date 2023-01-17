@@ -1,6 +1,6 @@
 {
   "name": "@ludex-labs/ludex-react-adapter",
-  "version": "1.8.5",
+  "version": "1.8.5-alpha1",
   "description": "react adapter for ludex sdk",
   "types": "./lib/index.d.ts",
   "module": "./lib/esm/index.js",
