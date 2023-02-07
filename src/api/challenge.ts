@@ -1,4 +1,5 @@
-import { _ludexChallengeApi, ApiConfig } from "./utils";
+import { ChallengeExtensions, FTChallenge, Player, Signature } from './models';
+import { _ludexChallengeApi, ApiConfig } from './utils';
 
 export class ChallengeAPIClient {
   ludexChallengeApi: <T>(config: ApiConfig) => Promise<T>;
@@ -65,6 +66,63 @@ export class ChallengeAPIClient {
       method: "HEAD",
       path: `${id}?action=resolve&payment=${JSON.stringify(payment)}`,
     });
+  }
+
+  async list(page?: number, limit?: number) {
+    let path = "";
+    if (page || limit) {
+      const params = new URLSearchParams();
+
+      if (page) {
+        params.append("page", page.toString());
+      }
+
+      if (limit) {
+        params.append("limit", limit.toString());
+      }
+
+      path = `?${params.toString()}`;
+    }
+
+    const challenges = await this.ludexChallengeApi<FTChallenge[]>({
+      path,
+    });
+
+    challenges.forEach((challenge) => {
+      // TODO: should stop using Object.assign for better type safety
+      Object.assign(challenge, {
+        getPlayers: () => {
+          return this.ludexChallengeApi<Player[]>({
+            path: `${challenge.id}/players`,
+          });
+        },
+        getSignatures: () => {
+          return this.ludexChallengeApi<Signature[]>({
+            path: `${challenge.id}/signatures`,
+          });
+        },
+      });
+    });
+
+    return challenges as (FTChallenge & ChallengeExtensions)[];
+  }
+
+  async get(id: number) {
+    const challenge = await this._apiGetChallenge(id);
+
+    // TODO: should stop using Object.assign for better type safety
+    Object.assign(challenge, {
+      getPlayers: () => {
+        return this.ludexChallengeApi<Player[]>({ path: `${id}/players` });
+      },
+      getSignatures: () => {
+        return this.ludexChallengeApi<Signature[]>({
+          path: `${id}/signatures`,
+        });
+      },
+    });
+
+    return challenge as typeof challenge & ChallengeExtensions;
   }
 
   async create(payoutId: number, limit: number = 2, chain: string = "SOLANA") {

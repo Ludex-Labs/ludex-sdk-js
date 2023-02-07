@@ -1,3 +1,4 @@
+import { Player, Signature } from './models';
 import { _ludexChallengeApi, ApiConfig } from './utils';
 
 export class NftChallengeAPIClient {
@@ -54,6 +55,27 @@ export class NftChallengeAPIClient {
       method: "HEAD",
       path: `${id}?action=resolve&payment=${JSON.stringify(payment)}`,
     });
+  }
+
+  async get(id: number) {
+    const challenge = await this._apiGetChallenge(id);
+
+    // TODO: should stop using Object.assign for better type safety
+    Object.assign(challenge, {
+      getPlayers: () => {
+        return this.ludexChallengeApi<Player[]>({ path: `${id}/players` });
+      },
+      getSignatures: () => {
+        return this.ludexChallengeApi<Signature[]>({
+          path: `${id}/signatures`,
+        });
+      },
+    });
+
+    return challenge as typeof challenge & {
+      getPlayers: () => Promise<Player[]>;
+      getSignatures: () => Promise<Signature[]>;
+    };
   }
 
   async create(
