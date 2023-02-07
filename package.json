@@ -1,6 +1,6 @@
 {
   "name": "@ludex-labs/ludex-sdk-js",
-  "version": "1.8.5",
+  "version": "1.8.6",
   "repository": {
     "directory": "packages/@ludex-labs/ludex-sdk-js",
     "type": "git",
