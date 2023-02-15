@@ -1,6 +1,10 @@
+import BN from 'bn.js';
+
 import { guestIdentity, Metaplex, TokenMetadataProgram } from '@metaplex-foundation/js';
-import { AnchorProvider, BN, Program, utils, web3 } from '@project-serum/anchor';
-import { TOKEN_PROGRAM_ID } from '@solana/spl-token';
+import { AnchorProvider, Program, utils, web3 } from '@project-serum/anchor';
+import {
+  ASSOCIATED_TOKEN_PROGRAM_ID, getAssociatedTokenAddress, TOKEN_PROGRAM_ID
+} from '@solana/spl-token';
 import {
   Connection, Keypair, PublicKey, SystemProgram, Transaction, TransactionInstruction
 } from '@solana/web3.js';
@@ -18,7 +22,9 @@ const findEdition = async (connection: Connection, mint: PublicKey) => {
 
   const edition = nft?.editionTask?.getResult()?.publicKey;
   if (!edition) {
-    throw new Error("couldn't find edition");
+    throw new Error(
+      "Couldn't find edition, the token probably doesn't follow Metaplex standards. Try using escrowed offering instead"
+    );
   }
 
   return edition;
@@ -133,6 +139,9 @@ export class NftChallengeTXClient {
     return this;
   }
 
+  /**
+   * @deprecated Use addEscrowlessOffering or addEscrowedOffering instead
+   */
   addNftOffering(
     _user: string,
     _nft_mint: string,
@@ -212,6 +221,156 @@ export class NftChallengeTXClient {
     return this;
   }
 
+  addEscrowedOffering(
+    user: string | PublicKey,
+    token_mint: string | PublicKey,
+    amount: BN | number,
+    token_account?: string | PublicKey
+  ) {
+    const run = async () => {
+      if (typeof user === "string") {
+        user = new web3.PublicKey(user);
+      }
+
+      if (typeof token_mint === "string") {
+        token_mint = new web3.PublicKey(token_mint);
+      }
+
+      if (!token_account) {
+        const largestAccounts = await this.connection.getTokenLargestAccounts(
+          token_mint
+        );
+        token_account = new web3.PublicKey(largestAccounts.value[0].address);
+      }
+
+      if (typeof token_account === "string") {
+        token_account = new web3.PublicKey(token_account);
+      }
+
+      if (typeof amount === "number") {
+        amount = new BN(amount);
+      }
+
+      const [offering] = await web3.PublicKey.findProgramAddress(
+        [
+          Buffer.from(utils.bytes.utf8.encode("offering")),
+          token_account.toBuffer(),
+        ],
+        this.program.programId
+      );
+      const offeringTokenAccount = await getAssociatedTokenAddress(
+        token_mint,
+        offering,
+        true,
+        TOKEN_PROGRAM_ID,
+        ASSOCIATED_TOKEN_PROGRAM_ID
+      );
+      const [player] = await web3.PublicKey.findProgramAddress(
+        [this.challengeKey.toBuffer(), user.toBuffer()],
+        this.program.programId
+      );
+
+      console.log("Add offering", {
+        tokenAccount: token_account,
+        offeringTokenAccount,
+      });
+
+      return this.program.methods
+        .addEscrowedOffering(amount)
+        .accounts({
+          playerAuthority: user,
+          player: player,
+          game: this.challengeKey,
+          offering: offering,
+          offeringTokenAccount: offeringTokenAccount,
+          tokenAccount: token_account,
+          tokenMint: token_mint,
+          tokenProgram: TOKEN_PROGRAM_ID,
+          systemProgram: web3.SystemProgram.programId,
+          associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
+          rent: web3.SYSVAR_RENT_PUBKEY,
+        })
+        .instruction();
+    };
+
+    this.tasks.push(run());
+
+    return this;
+  }
+
+  // Only works for Metaplex NFTs
+  addEscrowlessOffering(
+    user: string | PublicKey,
+    token_mint: string | PublicKey,
+    token_account?: string | PublicKey
+  ) {
+    const run = async () => {
+      if (typeof user === "string") {
+        user = new web3.PublicKey(user);
+      }
+
+      if (typeof token_mint === "string") {
+        token_mint = new web3.PublicKey(token_mint);
+      }
+
+      if (!token_account) {
+        const largestAccounts = await this.connection.getTokenLargestAccounts(
+          token_mint
+        );
+        token_account = new web3.PublicKey(largestAccounts.value[0].address);
+      }
+
+      if (typeof token_account === "string") {
+        token_account = new web3.PublicKey(token_account);
+      }
+
+      const [offering] = await web3.PublicKey.findProgramAddress(
+        [
+          Buffer.from(utils.bytes.utf8.encode("offering")),
+          token_account.toBuffer(),
+        ],
+        this.program.programId
+      );
+      const [player] = await web3.PublicKey.findProgramAddress(
+        [this.challengeKey.toBuffer(), user.toBuffer()],
+        this.program.programId
+      );
+
+      return this.program.methods
+        .addEscrowlessOffering(new BN(1))
+        .accounts({
+          playerAuthority: user,
+          player: player,
+          game: this.challengeKey,
+          offering: offering,
+          tokenAccount: token_account,
+          tokenMint: token_mint,
+          tokenProgram: TOKEN_PROGRAM_ID,
+          systemProgram: web3.SystemProgram.programId,
+        })
+        .remainingAccounts([
+          {
+            pubkey: await findEdition(
+              this.program.provider.connection,
+              token_mint
+            ),
+            isSigner: false,
+            isWritable: false,
+          },
+          {
+            pubkey: TokenMetadataProgram.publicKey,
+            isSigner: false,
+            isWritable: false,
+          },
+        ])
+        .instruction();
+    };
+
+    this.tasks.push(run());
+
+    return this;
+  }
+
   accept(_user: string) {
     this.tasks.push(
       new Promise(async (resolve) => {
@@ -258,7 +417,41 @@ export class NftChallengeTXClient {
         let ix: TransactionInstruction;
         if (offeringAccount.mint) {
           if (offeringAccount.isEscrowed) {
-            throw new Error("Not implemented");
+            const tokenAccount = await getAssociatedTokenAddress(
+              offeringAccount.mint,
+              userPublicKey,
+              true,
+              TOKEN_PROGRAM_ID,
+              ASSOCIATED_TOKEN_PROGRAM_ID
+            );
+
+            const offeringTokenAccount = await getAssociatedTokenAddress(
+              offeringAccount.mint,
+              offeringPublicKey,
+              true,
+              TOKEN_PROGRAM_ID,
+              ASSOCIATED_TOKEN_PROGRAM_ID
+            );
+
+            console.log("remove offering", {
+              tokenAccount,
+              offeringTokenAccount,
+            });
+
+            ix = await this.program.methods
+              .removeEscrowedOffering()
+              .accounts({
+                playerAuthority: userPublicKey,
+                player: playerPublicKey,
+                game: this.challengeKey,
+                offering: offeringPublicKey,
+                offeringTokenAccount: offeringTokenAccount,
+                tokenAccount: tokenAccount,
+                tokenMint: offeringAccount.mint,
+                tokenProgram: TOKEN_PROGRAM_ID,
+                systemProgram: SystemProgram.programId,
+              })
+              .instruction();
           } else {
             const tokenAccount = (
               await this.connection.getTokenLargestAccounts(
