@@ -1,12 +1,31 @@
-import { web3 } from '@project-serum/anchor';
-import { createSyncNativeInstruction } from '@solana/spl-token';
-import { Connection, PublicKey, SolanaJSONRPCError, Transaction } from '@solana/web3.js';
+import { web3 } from "@project-serum/anchor";
+import { createSyncNativeInstruction } from "@solana/spl-token";
+import {
+  Connection,
+  Keypair,
+  PublicKey,
+  SolanaJSONRPCError,
+  Transaction,
+} from "@solana/web3.js";
 
 export interface Wallet {
   signTransaction(tx: Transaction): Promise<Transaction>;
   signAllTransactions(txs: Transaction[]): Promise<Transaction[]>;
   publicKey: PublicKey;
 }
+
+export const createFakeWallet = () => {
+  if (typeof window === "undefined") {
+    const { Wallet: AnchorWallet } = require("@project-serum/anchor");
+    return new AnchorWallet(Keypair.generate()) as Wallet;
+  }
+
+  return {
+    signTransaction: async (tx: Transaction) => tx,
+    signAllTransactions: async (txs: Transaction[]) => txs,
+    publicKey: Keypair.generate().publicKey,
+  };
+};
 
 export const accountExists = async (
   connection: Connection,

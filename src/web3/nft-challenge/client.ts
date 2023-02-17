@@ -1,16 +1,27 @@
-import BN from 'bn.js';
+import BN from "bn.js";
 
-import { guestIdentity, Metaplex, TokenMetadataProgram } from '@metaplex-foundation/js';
-import { AnchorProvider, Program, utils, web3 } from '@project-serum/anchor';
 import {
-  ASSOCIATED_TOKEN_PROGRAM_ID, getAssociatedTokenAddress, TOKEN_PROGRAM_ID
-} from '@solana/spl-token';
+  guestIdentity,
+  Metaplex,
+  TokenMetadataProgram,
+} from "@metaplex-foundation/js";
+import { AnchorProvider, Program, utils, web3 } from "@project-serum/anchor";
 import {
-  Connection, Keypair, PublicKey, SystemProgram, Transaction, TransactionInstruction
-} from '@solana/web3.js';
+  ASSOCIATED_TOKEN_PROGRAM_ID,
+  getAssociatedTokenAddress,
+  TOKEN_PROGRAM_ID,
+} from "@solana/spl-token";
+import {
+  Connection,
+  Keypair,
+  PublicKey,
+  SystemProgram,
+  Transaction,
+  TransactionInstruction,
+} from "@solana/web3.js";
 
-import { Wallet } from '../utils';
-import { IDL, NftChallenge } from './';
+import { createFakeWallet, Wallet } from "../utils";
+import { IDL, NftChallenge } from "./";
 
 export type ChallengeClientOptions = {
   wallet?: Wallet;
@@ -47,9 +58,7 @@ export class NftChallengeTXClient {
     }
 
     if (!options.wallet) {
-      // TODO: This will fail in a browser
-      const { Wallet: AnchorWallet } = require("@project-serum/anchor");
-      options.wallet = new AnchorWallet(new Keypair()) as Wallet;
+      options.wallet = createFakeWallet();
     }
 
     this.challengeKey = new web3.PublicKey(challengeKey);
@@ -541,15 +550,27 @@ export class NftChallengeTXClient {
   static async getOfferings(
     connection: web3.Connection,
     challengeKey: string,
-    wallet: Wallet
+    options?: ChallengeClientOptions
   ) {
+    if (!options) {
+      options = {};
+    }
+
+    if (!options.wallet) {
+      options.wallet = createFakeWallet();
+    }
+
     const programAddress = new web3.PublicKey(
       "5U2Y2YNyMRofJxMBZKfkvxeuXRjsJUpkG95pRVGLLXyj"
     );
     const program = new Program<NftChallenge>(
       IDL,
       programAddress,
-      new AnchorProvider(connection, wallet, AnchorProvider.defaultOptions())
+      new AnchorProvider(
+        connection,
+        options.wallet,
+        AnchorProvider.defaultOptions()
+      )
     );
 
     const challenge = new web3.PublicKey(challengeKey);
