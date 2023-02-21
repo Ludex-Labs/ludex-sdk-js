@@ -1,5 +1,5 @@
 export type Challenge = {
-  "version": "0.1.18",
+  "version": "0.1.57",
   "name": "challenge",
   "instructions": [
     {
@@ -84,6 +84,47 @@ export type Challenge = {
         },
         {
           "name": "mint",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "authority",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "rent",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "updatePoolPayoutAccount",
+      "accounts": [
+        {
+          "name": "provider",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "pool",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "poolPayoutAccount",
           "isMut": false,
           "isSigner": false
         },
@@ -1490,12 +1531,22 @@ export type Challenge = {
       "code": 6038,
       "name": "WrongPayoutAccount",
       "msg": "Wrong payout account"
+    },
+    {
+      "code": 6039,
+      "name": "PayoutTooLarge",
+      "msg": "Payouts larger than entry fee"
+    },
+    {
+      "code": 6040,
+      "name": "PaymentAmountNotEqual",
+      "msg": "Total payment amount doesn't match expected amount"
     }
   ]
 };
 
 export const IDL: Challenge = {
-  "version": "0.1.18",
+  "version": "0.1.57",
   "name": "challenge",
   "instructions": [
     {
@@ -1580,6 +1631,47 @@ export const IDL: Challenge = {
         },
         {
           "name": "mint",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "authority",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "rent",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "updatePoolPayoutAccount",
+      "accounts": [
+        {
+          "name": "provider",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "pool",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "poolPayoutAccount",
           "isMut": false,
           "isSigner": false
         },
@@ -2986,6 +3078,16 @@ export const IDL: Challenge = {
       "code": 6038,
       "name": "WrongPayoutAccount",
       "msg": "Wrong payout account"
+    },
+    {
+      "code": 6039,
+      "name": "PayoutTooLarge",
+      "msg": "Payouts larger than entry fee"
+    },
+    {
+      "code": 6040,
+      "name": "PaymentAmountNotEqual",
+      "msg": "Total payment amount doesn't match expected amount"
     }
   ]
 };

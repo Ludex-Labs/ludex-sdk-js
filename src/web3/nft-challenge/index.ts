@@ -1,2003 +1,2077 @@
 export type NftChallenge = {
-  version: "0.1.0";
-  name: "nft_challenge";
-  instructions: [
+  "version": "0.1.50",
+  "name": "nft_challenge",
+  "instructions": [
     {
-      name: "getVersion";
-      accounts: [];
-      args: [];
-      returns: "string";
+      "name": "getVersion",
+      "accounts": [],
+      "args": [],
+      "returns": "string"
     },
     {
-      name: "initializeProvider";
-      accounts: [
+      "name": "initializeProvider",
+      "accounts": [
         {
-          name: "authority";
-          isMut: true;
-          isSigner: true;
+          "name": "authority",
+          "isMut": true,
+          "isSigner": true
         },
         {
-          name: "manager";
-          isMut: true;
-          isSigner: true;
+          "name": "manager",
+          "isMut": true,
+          "isSigner": true
         },
         {
-          name: "feeVault";
-          isMut: false;
-          isSigner: false;
+          "name": "feeVault",
+          "isMut": false,
+          "isSigner": false
         },
         {
-          name: "systemProgram";
-          isMut: false;
-          isSigner: false;
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
         }
-      ];
-      args: [
+      ],
+      "args": [
         {
-          name: "fee";
-          type: "u64";
+          "name": "fee",
+          "type": "u64"
         }
-      ];
+      ]
     },
     {
-      name: "createChallenge";
-      accounts: [
+      "name": "updateManager",
+      "accounts": [
         {
-          name: "authority";
-          isMut: true;
-          isSigner: true;
+          "name": "authority",
+          "isMut": true,
+          "isSigner": true
         },
         {
-          name: "manager";
-          isMut: false;
-          isSigner: false;
+          "name": "manager",
+          "isMut": true,
+          "isSigner": false
         },
         {
-          name: "mediator";
-          isMut: false;
-          isSigner: false;
+          "name": "feeVault",
+          "isMut": false,
+          "isSigner": false
         },
         {
-          name: "mediatorVault";
-          isMut: false;
-          isSigner: false;
-        },
-        {
-          name: "game";
-          isMut: true;
-          isSigner: true;
-        },
-        {
-          name: "systemProgram";
-          isMut: false;
-          isSigner: false;
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
         }
-      ];
-      args: [
+      ],
+      "args": [
         {
-          name: "limit";
-          type: "u8";
-        },
-        {
-          name: "fee";
-          type: "u64";
-        },
-        {
-          name: "mediatorFee";
-          type: "u64";
+          "name": "fee",
+          "type": "u64"
         }
-      ];
+      ]
     },
     {
-      name: "join";
-      accounts: [
+      "name": "createChallenge",
+      "accounts": [
         {
-          name: "playerAuthority";
-          isMut: true;
-          isSigner: true;
+          "name": "authority",
+          "isMut": true,
+          "isSigner": true
         },
         {
-          name: "manager";
-          isMut: false;
-          isSigner: false;
+          "name": "manager",
+          "isMut": false,
+          "isSigner": false
         },
         {
-          name: "player";
-          isMut: true;
-          isSigner: false;
+          "name": "mediator",
+          "isMut": false,
+          "isSigner": false
         },
         {
-          name: "game";
-          isMut: true;
-          isSigner: false;
+          "name": "mediatorVault",
+          "isMut": false,
+          "isSigner": false
         },
         {
-          name: "feeVault";
-          isMut: true;
-          isSigner: false;
+          "name": "game",
+          "isMut": true,
+          "isSigner": true
         },
         {
-          name: "mediatorVault";
-          isMut: true;
-          isSigner: false;
-        },
-        {
-          name: "systemProgram";
-          isMut: false;
-          isSigner: false;
-        },
-        {
-          name: "tokenProgram";
-          isMut: false;
-          isSigner: false;
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
         }
-      ];
-      args: [];
+      ],
+      "args": [
+        {
+          "name": "limit",
+          "type": "u8"
+        },
+        {
+          "name": "fee",
+          "type": "u64"
+        },
+        {
+          "name": "mediatorFee",
+          "type": "u64"
+        }
+      ]
     },
     {
-      name: "addEscrowlessOffering";
-      accounts: [
+      "name": "join",
+      "accounts": [
         {
-          name: "playerAuthority";
-          isMut: true;
-          isSigner: true;
+          "name": "playerAuthority",
+          "isMut": true,
+          "isSigner": true
         },
         {
-          name: "player";
-          isMut: true;
-          isSigner: false;
+          "name": "manager",
+          "isMut": false,
+          "isSigner": false
         },
         {
-          name: "game";
-          isMut: true;
-          isSigner: false;
+          "name": "player",
+          "isMut": true,
+          "isSigner": false
         },
         {
-          name: "offering";
-          isMut: true;
-          isSigner: false;
+          "name": "game",
+          "isMut": true,
+          "isSigner": false
         },
         {
-          name: "tokenAccount";
-          isMut: true;
-          isSigner: false;
+          "name": "feeVault",
+          "isMut": true,
+          "isSigner": false
         },
         {
-          name: "tokenMint";
-          isMut: true;
-          isSigner: false;
+          "name": "mediatorVault",
+          "isMut": true,
+          "isSigner": false
         },
         {
-          name: "tokenProgram";
-          isMut: false;
-          isSigner: false;
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
         },
         {
-          name: "systemProgram";
-          isMut: false;
-          isSigner: false;
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
         }
-      ];
-      args: [
-        {
-          name: "amount";
-          type: "u64";
-        }
-      ];
+      ],
+      "args": []
     },
     {
-      name: "addEscrowedOffering";
-      accounts: [
+      "name": "addEscrowlessOffering",
+      "accounts": [
         {
-          name: "playerAuthority";
-          isMut: true;
-          isSigner: true;
+          "name": "playerAuthority",
+          "isMut": true,
+          "isSigner": true
         },
         {
-          name: "player";
-          isMut: true;
-          isSigner: false;
+          "name": "player",
+          "isMut": true,
+          "isSigner": false
         },
         {
-          name: "game";
-          isMut: true;
-          isSigner: false;
+          "name": "game",
+          "isMut": true,
+          "isSigner": false
         },
         {
-          name: "offering";
-          isMut: true;
-          isSigner: false;
+          "name": "offering",
+          "isMut": true,
+          "isSigner": false
         },
         {
-          name: "tokenAccount";
-          isMut: true;
-          isSigner: false;
+          "name": "tokenAccount",
+          "isMut": true,
+          "isSigner": false
         },
         {
-          name: "offeringTokenAccount";
-          isMut: true;
-          isSigner: false;
+          "name": "tokenMint",
+          "isMut": true,
+          "isSigner": false
         },
         {
-          name: "tokenMint";
-          isMut: true;
-          isSigner: false;
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
         },
         {
-          name: "tokenProgram";
-          isMut: false;
-          isSigner: false;
-        },
-        {
-          name: "systemProgram";
-          isMut: false;
-          isSigner: false;
-        },
-        {
-          name: "associatedTokenProgram";
-          isMut: false;
-          isSigner: false;
-        },
-        {
-          name: "rent";
-          isMut: false;
-          isSigner: false;
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
         }
-      ];
-      args: [
+      ],
+      "args": [
         {
-          name: "amount";
-          type: "u64";
+          "name": "amount",
+          "type": "u64"
         }
-      ];
+      ]
     },
     {
-      name: "addSolOffering";
-      accounts: [
+      "name": "addEscrowedOffering",
+      "accounts": [
         {
-          name: "playerAuthority";
-          isMut: true;
-          isSigner: true;
+          "name": "playerAuthority",
+          "isMut": true,
+          "isSigner": true
         },
         {
-          name: "player";
-          isMut: true;
-          isSigner: false;
+          "name": "player",
+          "isMut": true,
+          "isSigner": false
         },
         {
-          name: "game";
-          isMut: true;
-          isSigner: false;
+          "name": "game",
+          "isMut": true,
+          "isSigner": false
         },
         {
-          name: "offering";
-          isMut: true;
-          isSigner: false;
+          "name": "offering",
+          "isMut": true,
+          "isSigner": false
         },
         {
-          name: "systemProgram";
-          isMut: false;
-          isSigner: false;
+          "name": "tokenAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "offeringTokenAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "tokenMint",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "associatedTokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "rent",
+          "isMut": false,
+          "isSigner": false
         }
-      ];
-      args: [
+      ],
+      "args": [
         {
-          name: "amount";
-          type: "u64";
+          "name": "amount",
+          "type": "u64"
         }
-      ];
+      ]
     },
     {
-      name: "removeEscrowlessOffering";
-      accounts: [
+      "name": "addSolOffering",
+      "accounts": [
         {
-          name: "playerAuthority";
-          isMut: true;
-          isSigner: true;
+          "name": "playerAuthority",
+          "isMut": true,
+          "isSigner": true
         },
         {
-          name: "player";
-          isMut: true;
-          isSigner: false;
+          "name": "player",
+          "isMut": true,
+          "isSigner": false
         },
         {
-          name: "game";
-          isMut: true;
-          isSigner: false;
+          "name": "game",
+          "isMut": true,
+          "isSigner": false
         },
         {
-          name: "offering";
-          isMut: true;
-          isSigner: false;
+          "name": "offering",
+          "isMut": true,
+          "isSigner": false
         },
         {
-          name: "tokenAccount";
-          isMut: true;
-          isSigner: false;
-        },
-        {
-          name: "tokenMint";
-          isMut: false;
-          isSigner: false;
-        },
-        {
-          name: "tokenProgram";
-          isMut: false;
-          isSigner: false;
-        },
-        {
-          name: "systemProgram";
-          isMut: false;
-          isSigner: false;
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
         }
-      ];
-      args: [];
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        }
+      ]
     },
     {
-      name: "removeEscrowedOffering";
-      accounts: [
+      "name": "removeEscrowlessOffering",
+      "accounts": [
         {
-          name: "playerAuthority";
-          isMut: true;
-          isSigner: true;
+          "name": "playerAuthority",
+          "isMut": true,
+          "isSigner": true
         },
         {
-          name: "player";
-          isMut: true;
-          isSigner: false;
+          "name": "player",
+          "isMut": true,
+          "isSigner": false
         },
         {
-          name: "game";
-          isMut: true;
-          isSigner: false;
+          "name": "game",
+          "isMut": true,
+          "isSigner": false
         },
         {
-          name: "offering";
-          isMut: true;
-          isSigner: false;
+          "name": "offering",
+          "isMut": true,
+          "isSigner": false
         },
         {
-          name: "offeringTokenAccount";
-          isMut: true;
-          isSigner: false;
+          "name": "tokenAccount",
+          "isMut": true,
+          "isSigner": false
         },
         {
-          name: "tokenAccount";
-          isMut: true;
-          isSigner: false;
+          "name": "tokenMint",
+          "isMut": false,
+          "isSigner": false
         },
         {
-          name: "tokenMint";
-          isMut: false;
-          isSigner: false;
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
         },
         {
-          name: "tokenProgram";
-          isMut: false;
-          isSigner: false;
-        },
-        {
-          name: "systemProgram";
-          isMut: false;
-          isSigner: false;
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
         }
-      ];
-      args: [];
+      ],
+      "args": []
     },
     {
-      name: "removeSolOffering";
-      accounts: [
+      "name": "removeEscrowedOffering",
+      "accounts": [
         {
-          name: "playerAuthority";
-          isMut: true;
-          isSigner: true;
+          "name": "playerAuthority",
+          "isMut": true,
+          "isSigner": true
         },
         {
-          name: "player";
-          isMut: true;
-          isSigner: false;
+          "name": "player",
+          "isMut": true,
+          "isSigner": false
         },
         {
-          name: "game";
-          isMut: true;
-          isSigner: false;
+          "name": "game",
+          "isMut": true,
+          "isSigner": false
         },
         {
-          name: "offering";
-          isMut: true;
-          isSigner: false;
+          "name": "offering",
+          "isMut": true,
+          "isSigner": false
         },
         {
-          name: "systemProgram";
-          isMut: false;
-          isSigner: false;
+          "name": "offeringTokenAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "tokenAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "tokenMint",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
         }
-      ];
-      args: [];
+      ],
+      "args": []
     },
     {
-      name: "accept";
-      accounts: [
+      "name": "removeSolOffering",
+      "accounts": [
         {
-          name: "playerAuthority";
-          isMut: false;
-          isSigner: true;
+          "name": "playerAuthority",
+          "isMut": true,
+          "isSigner": true
         },
         {
-          name: "player";
-          isMut: true;
-          isSigner: false;
+          "name": "player",
+          "isMut": true,
+          "isSigner": false
         },
         {
-          name: "game";
-          isMut: true;
-          isSigner: false;
+          "name": "game",
+          "isMut": true,
+          "isSigner": false
         },
         {
-          name: "systemProgram";
-          isMut: false;
-          isSigner: false;
+          "name": "offering",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
         }
-      ];
-      args: [];
+      ],
+      "args": []
     },
     {
-      name: "createPayment";
-      accounts: [
+      "name": "accept",
+      "accounts": [
         {
-          name: "mediator";
-          isMut: false;
-          isSigner: true;
+          "name": "playerAuthority",
+          "isMut": false,
+          "isSigner": true
         },
         {
-          name: "payer";
-          isMut: true;
-          isSigner: true;
+          "name": "player",
+          "isMut": true,
+          "isSigner": false
         },
         {
-          name: "game";
-          isMut: false;
-          isSigner: false;
+          "name": "game",
+          "isMut": true,
+          "isSigner": false
         },
         {
-          name: "manager";
-          isMut: false;
-          isSigner: false;
-        },
-        {
-          name: "payment";
-          isMut: true;
-          isSigner: false;
-        },
-        {
-          name: "systemProgram";
-          isMut: false;
-          isSigner: false;
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
         }
-      ];
-      args: [
-        {
-          name: "payments";
-          type: {
-            vec: {
-              defined: "PaymentArg";
-            };
-          };
-        }
-      ];
+      ],
+      "args": []
     },
     {
-      name: "createCancelPayment";
-      accounts: [
+      "name": "createPayment",
+      "accounts": [
         {
-          name: "authority";
-          isMut: false;
-          isSigner: true;
+          "name": "mediator",
+          "isMut": false,
+          "isSigner": true
         },
         {
-          name: "payer";
-          isMut: true;
-          isSigner: true;
+          "name": "payer",
+          "isMut": true,
+          "isSigner": true
         },
         {
-          name: "game";
-          isMut: false;
-          isSigner: false;
+          "name": "game",
+          "isMut": false,
+          "isSigner": false
         },
         {
-          name: "manager";
-          isMut: false;
-          isSigner: false;
+          "name": "manager",
+          "isMut": false,
+          "isSigner": false
         },
         {
-          name: "payment";
-          isMut: true;
-          isSigner: false;
+          "name": "payment",
+          "isMut": true,
+          "isSigner": false
         },
         {
-          name: "systemProgram";
-          isMut: false;
-          isSigner: false;
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
         }
-      ];
-      args: [
+      ],
+      "args": [
         {
-          name: "payments";
-          type: {
-            vec: {
-              defined: "PaymentArg";
-            };
-          };
+          "name": "payments",
+          "type": {
+            "vec": {
+              "defined": "PaymentArg"
+            }
+          }
         }
-      ];
+      ]
     },
     {
-      name: "verifyPayment";
-      accounts: [
+      "name": "createCancelPayment",
+      "accounts": [
         {
-          name: "payment";
-          isMut: true;
-          isSigner: false;
+          "name": "authority",
+          "isMut": false,
+          "isSigner": true
         },
         {
-          name: "game";
-          isMut: false;
-          isSigner: false;
+          "name": "payer",
+          "isMut": true,
+          "isSigner": true
         },
         {
-          name: "player";
-          isMut: false;
-          isSigner: false;
+          "name": "game",
+          "isMut": false,
+          "isSigner": false
         },
         {
-          name: "offering";
-          isMut: false;
-          isSigner: false;
+          "name": "manager",
+          "isMut": false,
+          "isSigner": false
         },
         {
-          name: "nftTokenOriginAccount";
-          isMut: false;
-          isSigner: false;
+          "name": "payment",
+          "isMut": true,
+          "isSigner": false
         },
         {
-          name: "nftTokenDestinationAccount";
-          isMut: false;
-          isSigner: false;
-        },
-        {
-          name: "tokenProgram";
-          isMut: false;
-          isSigner: false;
-        },
-        {
-          name: "systemProgram";
-          isMut: false;
-          isSigner: false;
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
         }
-      ];
-      args: [];
+      ],
+      "args": [
+        {
+          "name": "payments",
+          "type": {
+            "vec": {
+              "defined": "PaymentArg"
+            }
+          }
+        }
+      ]
     },
     {
-      name: "verifySolPayment";
-      accounts: [
+      "name": "verifyPayment",
+      "accounts": [
         {
-          name: "payment";
-          isMut: true;
-          isSigner: false;
+          "name": "payment",
+          "isMut": true,
+          "isSigner": false
         },
         {
-          name: "game";
-          isMut: false;
-          isSigner: false;
+          "name": "game",
+          "isMut": false,
+          "isSigner": false
         },
         {
-          name: "player";
-          isMut: false;
-          isSigner: false;
+          "name": "player",
+          "isMut": false,
+          "isSigner": false
         },
         {
-          name: "offering";
-          isMut: false;
-          isSigner: false;
+          "name": "offering",
+          "isMut": false,
+          "isSigner": false
         },
         {
-          name: "reciever";
-          isMut: false;
-          isSigner: false;
+          "name": "nftTokenOriginAccount",
+          "isMut": false,
+          "isSigner": false
         },
         {
-          name: "systemProgram";
-          isMut: false;
-          isSigner: false;
+          "name": "nftTokenDestinationAccount",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
         }
-      ];
-      args: [];
+      ],
+      "args": []
     },
     {
-      name: "redeem";
-      accounts: [
+      "name": "verifySolPayment",
+      "accounts": [
         {
-          name: "payment";
-          isMut: true;
-          isSigner: false;
+          "name": "payment",
+          "isMut": true,
+          "isSigner": false
         },
         {
-          name: "player";
-          isMut: true;
-          isSigner: false;
+          "name": "game",
+          "isMut": false,
+          "isSigner": false
         },
         {
-          name: "offering";
-          isMut: true;
-          isSigner: false;
+          "name": "player",
+          "isMut": false,
+          "isSigner": false
         },
         {
-          name: "nftTokenOriginAccount";
-          isMut: true;
-          isSigner: false;
+          "name": "offering",
+          "isMut": false,
+          "isSigner": false
         },
         {
-          name: "nftTokenAccountDestination";
-          isMut: true;
-          isSigner: false;
+          "name": "reciever",
+          "isMut": false,
+          "isSigner": false
         },
         {
-          name: "nftTokenMint";
-          isMut: true;
-          isSigner: false;
-        },
-        {
-          name: "playerAuthority";
-          isMut: true;
-          isSigner: false;
-        },
-        {
-          name: "tokenProgram";
-          isMut: false;
-          isSigner: false;
-        },
-        {
-          name: "systemProgram";
-          isMut: false;
-          isSigner: false;
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
         }
-      ];
-      args: [];
+      ],
+      "args": []
     },
     {
-      name: "redeemSol";
-      accounts: [
+      "name": "redeem",
+      "accounts": [
         {
-          name: "payment";
-          isMut: true;
-          isSigner: false;
+          "name": "payment",
+          "isMut": true,
+          "isSigner": false
         },
         {
-          name: "offering";
-          isMut: true;
-          isSigner: false;
+          "name": "player",
+          "isMut": true,
+          "isSigner": false
         },
         {
-          name: "receiver";
-          isMut: true;
-          isSigner: false;
+          "name": "offering",
+          "isMut": true,
+          "isSigner": false
         },
         {
-          name: "player";
-          isMut: true;
-          isSigner: false;
+          "name": "nftTokenOriginAccount",
+          "isMut": true,
+          "isSigner": false
         },
         {
-          name: "game";
-          isMut: true;
-          isSigner: false;
+          "name": "nftTokenAccountDestination",
+          "isMut": true,
+          "isSigner": false
         },
         {
-          name: "playerAuthority";
-          isMut: true;
-          isSigner: false;
+          "name": "nftTokenMint",
+          "isMut": true,
+          "isSigner": false
         },
         {
-          name: "systemProgram";
-          isMut: false;
-          isSigner: false;
+          "name": "playerAuthority",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
         }
-      ];
-      args: [];
+      ],
+      "args": []
     },
     {
-      name: "closeChallenge";
-      accounts: [
+      "name": "redeemSol",
+      "accounts": [
         {
-          name: "manager";
-          isMut: false;
-          isSigner: false;
+          "name": "payment",
+          "isMut": true,
+          "isSigner": false
         },
         {
-          name: "payment";
-          isMut: true;
-          isSigner: false;
+          "name": "offering",
+          "isMut": true,
+          "isSigner": false
         },
         {
-          name: "paymentPayer";
-          isMut: true;
-          isSigner: false;
+          "name": "receiver",
+          "isMut": true,
+          "isSigner": false
         },
         {
-          name: "game";
-          isMut: true;
-          isSigner: false;
+          "name": "player",
+          "isMut": true,
+          "isSigner": false
         },
         {
-          name: "gamePayer";
-          isMut: true;
-          isSigner: false;
+          "name": "game",
+          "isMut": true,
+          "isSigner": false
         },
         {
-          name: "systemProgram";
-          isMut: false;
-          isSigner: false;
+          "name": "playerAuthority",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
         }
-      ];
-      args: [];
+      ],
+      "args": []
+    },
+    {
+      "name": "closeChallenge",
+      "accounts": [
+        {
+          "name": "manager",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "payment",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "paymentPayer",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "game",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "gamePayer",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
     }
-  ];
-  accounts: [
+  ],
+  "accounts": [
     {
-      name: "manager";
-      type: {
-        kind: "struct";
-        fields: [
+      "name": "manager",
+      "type": {
+        "kind": "struct",
+        "fields": [
           {
-            name: "updateAuthority";
-            type: "publicKey";
+            "name": "updateAuthority",
+            "type": "publicKey"
           },
           {
-            name: "feeVault";
-            type: "publicKey";
+            "name": "feeVault",
+            "type": "publicKey"
           },
           {
-            name: "fee";
-            type: "u64";
+            "name": "fee",
+            "type": "u64"
           }
-        ];
-      };
+        ]
+      }
     },
     {
-      name: "game";
-      type: {
-        kind: "struct";
-        fields: [
+      "name": "game",
+      "type": {
+        "kind": "struct",
+        "fields": [
           {
-            name: "manager";
-            type: "publicKey";
+            "name": "manager",
+            "type": "publicKey"
           },
           {
-            name: "mediator";
-            type: "publicKey";
+            "name": "mediator",
+            "type": "publicKey"
           },
           {
-            name: "limit";
-            type: "u8";
+            "name": "limit",
+            "type": "u8"
           },
           {
-            name: "currentAmountJoined";
-            type: "u8";
+            "name": "currentAmountJoined",
+            "type": "u8"
           },
           {
-            name: "ready";
-            type: "bool";
+            "name": "ready",
+            "type": "bool"
           },
           {
-            name: "offerings";
-            type: "u8";
+            "name": "offerings",
+            "type": "u8"
           },
           {
-            name: "playersAccepted";
-            type: "u8";
+            "name": "playersAccepted",
+            "type": "u8"
           },
           {
-            name: "mediatorVault";
-            type: "publicKey";
+            "name": "mediatorVault",
+            "type": "publicKey"
           },
           {
-            name: "fee";
-            type: "u64";
+            "name": "fee",
+            "type": "u64"
           },
           {
-            name: "mediatorFee";
-            type: "u64";
+            "name": "mediatorFee",
+            "type": "u64"
           }
-        ];
-      };
+        ]
+      }
     },
     {
-      name: "player";
-      type: {
-        kind: "struct";
-        fields: [
+      "name": "player",
+      "type": {
+        "kind": "struct",
+        "fields": [
           {
-            name: "game";
-            type: "publicKey";
+            "name": "game",
+            "type": "publicKey"
           },
           {
-            name: "authority";
-            type: "publicKey";
+            "name": "authority",
+            "type": "publicKey"
           },
           {
-            name: "accepted";
-            type: "bool";
+            "name": "accepted",
+            "type": "bool"
           }
-        ];
-      };
+        ]
+      }
     },
     {
-      name: "offering";
-      type: {
-        kind: "struct";
-        fields: [
+      "name": "offering",
+      "type": {
+        "kind": "struct",
+        "fields": [
           {
-            name: "player";
-            type: "publicKey";
+            "name": "player",
+            "type": "publicKey"
           },
           {
-            name: "tokenAccount";
-            type: {
-              option: "publicKey";
-            };
+            "name": "offeringTokenAccount",
+            "type": {
+              "option": "publicKey"
+            }
           },
           {
-            name: "mint";
-            type: {
-              option: "publicKey";
-            };
+            "name": "mint",
+            "type": {
+              "option": "publicKey"
+            }
           },
           {
-            name: "isEscrowed";
-            type: "bool";
+            "name": "isEscrowed",
+            "type": "bool"
           },
           {
-            name: "amount";
-            type: "u64";
+            "name": "amount",
+            "type": "u64"
           },
           {
-            name: "selfBump";
-            type: "u8";
+            "name": "selfBump",
+            "type": "u8"
+          },
+          {
+            "name": "playerTokenAccount",
+            "type": {
+              "option": "publicKey"
+            }
           }
-        ];
-      };
+        ]
+      }
     },
     {
-      name: "payments";
-      type: {
-        kind: "struct";
-        fields: [
+      "name": "payments",
+      "type": {
+        "kind": "struct",
+        "fields": [
           {
-            name: "payer";
-            type: "publicKey";
+            "name": "payer",
+            "type": "publicKey"
           },
           {
-            name: "game";
-            type: "publicKey";
+            "name": "game",
+            "type": "publicKey"
           },
           {
-            name: "verified";
-            type: "bool";
+            "name": "verified",
+            "type": "bool"
           },
           {
-            name: "payments";
-            type: {
-              vec: {
-                defined: "Payment";
-              };
-            };
+            "name": "payments",
+            "type": {
+              "vec": {
+                "defined": "Payment"
+              }
+            }
           }
-        ];
-      };
+        ]
+      }
     }
-  ];
-  types: [
+  ],
+  "types": [
     {
-      name: "Payment";
-      type: {
-        kind: "struct";
-        fields: [
+      "name": "Payment",
+      "type": {
+        "kind": "struct",
+        "fields": [
           {
-            name: "offering";
-            type: "publicKey";
+            "name": "offering",
+            "type": "publicKey"
           },
           {
-            name: "player";
-            type: "publicKey";
+            "name": "player",
+            "type": "publicKey"
           },
           {
-            name: "winner";
-            type: "publicKey";
+            "name": "winner",
+            "type": "publicKey"
           },
           {
-            name: "verify";
-            type: "bool";
+            "name": "verify",
+            "type": "bool"
           },
           {
-            name: "paid";
-            type: "bool";
+            "name": "paid",
+            "type": "bool"
           }
-        ];
-      };
+        ]
+      }
     },
     {
-      name: "PaymentArg";
-      type: {
-        kind: "struct";
-        fields: [
+      "name": "PaymentArg",
+      "type": {
+        "kind": "struct",
+        "fields": [
           {
-            name: "offering";
-            type: "publicKey";
+            "name": "offering",
+            "type": "publicKey"
           },
           {
-            name: "player";
-            type: "publicKey";
+            "name": "player",
+            "type": "publicKey"
           },
           {
-            name: "winner";
-            type: "publicKey";
+            "name": "winner",
+            "type": "publicKey"
           }
-        ];
-      };
+        ]
+      }
     }
-  ];
-  errors: [
+  ],
+  "errors": [
     {
-      code: 6000;
-      name: "Unauthorized";
-      msg: "You are not admin for this provider";
+      "code": 6000,
+      "name": "Unauthorized",
+      "msg": "You are not admin for this provider"
     },
     {
-      code: 6001;
-      name: "NotPaidYet";
-      msg: "Not all of the payments have been paid yet";
+      "code": 6001,
+      "name": "NotPaidYet",
+      "msg": "Not all of the payments have been paid yet"
     },
     {
-      code: 6002;
-      name: "PaymentOfferingMissmatch";
-      msg: "Payment and offering Missmatch";
+      "code": 6002,
+      "name": "PaymentOfferingMissmatch",
+      "msg": "Payment and offering Missmatch"
     },
     {
-      code: 6003;
-      name: "IncorrectNftDestination";
-      msg: "Nft destination incorrect";
+      "code": 6003,
+      "name": "IncorrectNftDestination",
+      "msg": "Nft destination incorrect"
     },
     {
-      code: 6004;
-      name: "InvalidDestination";
-      msg: "Asset destination incorrect";
+      "code": 6004,
+      "name": "InvalidDestination",
+      "msg": "Asset destination incorrect"
     },
     {
-      code: 6005;
-      name: "IsNotSolOffering";
-      msg: "Is not sol offering";
+      "code": 6005,
+      "name": "IsNotSolOffering",
+      "msg": "Is not sol offering"
     },
     {
-      code: 6006;
-      name: "PublicKeyMismatch";
-      msg: "PublicKey Mismatch";
+      "code": 6006,
+      "name": "PublicKeyMismatch",
+      "msg": "PublicKey Mismatch"
     },
     {
-      code: 6007;
-      name: "NotFreezable";
-      msg: "Is not freezable";
+      "code": 6007,
+      "name": "NotFreezable",
+      "msg": "Is not freezable"
     },
     {
-      code: 6008;
-      name: "Escrowed";
-      msg: "Offering is escrowed";
+      "code": 6008,
+      "name": "Escrowed",
+      "msg": "Offering is escrowed"
     },
     {
-      code: 6009;
-      name: "NotEscrowed";
-      msg: "Offering is not escrowed";
+      "code": 6009,
+      "name": "NotEscrowed",
+      "msg": "Offering is not escrowed"
     }
-  ];
+  ]
 };
 
 export const IDL: NftChallenge = {
-  version: "0.1.0",
-  name: "nft_challenge",
-  instructions: [
+  "version": "0.1.50",
+  "name": "nft_challenge",
+  "instructions": [
     {
-      name: "getVersion",
-      accounts: [],
-      args: [],
-      returns: "string",
+      "name": "getVersion",
+      "accounts": [],
+      "args": [],
+      "returns": "string"
     },
     {
-      name: "initializeProvider",
-      accounts: [
+      "name": "initializeProvider",
+      "accounts": [
         {
-          name: "authority",
-          isMut: true,
-          isSigner: true,
+          "name": "authority",
+          "isMut": true,
+          "isSigner": true
         },
         {
-          name: "manager",
-          isMut: true,
-          isSigner: true,
+          "name": "manager",
+          "isMut": true,
+          "isSigner": true
         },
         {
-          name: "feeVault",
-          isMut: false,
-          isSigner: false,
+          "name": "feeVault",
+          "isMut": false,
+          "isSigner": false
         },
         {
-          name: "systemProgram",
-          isMut: false,
-          isSigner: false,
-        },
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
       ],
-      args: [
+      "args": [
         {
-          name: "fee",
-          type: "u64",
-        },
-      ],
+          "name": "fee",
+          "type": "u64"
+        }
+      ]
     },
     {
-      name: "createChallenge",
-      accounts: [
+      "name": "updateManager",
+      "accounts": [
         {
-          name: "authority",
-          isMut: true,
-          isSigner: true,
+          "name": "authority",
+          "isMut": true,
+          "isSigner": true
         },
         {
-          name: "manager",
-          isMut: false,
-          isSigner: false,
+          "name": "manager",
+          "isMut": true,
+          "isSigner": false
         },
         {
-          name: "mediator",
-          isMut: false,
-          isSigner: false,
+          "name": "feeVault",
+          "isMut": false,
+          "isSigner": false
         },
         {
-          name: "mediatorVault",
-          isMut: false,
-          isSigner: false,
-        },
-        {
-          name: "game",
-          isMut: true,
-          isSigner: true,
-        },
-        {
-          name: "systemProgram",
-          isMut: false,
-          isSigner: false,
-        },
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
       ],
-      args: [
+      "args": [
         {
-          name: "limit",
-          type: "u8",
-        },
-        {
-          name: "fee",
-          type: "u64",
-        },
-        {
-          name: "mediatorFee",
-          type: "u64",
-        },
-      ],
+          "name": "fee",
+          "type": "u64"
+        }
+      ]
     },
     {
-      name: "join",
-      accounts: [
+      "name": "createChallenge",
+      "accounts": [
         {
-          name: "playerAuthority",
-          isMut: true,
-          isSigner: true,
+          "name": "authority",
+          "isMut": true,
+          "isSigner": true
         },
         {
-          name: "manager",
-          isMut: false,
-          isSigner: false,
+          "name": "manager",
+          "isMut": false,
+          "isSigner": false
         },
         {
-          name: "player",
-          isMut: true,
-          isSigner: false,
+          "name": "mediator",
+          "isMut": false,
+          "isSigner": false
         },
         {
-          name: "game",
-          isMut: true,
-          isSigner: false,
+          "name": "mediatorVault",
+          "isMut": false,
+          "isSigner": false
         },
         {
-          name: "feeVault",
-          isMut: true,
-          isSigner: false,
+          "name": "game",
+          "isMut": true,
+          "isSigner": true
         },
         {
-          name: "mediatorVault",
-          isMut: true,
-          isSigner: false,
-        },
-        {
-          name: "systemProgram",
-          isMut: false,
-          isSigner: false,
-        },
-        {
-          name: "tokenProgram",
-          isMut: false,
-          isSigner: false,
-        },
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
       ],
-      args: [],
+      "args": [
+        {
+          "name": "limit",
+          "type": "u8"
+        },
+        {
+          "name": "fee",
+          "type": "u64"
+        },
+        {
+          "name": "mediatorFee",
+          "type": "u64"
+        }
+      ]
     },
     {
-      name: "addEscrowlessOffering",
-      accounts: [
+      "name": "join",
+      "accounts": [
         {
-          name: "playerAuthority",
-          isMut: true,
-          isSigner: true,
+          "name": "playerAuthority",
+          "isMut": true,
+          "isSigner": true
         },
         {
-          name: "player",
-          isMut: true,
-          isSigner: false,
+          "name": "manager",
+          "isMut": false,
+          "isSigner": false
         },
         {
-          name: "game",
-          isMut: true,
-          isSigner: false,
+          "name": "player",
+          "isMut": true,
+          "isSigner": false
         },
         {
-          name: "offering",
-          isMut: true,
-          isSigner: false,
+          "name": "game",
+          "isMut": true,
+          "isSigner": false
         },
         {
-          name: "tokenAccount",
-          isMut: true,
-          isSigner: false,
+          "name": "feeVault",
+          "isMut": true,
+          "isSigner": false
         },
         {
-          name: "tokenMint",
-          isMut: true,
-          isSigner: false,
+          "name": "mediatorVault",
+          "isMut": true,
+          "isSigner": false
         },
         {
-          name: "tokenProgram",
-          isMut: false,
-          isSigner: false,
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
         },
         {
-          name: "systemProgram",
-          isMut: false,
-          isSigner: false,
-        },
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        }
       ],
-      args: [
-        {
-          name: "amount",
-          type: "u64",
-        },
-      ],
+      "args": []
     },
     {
-      name: "addEscrowedOffering",
-      accounts: [
+      "name": "addEscrowlessOffering",
+      "accounts": [
         {
-          name: "playerAuthority",
-          isMut: true,
-          isSigner: true,
+          "name": "playerAuthority",
+          "isMut": true,
+          "isSigner": true
         },
         {
-          name: "player",
-          isMut: true,
-          isSigner: false,
+          "name": "player",
+          "isMut": true,
+          "isSigner": false
         },
         {
-          name: "game",
-          isMut: true,
-          isSigner: false,
+          "name": "game",
+          "isMut": true,
+          "isSigner": false
         },
         {
-          name: "offering",
-          isMut: true,
-          isSigner: false,
+          "name": "offering",
+          "isMut": true,
+          "isSigner": false
         },
         {
-          name: "tokenAccount",
-          isMut: true,
-          isSigner: false,
+          "name": "tokenAccount",
+          "isMut": true,
+          "isSigner": false
         },
         {
-          name: "offeringTokenAccount",
-          isMut: true,
-          isSigner: false,
+          "name": "tokenMint",
+          "isMut": true,
+          "isSigner": false
         },
         {
-          name: "tokenMint",
-          isMut: true,
-          isSigner: false,
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
         },
         {
-          name: "tokenProgram",
-          isMut: false,
-          isSigner: false,
-        },
-        {
-          name: "systemProgram",
-          isMut: false,
-          isSigner: false,
-        },
-        {
-          name: "associatedTokenProgram",
-          isMut: false,
-          isSigner: false,
-        },
-        {
-          name: "rent",
-          isMut: false,
-          isSigner: false,
-        },
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
       ],
-      args: [
+      "args": [
         {
-          name: "amount",
-          type: "u64",
-        },
-      ],
+          "name": "amount",
+          "type": "u64"
+        }
+      ]
     },
     {
-      name: "addSolOffering",
-      accounts: [
+      "name": "addEscrowedOffering",
+      "accounts": [
         {
-          name: "playerAuthority",
-          isMut: true,
-          isSigner: true,
+          "name": "playerAuthority",
+          "isMut": true,
+          "isSigner": true
         },
         {
-          name: "player",
-          isMut: true,
-          isSigner: false,
+          "name": "player",
+          "isMut": true,
+          "isSigner": false
         },
         {
-          name: "game",
-          isMut: true,
-          isSigner: false,
+          "name": "game",
+          "isMut": true,
+          "isSigner": false
         },
         {
-          name: "offering",
-          isMut: true,
-          isSigner: false,
+          "name": "offering",
+          "isMut": true,
+          "isSigner": false
         },
         {
-          name: "systemProgram",
-          isMut: false,
-          isSigner: false,
+          "name": "tokenAccount",
+          "isMut": true,
+          "isSigner": false
         },
+        {
+          "name": "offeringTokenAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "tokenMint",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "associatedTokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "rent",
+          "isMut": false,
+          "isSigner": false
+        }
       ],
-      args: [
+      "args": [
         {
-          name: "amount",
-          type: "u64",
-        },
-      ],
+          "name": "amount",
+          "type": "u64"
+        }
+      ]
     },
     {
-      name: "removeEscrowlessOffering",
-      accounts: [
+      "name": "addSolOffering",
+      "accounts": [
         {
-          name: "playerAuthority",
-          isMut: true,
-          isSigner: true,
+          "name": "playerAuthority",
+          "isMut": true,
+          "isSigner": true
         },
         {
-          name: "player",
-          isMut: true,
-          isSigner: false,
+          "name": "player",
+          "isMut": true,
+          "isSigner": false
         },
         {
-          name: "game",
-          isMut: true,
-          isSigner: false,
+          "name": "game",
+          "isMut": true,
+          "isSigner": false
         },
         {
-          name: "offering",
-          isMut: true,
-          isSigner: false,
+          "name": "offering",
+          "isMut": true,
+          "isSigner": false
         },
         {
-          name: "tokenAccount",
-          isMut: true,
-          isSigner: false,
-        },
-        {
-          name: "tokenMint",
-          isMut: false,
-          isSigner: false,
-        },
-        {
-          name: "tokenProgram",
-          isMut: false,
-          isSigner: false,
-        },
-        {
-          name: "systemProgram",
-          isMut: false,
-          isSigner: false,
-        },
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
       ],
-      args: [],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        }
+      ]
     },
     {
-      name: "removeEscrowedOffering",
-      accounts: [
+      "name": "removeEscrowlessOffering",
+      "accounts": [
         {
-          name: "playerAuthority",
-          isMut: true,
-          isSigner: true,
+          "name": "playerAuthority",
+          "isMut": true,
+          "isSigner": true
         },
         {
-          name: "player",
-          isMut: true,
-          isSigner: false,
+          "name": "player",
+          "isMut": true,
+          "isSigner": false
         },
         {
-          name: "game",
-          isMut: true,
-          isSigner: false,
+          "name": "game",
+          "isMut": true,
+          "isSigner": false
         },
         {
-          name: "offering",
-          isMut: true,
-          isSigner: false,
+          "name": "offering",
+          "isMut": true,
+          "isSigner": false
         },
         {
-          name: "offeringTokenAccount",
-          isMut: true,
-          isSigner: false,
+          "name": "tokenAccount",
+          "isMut": true,
+          "isSigner": false
         },
         {
-          name: "tokenAccount",
-          isMut: true,
-          isSigner: false,
+          "name": "tokenMint",
+          "isMut": false,
+          "isSigner": false
         },
         {
-          name: "tokenMint",
-          isMut: false,
-          isSigner: false,
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
         },
         {
-          name: "tokenProgram",
-          isMut: false,
-          isSigner: false,
-        },
-        {
-          name: "systemProgram",
-          isMut: false,
-          isSigner: false,
-        },
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
       ],
-      args: [],
+      "args": []
     },
     {
-      name: "removeSolOffering",
-      accounts: [
+      "name": "removeEscrowedOffering",
+      "accounts": [
         {
-          name: "playerAuthority",
-          isMut: true,
-          isSigner: true,
+          "name": "playerAuthority",
+          "isMut": true,
+          "isSigner": true
         },
         {
-          name: "player",
-          isMut: true,
-          isSigner: false,
+          "name": "player",
+          "isMut": true,
+          "isSigner": false
         },
         {
-          name: "game",
-          isMut: true,
-          isSigner: false,
+          "name": "game",
+          "isMut": true,
+          "isSigner": false
         },
         {
-          name: "offering",
-          isMut: true,
-          isSigner: false,
+          "name": "offering",
+          "isMut": true,
+          "isSigner": false
         },
         {
-          name: "systemProgram",
-          isMut: false,
-          isSigner: false,
+          "name": "offeringTokenAccount",
+          "isMut": true,
+          "isSigner": false
         },
+        {
+          "name": "tokenAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "tokenMint",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
       ],
-      args: [],
+      "args": []
     },
     {
-      name: "accept",
-      accounts: [
+      "name": "removeSolOffering",
+      "accounts": [
         {
-          name: "playerAuthority",
-          isMut: false,
-          isSigner: true,
+          "name": "playerAuthority",
+          "isMut": true,
+          "isSigner": true
         },
         {
-          name: "player",
-          isMut: true,
-          isSigner: false,
+          "name": "player",
+          "isMut": true,
+          "isSigner": false
         },
         {
-          name: "game",
-          isMut: true,
-          isSigner: false,
+          "name": "game",
+          "isMut": true,
+          "isSigner": false
         },
         {
-          name: "systemProgram",
-          isMut: false,
-          isSigner: false,
+          "name": "offering",
+          "isMut": true,
+          "isSigner": false
         },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
       ],
-      args: [],
+      "args": []
     },
     {
-      name: "createPayment",
-      accounts: [
+      "name": "accept",
+      "accounts": [
         {
-          name: "mediator",
-          isMut: false,
-          isSigner: true,
+          "name": "playerAuthority",
+          "isMut": false,
+          "isSigner": true
         },
         {
-          name: "payer",
-          isMut: true,
-          isSigner: true,
+          "name": "player",
+          "isMut": true,
+          "isSigner": false
         },
         {
-          name: "game",
-          isMut: false,
-          isSigner: false,
+          "name": "game",
+          "isMut": true,
+          "isSigner": false
         },
         {
-          name: "manager",
-          isMut: false,
-          isSigner: false,
-        },
-        {
-          name: "payment",
-          isMut: true,
-          isSigner: false,
-        },
-        {
-          name: "systemProgram",
-          isMut: false,
-          isSigner: false,
-        },
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
       ],
-      args: [
-        {
-          name: "payments",
-          type: {
-            vec: {
-              defined: "PaymentArg",
-            },
-          },
-        },
-      ],
+      "args": []
     },
     {
-      name: "createCancelPayment",
-      accounts: [
+      "name": "createPayment",
+      "accounts": [
         {
-          name: "authority",
-          isMut: false,
-          isSigner: true,
+          "name": "mediator",
+          "isMut": false,
+          "isSigner": true
         },
         {
-          name: "payer",
-          isMut: true,
-          isSigner: true,
+          "name": "payer",
+          "isMut": true,
+          "isSigner": true
         },
         {
-          name: "game",
-          isMut: false,
-          isSigner: false,
+          "name": "game",
+          "isMut": false,
+          "isSigner": false
         },
         {
-          name: "manager",
-          isMut: false,
-          isSigner: false,
+          "name": "manager",
+          "isMut": false,
+          "isSigner": false
         },
         {
-          name: "payment",
-          isMut: true,
-          isSigner: false,
+          "name": "payment",
+          "isMut": true,
+          "isSigner": false
         },
         {
-          name: "systemProgram",
-          isMut: false,
-          isSigner: false,
-        },
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
       ],
-      args: [
+      "args": [
         {
-          name: "payments",
-          type: {
-            vec: {
-              defined: "PaymentArg",
-            },
-          },
-        },
-      ],
+          "name": "payments",
+          "type": {
+            "vec": {
+              "defined": "PaymentArg"
+            }
+          }
+        }
+      ]
     },
     {
-      name: "verifyPayment",
-      accounts: [
+      "name": "createCancelPayment",
+      "accounts": [
         {
-          name: "payment",
-          isMut: true,
-          isSigner: false,
+          "name": "authority",
+          "isMut": false,
+          "isSigner": true
         },
         {
-          name: "game",
-          isMut: false,
-          isSigner: false,
+          "name": "payer",
+          "isMut": true,
+          "isSigner": true
         },
         {
-          name: "player",
-          isMut: false,
-          isSigner: false,
+          "name": "game",
+          "isMut": false,
+          "isSigner": false
         },
         {
-          name: "offering",
-          isMut: false,
-          isSigner: false,
+          "name": "manager",
+          "isMut": false,
+          "isSigner": false
         },
         {
-          name: "nftTokenOriginAccount",
-          isMut: false,
-          isSigner: false,
+          "name": "payment",
+          "isMut": true,
+          "isSigner": false
         },
         {
-          name: "nftTokenDestinationAccount",
-          isMut: false,
-          isSigner: false,
-        },
-        {
-          name: "tokenProgram",
-          isMut: false,
-          isSigner: false,
-        },
-        {
-          name: "systemProgram",
-          isMut: false,
-          isSigner: false,
-        },
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
       ],
-      args: [],
+      "args": [
+        {
+          "name": "payments",
+          "type": {
+            "vec": {
+              "defined": "PaymentArg"
+            }
+          }
+        }
+      ]
     },
     {
-      name: "verifySolPayment",
-      accounts: [
+      "name": "verifyPayment",
+      "accounts": [
         {
-          name: "payment",
-          isMut: true,
-          isSigner: false,
+          "name": "payment",
+          "isMut": true,
+          "isSigner": false
         },
         {
-          name: "game",
-          isMut: false,
-          isSigner: false,
+          "name": "game",
+          "isMut": false,
+          "isSigner": false
         },
         {
-          name: "player",
-          isMut: false,
-          isSigner: false,
+          "name": "player",
+          "isMut": false,
+          "isSigner": false
         },
         {
-          name: "offering",
-          isMut: false,
-          isSigner: false,
+          "name": "offering",
+          "isMut": false,
+          "isSigner": false
         },
         {
-          name: "reciever",
-          isMut: false,
-          isSigner: false,
+          "name": "nftTokenOriginAccount",
+          "isMut": false,
+          "isSigner": false
         },
         {
-          name: "systemProgram",
-          isMut: false,
-          isSigner: false,
+          "name": "nftTokenDestinationAccount",
+          "isMut": false,
+          "isSigner": false
         },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
       ],
-      args: [],
+      "args": []
     },
     {
-      name: "redeem",
-      accounts: [
+      "name": "verifySolPayment",
+      "accounts": [
         {
-          name: "payment",
-          isMut: true,
-          isSigner: false,
+          "name": "payment",
+          "isMut": true,
+          "isSigner": false
         },
         {
-          name: "player",
-          isMut: true,
-          isSigner: false,
+          "name": "game",
+          "isMut": false,
+          "isSigner": false
         },
         {
-          name: "offering",
-          isMut: true,
-          isSigner: false,
+          "name": "player",
+          "isMut": false,
+          "isSigner": false
         },
         {
-          name: "nftTokenOriginAccount",
-          isMut: true,
-          isSigner: false,
+          "name": "offering",
+          "isMut": false,
+          "isSigner": false
         },
         {
-          name: "nftTokenAccountDestination",
-          isMut: true,
-          isSigner: false,
+          "name": "reciever",
+          "isMut": false,
+          "isSigner": false
         },
         {
-          name: "nftTokenMint",
-          isMut: true,
-          isSigner: false,
-        },
-        {
-          name: "playerAuthority",
-          isMut: true,
-          isSigner: false,
-        },
-        {
-          name: "tokenProgram",
-          isMut: false,
-          isSigner: false,
-        },
-        {
-          name: "systemProgram",
-          isMut: false,
-          isSigner: false,
-        },
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
       ],
-      args: [],
+      "args": []
     },
     {
-      name: "redeemSol",
-      accounts: [
+      "name": "redeem",
+      "accounts": [
         {
-          name: "payment",
-          isMut: true,
-          isSigner: false,
+          "name": "payment",
+          "isMut": true,
+          "isSigner": false
         },
         {
-          name: "offering",
-          isMut: true,
-          isSigner: false,
+          "name": "player",
+          "isMut": true,
+          "isSigner": false
         },
         {
-          name: "receiver",
-          isMut: true,
-          isSigner: false,
+          "name": "offering",
+          "isMut": true,
+          "isSigner": false
         },
         {
-          name: "player",
-          isMut: true,
-          isSigner: false,
+          "name": "nftTokenOriginAccount",
+          "isMut": true,
+          "isSigner": false
         },
         {
-          name: "game",
-          isMut: true,
-          isSigner: false,
+          "name": "nftTokenAccountDestination",
+          "isMut": true,
+          "isSigner": false
         },
         {
-          name: "playerAuthority",
-          isMut: true,
-          isSigner: false,
+          "name": "nftTokenMint",
+          "isMut": true,
+          "isSigner": false
         },
         {
-          name: "systemProgram",
-          isMut: false,
-          isSigner: false,
+          "name": "playerAuthority",
+          "isMut": true,
+          "isSigner": false
         },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
       ],
-      args: [],
+      "args": []
     },
     {
-      name: "closeChallenge",
-      accounts: [
+      "name": "redeemSol",
+      "accounts": [
         {
-          name: "manager",
-          isMut: false,
-          isSigner: false,
+          "name": "payment",
+          "isMut": true,
+          "isSigner": false
         },
         {
-          name: "payment",
-          isMut: true,
-          isSigner: false,
+          "name": "offering",
+          "isMut": true,
+          "isSigner": false
         },
         {
-          name: "paymentPayer",
-          isMut: true,
-          isSigner: false,
+          "name": "receiver",
+          "isMut": true,
+          "isSigner": false
         },
         {
-          name: "game",
-          isMut: true,
-          isSigner: false,
+          "name": "player",
+          "isMut": true,
+          "isSigner": false
         },
         {
-          name: "gamePayer",
-          isMut: true,
-          isSigner: false,
+          "name": "game",
+          "isMut": true,
+          "isSigner": false
         },
         {
-          name: "systemProgram",
-          isMut: false,
-          isSigner: false,
+          "name": "playerAuthority",
+          "isMut": true,
+          "isSigner": false
         },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
       ],
-      args: [],
+      "args": []
     },
+    {
+      "name": "closeChallenge",
+      "accounts": [
+        {
+          "name": "manager",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "payment",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "paymentPayer",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "game",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "gamePayer",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    }
   ],
-  accounts: [
+  "accounts": [
     {
-      name: "manager",
-      type: {
-        kind: "struct",
-        fields: [
+      "name": "manager",
+      "type": {
+        "kind": "struct",
+        "fields": [
           {
-            name: "updateAuthority",
-            type: "publicKey",
+            "name": "updateAuthority",
+            "type": "publicKey"
           },
           {
-            name: "feeVault",
-            type: "publicKey",
+            "name": "feeVault",
+            "type": "publicKey"
           },
           {
-            name: "fee",
-            type: "u64",
-          },
-        ],
-      },
+            "name": "fee",
+            "type": "u64"
+          }
+        ]
+      }
     },
     {
-      name: "game",
-      type: {
-        kind: "struct",
-        fields: [
+      "name": "game",
+      "type": {
+        "kind": "struct",
+        "fields": [
           {
-            name: "manager",
-            type: "publicKey",
+            "name": "manager",
+            "type": "publicKey"
           },
           {
-            name: "mediator",
-            type: "publicKey",
+            "name": "mediator",
+            "type": "publicKey"
           },
           {
-            name: "limit",
-            type: "u8",
+            "name": "limit",
+            "type": "u8"
           },
           {
-            name: "currentAmountJoined",
-            type: "u8",
+            "name": "currentAmountJoined",
+            "type": "u8"
           },
           {
-            name: "ready",
-            type: "bool",
+            "name": "ready",
+            "type": "bool"
           },
           {
-            name: "offerings",
-            type: "u8",
+            "name": "offerings",
+            "type": "u8"
           },
           {
-            name: "playersAccepted",
-            type: "u8",
+            "name": "playersAccepted",
+            "type": "u8"
           },
           {
-            name: "mediatorVault",
-            type: "publicKey",
+            "name": "mediatorVault",
+            "type": "publicKey"
           },
           {
-            name: "fee",
-            type: "u64",
+            "name": "fee",
+            "type": "u64"
           },
           {
-            name: "mediatorFee",
-            type: "u64",
-          },
-        ],
-      },
+            "name": "mediatorFee",
+            "type": "u64"
+          }
+        ]
+      }
     },
     {
-      name: "player",
-      type: {
-        kind: "struct",
-        fields: [
+      "name": "player",
+      "type": {
+        "kind": "struct",
+        "fields": [
           {
-            name: "game",
-            type: "publicKey",
+            "name": "game",
+            "type": "publicKey"
           },
           {
-            name: "authority",
-            type: "publicKey",
+            "name": "authority",
+            "type": "publicKey"
           },
           {
-            name: "accepted",
-            type: "bool",
-          },
-        ],
-      },
+            "name": "accepted",
+            "type": "bool"
+          }
+        ]
+      }
     },
     {
-      name: "offering",
-      type: {
-        kind: "struct",
-        fields: [
+      "name": "offering",
+      "type": {
+        "kind": "struct",
+        "fields": [
           {
-            name: "player",
-            type: "publicKey",
+            "name": "player",
+            "type": "publicKey"
           },
           {
-            name: "tokenAccount",
-            type: {
-              option: "publicKey",
-            },
+            "name": "offeringTokenAccount",
+            "type": {
+              "option": "publicKey"
+            }
           },
           {
-            name: "mint",
-            type: {
-              option: "publicKey",
-            },
+            "name": "mint",
+            "type": {
+              "option": "publicKey"
+            }
           },
           {
-            name: "isEscrowed",
-            type: "bool",
+            "name": "isEscrowed",
+            "type": "bool"
           },
           {
-            name: "amount",
-            type: "u64",
+            "name": "amount",
+            "type": "u64"
           },
           {
-            name: "selfBump",
-            type: "u8",
+            "name": "selfBump",
+            "type": "u8"
           },
-        ],
-      },
+          {
+            "name": "playerTokenAccount",
+            "type": {
+              "option": "publicKey"
+            }
+          }
+        ]
+      }
     },
     {
-      name: "payments",
-      type: {
-        kind: "struct",
-        fields: [
+      "name": "payments",
+      "type": {
+        "kind": "struct",
+        "fields": [
           {
-            name: "payer",
-            type: "publicKey",
+            "name": "payer",
+            "type": "publicKey"
           },
           {
-            name: "game",
-            type: "publicKey",
+            "name": "game",
+            "type": "publicKey"
           },
           {
-            name: "verified",
-            type: "bool",
+            "name": "verified",
+            "type": "bool"
           },
           {
-            name: "payments",
-            type: {
-              vec: {
-                defined: "Payment",
-              },
-            },
-          },
-        ],
-      },
-    },
+            "name": "payments",
+            "type": {
+              "vec": {
+                "defined": "Payment"
+              }
+            }
+          }
+        ]
+      }
+    }
   ],
-  types: [
+  "types": [
     {
-      name: "Payment",
-      type: {
-        kind: "struct",
-        fields: [
+      "name": "Payment",
+      "type": {
+        "kind": "struct",
+        "fields": [
           {
-            name: "offering",
-            type: "publicKey",
+            "name": "offering",
+            "type": "publicKey"
           },
           {
-            name: "player",
-            type: "publicKey",
+            "name": "player",
+            "type": "publicKey"
           },
           {
-            name: "winner",
-            type: "publicKey",
+            "name": "winner",
+            "type": "publicKey"
           },
           {
-            name: "verify",
-            type: "bool",
+            "name": "verify",
+            "type": "bool"
           },
           {
-            name: "paid",
-            type: "bool",
-          },
-        ],
-      },
+            "name": "paid",
+            "type": "bool"
+          }
+        ]
+      }
     },
     {
-      name: "PaymentArg",
-      type: {
-        kind: "struct",
-        fields: [
+      "name": "PaymentArg",
+      "type": {
+        "kind": "struct",
+        "fields": [
           {
-            name: "offering",
-            type: "publicKey",
+            "name": "offering",
+            "type": "publicKey"
           },
           {
-            name: "player",
-            type: "publicKey",
+            "name": "player",
+            "type": "publicKey"
           },
           {
-            name: "winner",
-            type: "publicKey",
-          },
-        ],
-      },
-    },
+            "name": "winner",
+            "type": "publicKey"
+          }
+        ]
+      }
+    }
   ],
-  errors: [
+  "errors": [
     {
-      code: 6000,
-      name: "Unauthorized",
-      msg: "You are not admin for this provider",
+      "code": 6000,
+      "name": "Unauthorized",
+      "msg": "You are not admin for this provider"
     },
     {
-      code: 6001,
-      name: "NotPaidYet",
-      msg: "Not all of the payments have been paid yet",
+      "code": 6001,
+      "name": "NotPaidYet",
+      "msg": "Not all of the payments have been paid yet"
     },
     {
-      code: 6002,
-      name: "PaymentOfferingMissmatch",
-      msg: "Payment and offering Missmatch",
+      "code": 6002,
+      "name": "PaymentOfferingMissmatch",
+      "msg": "Payment and offering Missmatch"
     },
     {
-      code: 6003,
-      name: "IncorrectNftDestination",
-      msg: "Nft destination incorrect",
+      "code": 6003,
+      "name": "IncorrectNftDestination",
+      "msg": "Nft destination incorrect"
     },
     {
-      code: 6004,
-      name: "InvalidDestination",
-      msg: "Asset destination incorrect",
+      "code": 6004,
+      "name": "InvalidDestination",
+      "msg": "Asset destination incorrect"
     },
     {
-      code: 6005,
-      name: "IsNotSolOffering",
-      msg: "Is not sol offering",
+      "code": 6005,
+      "name": "IsNotSolOffering",
+      "msg": "Is not sol offering"
     },
     {
-      code: 6006,
-      name: "PublicKeyMismatch",
-      msg: "PublicKey Mismatch",
+      "code": 6006,
+      "name": "PublicKeyMismatch",
+      "msg": "PublicKey Mismatch"
     },
     {
-      code: 6007,
-      name: "NotFreezable",
-      msg: "Is not freezable",
+      "code": 6007,
+      "name": "NotFreezable",
+      "msg": "Is not freezable"
     },
     {
-      code: 6008,
-      name: "Escrowed",
-      msg: "Offering is escrowed",
+      "code": 6008,
+      "name": "Escrowed",
+      "msg": "Offering is escrowed"
     },
     {
-      code: 6009,
-      name: "NotEscrowed",
-      msg: "Offering is not escrowed",
-    },
-  ],
+      "code": 6009,
+      "name": "NotEscrowed",
+      "msg": "Offering is not escrowed"
+    }
+  ]
 };
