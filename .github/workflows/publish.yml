@@ -4,12 +4,6 @@ on:
   push:
     tags:
       - v1.**
-
-jobs:
-  publish:
-    name: Publish package
-    runs-on: ubuntu-latest
-
 jobs:
   publish_github:
     runs-on: ubuntu-latest
