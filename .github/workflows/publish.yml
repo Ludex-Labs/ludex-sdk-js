@@ -4,6 +4,8 @@ on:
   push:
     tags:
       - v1.**
+  workflow_dispatch:
+    
 jobs:
   publish_github:
     runs-on: ubuntu-latest
