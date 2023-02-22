@@ -1,4 +1,4 @@
-name: Publish NPM Package
+name: Publish package
 
 on:
   push:
@@ -10,18 +10,42 @@ jobs:
     name: Publish package
     runs-on: ubuntu-latest
 
+jobs:
+  publish_github:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
     steps:
-      - name: "Checkout source code"
-        uses: "actions/checkout@v2"
+      - uses: actions/checkout@v3
+      # Setup .npmrc file to publish to GitHub Packages
+      - uses: actions/setup-node@v3
         with:
-          ref: ${{ github.ref }}
-      - name: "Publish"
-        uses: actions/setup-node@v3
-        with:
-          node-version: 16
+          node-version: '16.x'
+          registry-url: 'https://npm.pkg.github.com'
+          # Defaults to the user or organization that owns the workflow file
+          scope: '@ludex-labs'
       - name: install and build
         run: npm ci && npm run build
-      - name: publish
-        run: npm publish
+      - run: npm publish
         env:
-          NPM_TOKEN: ${{secrets.NPM_TOKEN}}
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  publish_npm:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v3
+      # Setup .npmrc file to publish to GitHub Packages
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '16.x'
+          registry-url: 'https://registry.npmjs.org'
+          # Defaults to the user or organization that owns the workflow file
+          scope: '@ludex-labs'
+      - name: install and build
+        run: npm ci && npm run build
+      - run: npm publish
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

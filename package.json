@@ -6,9 +6,6 @@
     "type": "git",
     "url": "https://github.com/Ludex-Labs/ludex-sdk-js.git"
   },
-  "publishConfig": {
-    "registry": "https://registry.npmjs.org/"
-  },
   "private": false,
   "description": "",
   "types": "./lib/index.d.ts",
