@@ -75,6 +75,36 @@ export class ChallengeAPIClient {
     });
   }
 
+  async count(filter?: ChallengeFilter | string) {
+    let path = "count";
+    const params = new URLSearchParams();
+
+    if (filter) {
+      if (typeof filter === "string") {
+        params.append("search", filter);
+      } else {
+        if (filter.chain) {
+          params.append("chain", filter.chain);
+        }
+        if (filter.type) {
+          params.append("type", filter.type);
+        }
+        if (filter.payoutId) {
+          params.append("payoutId", filter.payoutId.toString());
+        }
+        if (filter.mint) {
+          params.append("mint", filter.mint);
+        }
+      }
+    }
+
+    if (params.toString() !== "") {
+      path += `?${params.toString()}`;
+    }
+
+    return this.ludexChallengeApi<number>({ path });
+  }
+
   async list(filter?: ChallengeFilter | string, page?: number, limit?: number) {
     let path = "";
     const params = new URLSearchParams();
