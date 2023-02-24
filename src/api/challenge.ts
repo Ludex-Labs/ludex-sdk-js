@@ -1,6 +1,13 @@
 import { ChallengeExtensions, FTChallenge, Player, Signature } from './models';
 import { _ludexChallengeApi, ApiConfig } from './utils';
 
+export type ChallengeFilter = {
+  chain?: string;
+  type?: string;
+  payoutId?: number;
+  mint?: string;
+};
+
 export class ChallengeAPIClient {
   ludexChallengeApi: <T>(config: ApiConfig) => Promise<T>;
   constructor(apiKey: string, baseUrl?: string) {
@@ -68,19 +75,38 @@ export class ChallengeAPIClient {
     });
   }
 
-  async list(page?: number, limit?: number) {
+  async list(filter?: ChallengeFilter | string, page?: number, limit?: number) {
     let path = "";
-    if (page || limit) {
-      const params = new URLSearchParams();
+    const params = new URLSearchParams();
 
-      if (page) {
-        params.append("page", page.toString());
+    if (filter) {
+      if (typeof filter === "string") {
+        params.append("search", filter);
+      } else {
+        if (filter.chain) {
+          params.append("chain", filter.chain);
+        }
+        if (filter.type) {
+          params.append("type", filter.type);
+        }
+        if (filter.payoutId) {
+          params.append("payoutId", filter.payoutId.toString());
+        }
+        if (filter.mint) {
+          params.append("mint", filter.mint);
+        }
       }
+    }
 
-      if (limit) {
-        params.append("limit", limit.toString());
-      }
+    if (page) {
+      params.append("page", page.toString());
+    }
 
+    if (limit) {
+      params.append("limit", limit.toString());
+    }
+
+    if (params.toString() !== "") {
       path = `?${params.toString()}`;
     }
 
