@@ -13,7 +13,9 @@
     ".": {
       "import": "./lib/index.mjs",
       "require": "./lib/index.cjs"
-    }
+    },
+    "./api/*": "./lib/api/*.mjs",
+    "./web3/*": "./lib/web3/*.mjs"
   },
   "main": "./lib/index.cjs",
   "files": [
