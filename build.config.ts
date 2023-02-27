@@ -2,7 +2,10 @@
 import { defineBuildConfig } from 'unbuild';
 
 export default defineBuildConfig({
-  entries: ["src/index", { input: "src/", outDir: "lib", builder: "mkdist" }],
+  entries: [
+    { input: "src/", outDir: "lib", builder: "mkdist", format: "esm" },
+    { input: "src/", outDir: "lib", builder: "mkdist", format: "cjs" },
+  ],
   declaration: true, // generate .d.ts files
   rollup: {
     emitCJS: true,

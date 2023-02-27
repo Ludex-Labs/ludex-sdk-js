@@ -1,6 +1,6 @@
 {
   "name": "@ludex-labs/ludex-sdk-js",
-  "version": "0.0.5",
+  "version": "0.0.8",
   "repository": {
     "directory": "packages/@ludex-labs/ludex-sdk-js",
     "type": "git",
@@ -8,11 +8,50 @@
   },
   "private": false,
   "description": "",
+  "exports": {
+    ".": {
+      "types": "./lib/index.d.ts",
+      "require": "./lib/index.js",
+      "import": "./lib/index.mjs"
+    },
+    "./api/*": {
+      "types": [
+        "./lib/api/*/index.d.ts",
+        "./lib/api/*.d.ts"
+      ],
+      "require": [
+        "./lib/api/*/index.js",
+        "./lib/api/*.js"
+      ],
+      "import": [
+        "./lib/api/*/index.mjs",
+        "./lib/api/*.mjs"
+      ]
+    },
+    "./web3/*": {
+      "types": [
+        "./lib/web3/*/index.d.ts",
+        "./lib/web3/*.d.ts"
+      ],
+      "require": [
+        "./lib/web3/*/index.js",
+        "./lib/web3/*.js"
+      ],
+      "import": [
+        "./lib/web3/*/index.mjs",
+        "./lib/web3/*.mjs"
+      ]
+    }
+  },
   "types": "./lib/index.d.ts",
-  "main": "./lib/index.cjs",
+  "main": "./lib/index.js",
   "module": "./lib/index.mjs",
+  "files": [
+    "lib",
+    "src"
+  ],
   "scripts": {
-    "prepublishOnly": "echo \"Use the publish script to publish\" && false",
+    "prepublishOnly": "npm run build",
     "build": "unbuild"
   },
   "author": "Ludex-Labs",
