@@ -1,6 +1,6 @@
 {
   "name": "@ludex-labs/ludex-sdk-js",
-  "version": "1.8.12",
+  "version": "1.8.13",
   "repository": {
     "directory": "packages/@ludex-labs/ludex-sdk-js",
     "type": "git",
@@ -8,25 +8,59 @@
   },
   "private": false,
   "description": "",
+  "exports": {
+    ".": {
+      "types": "./lib/index.d.ts",
+      "require": "./lib/index.js",
+      "import": "./lib/index.mjs"
+    },
+    "./api/*": {
+      "types": [
+        "./lib/api/*/index.d.ts",
+        "./lib/api/*.d.ts"
+      ],
+      "require": [
+        "./lib/api/*/index.js",
+        "./lib/api/*.js"
+      ],
+      "import": [
+        "./lib/api/*/index.mjs",
+        "./lib/api/*.mjs"
+      ]
+    },
+    "./web3/*": {
+      "types": [
+        "./lib/web3/*/index.d.ts",
+        "./lib/web3/*.d.ts"
+      ],
+      "require": [
+        "./lib/web3/*/index.js",
+        "./lib/web3/*.js"
+      ],
+      "import": [
+        "./lib/web3/*/index.mjs",
+        "./lib/web3/*.mjs"
+      ]
+    }
+  },
   "types": "./lib/index.d.ts",
-  "module": "./lib/esm/index.js",
-  "main": "./lib/cjs/index.js",
+  "main": "./lib/index.js",
+  "module": "./lib/index.mjs",
   "files": [
-    "src",
-    "lib"
+    "lib",
+    "src"
   ],
   "scripts": {
-    "build": "tsc && tsc -p tsconfig.esm.json",
-    "clean": "rm -rf ./lib",
-    "prepublishOnly": "npm run rebuild",
-    "rebuild": "npm run clean && npm run build"
+    "prepublishOnly": "npm run build",
+    "build": "unbuild"
   },
   "author": "Ludex-Labs",
   "license": "MIT",
   "devDependencies": {
     "@types/bn.js": "^5.1.1",
     "@types/node-fetch": "^2.6.2",
-    "typescript": "^4.4.4"
+    "typescript": "^4.4.4",
+    "unbuild": "^1.1.2"
   },
   "dependencies": {
     "@metaplex-foundation/js": "^0.11.5",
