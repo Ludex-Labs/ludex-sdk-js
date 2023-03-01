@@ -1,13 +1,16 @@
-import { AnchorProvider, Program, web3 } from '@project-serum/anchor';
+import { AnchorProvider, Program, web3 } from "@project-serum/anchor";
 import {
-  ASSOCIATED_TOKEN_PROGRAM_ID, createAssociatedTokenAccountInstruction, getAssociatedTokenAddress,
-  NATIVE_MINT, TOKEN_PROGRAM_ID
-} from '@solana/spl-token';
-import { WalletAdapterProps } from '@solana/wallet-adapter-base';
-import { Connection, Keypair, PublicKey } from '@solana/web3.js';
+  ASSOCIATED_TOKEN_PROGRAM_ID,
+  createAssociatedTokenAccountInstruction,
+  getAssociatedTokenAddress,
+  NATIVE_MINT,
+  TOKEN_PROGRAM_ID,
+} from "@solana/spl-token";
+import { WalletAdapterProps } from "@solana/wallet-adapter-base";
+import { Connection, Keypair, PublicKey } from "@solana/web3.js";
 
-import { accountExists, transferWrappedSol, Wallet } from '../utils';
-import { Challenge as IDL_TYPE, IDL } from './';
+import { accountExists, transferWrappedSol, Wallet } from "../utils";
+import { Challenge as IDL_TYPE, IDL } from "./";
 
 export const CHALLENGE_PROGRAM_ID =
   "BuPvutSnk9NdTZHFiA6UZm6oPwGszp6ozMwoAgJMDBGR";
@@ -154,6 +157,7 @@ export class ChallengeTXClient {
               poolTokenAccount: pool.tokenAccount,
               challenge: this.challengeKey,
               player: player,
+              playerPayer: user,
               user: user,
               userTokenAccount: userTokenAccount,
               mint: pool.mint,
