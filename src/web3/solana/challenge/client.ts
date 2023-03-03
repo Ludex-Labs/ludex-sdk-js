@@ -148,6 +148,19 @@ export class ChallengeTXClient {
 
         userTokenAccount = await getAssociatedTokenAddress(user, pool.mint);
 
+        if (!(await accountExists(this.connection, userTokenAccount))) {
+          this.tx.add(
+            createAssociatedTokenAccountInstruction(
+              user,
+              userTokenAccount,
+              user,
+              pool.mint,
+              TOKEN_PROGRAM_ID,
+              ASSOCIATED_TOKEN_PROGRAM_ID
+            )
+          );
+        }
+
         return resolve(
           this.program.methods
             .leave()

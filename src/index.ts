@@ -1,9 +1,15 @@
-import { ChallengeAPIClient as ChallengeAPIClientClass } from './api/challenge';
-import { NftChallengeAPIClient as NFTChallengeAPIClientClass } from './api/nft_challenge';
-import { Challenge as ChallengeType, IDL as ChallengeIDL } from './web3/challenge';
-import { ChallengeTXClient as ChallengeTXClientClass } from './web3/challenge/client';
-import { IDL as NFTChallengeIDL, NftChallenge as NFTChallengeType } from './web3/nft-challenge';
-import { NftChallengeTXClient as NftChallengeTXClientClass } from './web3/nft-challenge/client';
+import { ChallengeAPIClient as ChallengeAPIClientClass } from "./api/challenge";
+import { NftChallengeAPIClient as NFTChallengeAPIClientClass } from "./api/nft_challenge";
+import {
+  Challenge as ChallengeType,
+  IDL as ChallengeIDL,
+} from "./web3/solana/challenge";
+import { ChallengeTXClient as ChallengeTXClientClass } from "./web3/solana/challenge/client";
+import {
+  IDL as NFTChallengeIDL,
+  NftChallenge as NFTChallengeType,
+} from "./web3/solana/nft-challenge";
+import { NftChallengeTXClient as NftChallengeTXClientClass } from "./web3/solana/nft-challenge/client";
 
 export { Ludex } from "./api/ludex";
 
