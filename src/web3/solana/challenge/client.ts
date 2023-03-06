@@ -1,16 +1,13 @@
-import { AnchorProvider, Program, web3 } from "@project-serum/anchor";
+import { AnchorProvider, Program, web3 } from '@project-serum/anchor';
 import {
-  ASSOCIATED_TOKEN_PROGRAM_ID,
-  createAssociatedTokenAccountInstruction,
-  getAssociatedTokenAddress,
-  NATIVE_MINT,
-  TOKEN_PROGRAM_ID,
-} from "@solana/spl-token";
-import { WalletAdapterProps } from "@solana/wallet-adapter-base";
-import { Connection, Keypair, PublicKey } from "@solana/web3.js";
+  ASSOCIATED_TOKEN_PROGRAM_ID, createAssociatedTokenAccountInstruction, getAssociatedTokenAddress,
+  NATIVE_MINT, TOKEN_PROGRAM_ID
+} from '@solana/spl-token';
+import { WalletAdapterProps } from '@solana/wallet-adapter-base';
+import { Connection, Keypair, PublicKey } from '@solana/web3.js';
 
-import { accountExists, transferWrappedSol, Wallet } from "../utils";
-import { Challenge as IDL_TYPE, IDL } from "./";
+import { accountExists, transferWrappedSol, Wallet } from '../utils';
+import { Challenge as IDL_TYPE, IDL } from './';
 
 export const CHALLENGE_PROGRAM_ID =
   "BuPvutSnk9NdTZHFiA6UZm6oPwGszp6ozMwoAgJMDBGR";
@@ -144,9 +141,12 @@ export class ChallengeTXClient {
           this.challengeKey
         );
         const pool = await this.program.account.pool.fetch(challenge.pool);
-        let userTokenAccount: web3.PublicKey;
 
-        userTokenAccount = await getAssociatedTokenAddress(user, pool.mint);
+        const userTokenAccount = await getAssociatedTokenAddress(
+          user,
+          pool.mint,
+          true
+        );
 
         if (!(await accountExists(this.connection, userTokenAccount))) {
           this.tx.add(
@@ -154,9 +154,7 @@ export class ChallengeTXClient {
               user,
               userTokenAccount,
               user,
-              pool.mint,
-              TOKEN_PROGRAM_ID,
-              ASSOCIATED_TOKEN_PROGRAM_ID
+              pool.mint
             )
           );
         }
