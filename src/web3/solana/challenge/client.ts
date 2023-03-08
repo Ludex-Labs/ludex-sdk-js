@@ -143,9 +143,8 @@ export class ChallengeTXClient {
         const pool = await this.program.account.pool.fetch(challenge.pool);
 
         const userTokenAccount = await getAssociatedTokenAddress(
-          user,
           pool.mint,
-          true
+          user
         );
 
         if (!(await accountExists(this.connection, userTokenAccount))) {

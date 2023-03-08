@@ -1,26 +1,26 @@
-import BN from "bn.js";
+import BN from 'bn.js';
 
+import { guestIdentity, Metaplex, TokenMetadataProgram } from '@metaplex-foundation/js';
+import { AnchorProvider, Program, utils, web3 } from '@project-serum/anchor';
 import {
-  guestIdentity,
-  Metaplex,
-  TokenMetadataProgram,
-} from "@metaplex-foundation/js";
-import { AnchorProvider, Program, utils, web3 } from "@project-serum/anchor";
+  ASSOCIATED_TOKEN_PROGRAM_ID, getAssociatedTokenAddress, TOKEN_PROGRAM_ID
+} from '@solana/spl-token';
 import {
-  ASSOCIATED_TOKEN_PROGRAM_ID,
-  getAssociatedTokenAddress,
-  TOKEN_PROGRAM_ID,
-} from "@solana/spl-token";
-import {
-  Connection,
-  PublicKey,
-  SystemProgram,
-  Transaction,
-  TransactionInstruction,
-} from "@solana/web3.js";
+  Connection, PublicKey, SystemProgram, Transaction, TransactionInstruction
+} from '@solana/web3.js';
 
-import { createFakeWallet, Wallet } from "../utils";
-import { IDL, NftChallenge } from "./";
+import { createFakeWallet, Wallet } from '../utils';
+import { IDL, NftChallenge } from './';
+
+export type Offering = {
+  authority: PublicKey;
+  player: PublicKey;
+  isEscrowed: boolean;
+  amount: BN;
+  mint?: PublicKey;
+  offeringTokenAccount?: PublicKey;
+  playerTokenAccount?: PublicKey;
+};
 
 export type ChallengeClientOptions = {
   wallet?: Wallet;
@@ -582,28 +582,37 @@ export class NftChallengeTXClient {
       },
     ]);
 
-    let offeringsResult = [];
-    for await (const offerings of players.map((p) =>
-      program.account.offering.all([
-        {
-          memcmp: {
-            offset: 8,
-            bytes: p.publicKey.toBase58(),
+    const playerOfferings = await Promise.all(
+      players.map(async (p) => ({
+        player: p,
+        offerings: await program.account.offering.all([
+          {
+            memcmp: {
+              offset: 8,
+              bytes: p.publicKey.toBase58(),
+            },
           },
-        },
-      ])
-    )) {
-      offeringsResult.push(
-        offerings.map((o) => ({
-          ...o,
-          authority: players.find(
-            (p) => p.publicKey.toBase58() === o.account.player.toBase58()
-          )?.account.authority,
-        }))
-      );
-    }
+        ]),
+      }))
+    );
 
-    return offeringsResult.reduce((acc, val) => acc.concat(val), []);
+    const offerings = playerOfferings.reduce((acc, val) => {
+      if (val.offerings.length > 0) {
+        return [
+          ...acc,
+          ...val.offerings.map((o) => ({
+            ...o.account,
+            mint: o.account.mint || undefined,
+            playerTokenAccount: o.account.playerTokenAccount || undefined,
+            offeringTokenAccount: o.account.offeringTokenAccount || undefined,
+            authority: val.player.account.authority,
+          })),
+        ];
+      }
+      return acc;
+    }, [] as Offering[]);
+
+    return offerings;
   }
 
   static async getPlayerStatus(
