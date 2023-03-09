@@ -1,5 +1,5 @@
 export type Challenge = {
-  "version": "0.1.57",
+  "version": "0.1.59",
   "name": "challenge",
   "instructions": [
     {
@@ -436,7 +436,7 @@ export type Challenge = {
         },
         {
           "name": "poolTokenAccount",
-          "isMut": false,
+          "isMut": true,
           "isSigner": false
         },
         {
@@ -1546,7 +1546,7 @@ export type Challenge = {
 };
 
 export const IDL: Challenge = {
-  "version": "0.1.57",
+  "version": "0.1.59",
   "name": "challenge",
   "instructions": [
     {
@@ -1983,7 +1983,7 @@ export const IDL: Challenge = {
         },
         {
           "name": "poolTokenAccount",
-          "isMut": false,
+          "isMut": true,
           "isSigner": false
         },
         {
