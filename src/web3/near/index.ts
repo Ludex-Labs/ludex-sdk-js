@@ -1,5 +1,5 @@
 import BN from "bn.js";
-import { Account, Connection } from "near-api-js";
+import { Account, providers } from "near-api-js";
 
 import { Action, BrowserWalletBehaviour } from "@near-wallet-selector/core";
 
@@ -90,7 +90,7 @@ export class Challenge {
   private _challenge: ChallengeType | undefined;
   private _challengeUpdateTimestamp: number | undefined;
 
-  private connection: Connection;
+  private provider: providers.Provider;
   private cluster: Cluster;
 
   private challengeAddress: number;
@@ -100,11 +100,11 @@ export class Challenge {
 
   constructor(
     challengeAddress: number,
-    connection: Connection,
+    provider: providers.Provider,
     options?: ConnectionOptions
   ) {
     this.challengeAddress = challengeAddress;
-    this.connection = connection;
+    this.provider = provider;
     this.cluster = options?.cluster || "MAINNET";
 
     this.nearContractId =
@@ -128,7 +128,7 @@ export class Challenge {
       return this._challenge;
     }
 
-    const res = await this.connection.provider.query({
+    const res = await this.provider.query({
       request_type: "call_function",
       account_id: this.ludexContractId,
       method_name: "get_challenge",
