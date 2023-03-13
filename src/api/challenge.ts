@@ -1,11 +1,18 @@
-import { ChallengeExtensions, FTChallenge, Player, Signature } from './models';
-import { _ludexChallengeApi, ApiConfig } from './utils';
+import { ChallengeExtensions, FTChallenge, Player, Signature } from "./models";
+import { _ludexChallengeApi, ApiConfig } from "./utils";
 
 export type ChallengeFilter = {
   chain?: string;
   type?: string;
   payoutId?: number;
   mint?: string;
+};
+
+export type ChallengePagination = {
+  page?: number;
+  limit?: number;
+  orderBy?: "createdAt" | "lockedAt" | "canceledAt" | "resolvedAt";
+  sort?: "asc" | "desc";
 };
 
 export class ChallengeAPIClient {
@@ -105,7 +112,10 @@ export class ChallengeAPIClient {
     return this.ludexChallengeApi<number>({ path });
   }
 
-  async list(filter?: ChallengeFilter | string, page?: number, limit?: number) {
+  async list(
+    filter?: ChallengeFilter | string,
+    paginationQuery?: ChallengePagination
+  ) {
     let path = "";
     const params = new URLSearchParams();
 
@@ -128,12 +138,20 @@ export class ChallengeAPIClient {
       }
     }
 
-    if (page) {
-      params.append("page", page.toString());
+    if (paginationQuery?.page) {
+      params.append("page", paginationQuery?.page.toString());
     }
 
-    if (limit) {
-      params.append("limit", limit.toString());
+    if (paginationQuery?.limit) {
+      params.append("limit", paginationQuery?.limit.toString());
+    }
+
+    if (paginationQuery?.orderBy) {
+      params.append("orderBy", paginationQuery?.orderBy);
+    }
+
+    if (paginationQuery?.sort) {
+      params.append("sort", paginationQuery?.sort);
     }
 
     if (params.toString() !== "") {
