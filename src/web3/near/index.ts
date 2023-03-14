@@ -90,7 +90,7 @@ export class ActionsBuilder {
         methodName: "leave_challenge",
         args: { challenge_id: this.challengeAddress },
         gas: "30000000000000",
-        deposit: "1",
+        deposit: "0",
       },
     };
 
@@ -226,7 +226,7 @@ export class Challenge {
       methodName: "leave_challenge",
       args: { challenge_id: this.challengeAddress },
       gas: new BN("30000000000000"),
-      attachedDeposit: new BN("1"),
+      attachedDeposit: new BN("0"),
     });
 
     res.receipts_outcome.forEach((receipt) => {
