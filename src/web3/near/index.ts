@@ -9,7 +9,8 @@ import type {
 import type { Challenge as BaseChallengeType } from "../types";
 
 export type Cluster = "MAINNET" | "DEVNET";
-export type ChallengeType = BaseChallengeType & {
+export type ChallengeInfo = BaseChallengeType & {
+  /// ContractId of the token contract that is used for this challenge
   ft: string;
 };
 
@@ -36,7 +37,7 @@ const makeSendTransaction = (
 };
 
 export class ActionsBuilder {
-  private challengePromise: Promise<ChallengeType>;
+  private challengePromise: Promise<ChallengeInfo>;
   private cluster: Cluster;
 
   private challengeAddress: number;
@@ -46,7 +47,7 @@ export class ActionsBuilder {
 
   public constructor(
     challengeAddress: number,
-    challengePromise: Promise<ChallengeType>,
+    challengePromise: Promise<ChallengeInfo>,
     options?: ConnectionOptions
   ) {
     this.challengeAddress = challengeAddress;
@@ -72,7 +73,7 @@ export class ActionsBuilder {
           memo: null,
           msg: this.challengeAddress.toString(),
         },
-        gas: "300000000000000",
+        gas: "30000000000000",
         deposit: "1",
       },
     };
@@ -88,7 +89,7 @@ export class ActionsBuilder {
       params: {
         methodName: "leave_challenge",
         args: { challenge_id: this.challengeAddress },
-        gas: "300000000000000",
+        gas: "30000000000000",
         deposit: "1",
       },
     };
@@ -100,8 +101,8 @@ export class ActionsBuilder {
 }
 
 export class Challenge {
-  private _challenge: ChallengeType | undefined;
-  private _challengeUpdateTimestamp: number | undefined;
+  private _info: ChallengeInfo | undefined;
+  private _infoUpdateTimestamp: number | undefined;
 
   private provider: providers.Provider;
   private cluster: Cluster;
@@ -127,18 +128,18 @@ export class Challenge {
   }
 
   public get actions() {
-    return new ActionsBuilder(this.challengeAddress, this.getChallenge(), {
+    return new ActionsBuilder(this.challengeAddress, this.getInfo(), {
       cluster: this.cluster,
     });
   }
 
-  public async getChallenge() {
+  public async getInfo() {
     if (
-      this._challenge &&
-      this._challengeUpdateTimestamp &&
-      this._challengeUpdateTimestamp > Date.now() - 15_000
+      this._info &&
+      this._infoUpdateTimestamp &&
+      this._infoUpdateTimestamp > Date.now() - 15_000
     ) {
-      return this._challenge;
+      return this._info;
     }
 
     const res = await this.provider.query({
@@ -155,9 +156,9 @@ export class Challenge {
       Buffer.from((res as any).result as number[]).toString()
     );
 
-    this._challengeUpdateTimestamp = Date.now();
+    this._infoUpdateTimestamp = Date.now();
 
-    this._challenge = {
+    this._info = {
       entryFee: new BN(challenge.entry_fee),
       providerRake: new BN(challenge.provider_rake),
       mediatorRake: new BN(challenge.mediator_rake),
@@ -168,7 +169,7 @@ export class Challenge {
       ft: challenge.ft,
     };
 
-    return this._challenge;
+    return this._info;
   }
 
   public async getPlayers() {
@@ -190,7 +191,7 @@ export class Challenge {
   }
 
   public async join(account: Account) {
-    const challenge = await this.getChallenge();
+    const challenge = await this.getInfo();
 
     const res = await account.functionCall({
       contractId: this.nearContractId,
@@ -201,7 +202,7 @@ export class Challenge {
         memo: null,
         msg: this.challengeAddress.toString(),
       },
-      gas: new BN("300000000000000"),
+      gas: new BN("30000000000000"),
       attachedDeposit: new BN("1"),
     });
 
@@ -224,7 +225,7 @@ export class Challenge {
       contractId: this.ludexContractId,
       methodName: "leave_challenge",
       args: { challenge_id: this.challengeAddress },
-      gas: new BN("300000000000000"),
+      gas: new BN("30000000000000"),
       attachedDeposit: new BN("1"),
     });
 
