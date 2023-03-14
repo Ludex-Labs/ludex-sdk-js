@@ -1,12 +1,23 @@
 // build.config.ts
-import { defineBuildConfig } from 'unbuild';
+import { defineBuildConfig } from "unbuild";
 
 export default defineBuildConfig({
   entries: [
-    { input: "src/", outDir: "lib", builder: "mkdist", format: "esm" },
-    { input: "src/", outDir: "lib", builder: "mkdist", format: "cjs" },
+    {
+      input: "src/",
+      outDir: "lib",
+      builder: "mkdist",
+      format: "esm",
+      declaration: false,
+    },
+    {
+      input: "src/",
+      outDir: "lib",
+      builder: "mkdist",
+      format: "cjs",
+      declaration: true,
+    },
   ],
-  declaration: true, // generate .d.ts files
   rollup: {
     emitCJS: true,
     dts: {
@@ -15,5 +26,4 @@ export default defineBuildConfig({
   },
   outDir: "lib",
   externals: ["@solana/web3.js", "@solana/wallet-adapter-base"],
-  failOnWarn: false,
 });
