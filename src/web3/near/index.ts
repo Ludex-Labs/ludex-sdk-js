@@ -127,11 +127,9 @@ export class Challenge {
   }
 
   public get actions() {
-    // return new ActionsBuilder(this.challengeAddress, this.getChallenge(), {
-    //   cluster: this.cluster,
-    // });
-
-    return null;
+    return new ActionsBuilder(this.challengeAddress, this.getChallenge(), {
+      cluster: this.cluster,
+    });
   }
 
   public async getChallenge() {
