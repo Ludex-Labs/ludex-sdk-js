@@ -73,7 +73,7 @@ export class ActionsBuilder {
           memo: null,
           msg: this.challengeAddress.toString(),
         },
-        gas: "30000000000000",
+        gas: "60000000000000", // the ft_transfer will attach 30TGas, thus we give 60TGas to have enough
         deposit: "1",
       },
     };
@@ -202,7 +202,7 @@ export class Challenge {
         memo: null,
         msg: this.challengeAddress.toString(),
       },
-      gas: new BN("30000000000000"),
+      gas: new BN("60000000000000"),
       attachedDeposit: new BN("1"),
     });
 
