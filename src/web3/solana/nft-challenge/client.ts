@@ -1,18 +1,29 @@
-import BN from 'bn.js';
+import BN from "bn.js";
 
-import { guestIdentity, Metaplex, TokenMetadataProgram } from '@metaplex-foundation/js';
-import { AnchorProvider, Program, utils, web3 } from '@project-serum/anchor';
 import {
-  ASSOCIATED_TOKEN_PROGRAM_ID, getAssociatedTokenAddress, TOKEN_PROGRAM_ID
-} from '@solana/spl-token';
+  guestIdentity,
+  Metaplex,
+  TokenMetadataProgram,
+} from "@metaplex-foundation/js";
+import { AnchorProvider, Program, utils, web3 } from "@project-serum/anchor";
 import {
-  Connection, PublicKey, SystemProgram, Transaction, TransactionInstruction
-} from '@solana/web3.js';
+  ASSOCIATED_TOKEN_PROGRAM_ID,
+  getAssociatedTokenAddress,
+  TOKEN_PROGRAM_ID,
+} from "@solana/spl-token";
+import {
+  Connection,
+  PublicKey,
+  SystemProgram,
+  Transaction,
+  TransactionInstruction,
+} from "@solana/web3.js";
 
-import { createFakeWallet, Wallet } from '../utils';
-import { IDL, NftChallenge } from './';
+import { createFakeWallet, Wallet } from "../utils";
+import { IDL, NftChallenge } from "./";
 
 export type Offering = {
+  publicKey: PublicKey;
   authority: PublicKey;
   player: PublicKey;
   isEscrowed: boolean;
@@ -602,6 +613,7 @@ export class NftChallengeTXClient {
           ...acc,
           ...val.offerings.map((o) => ({
             ...o.account,
+            publicKey: o.publicKey,
             mint: o.account.mint || undefined,
             playerTokenAccount: o.account.playerTokenAccount || undefined,
             offeringTokenAccount: o.account.offeringTokenAccount || undefined,
