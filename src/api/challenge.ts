@@ -11,7 +11,12 @@ export type ChallengeFilter = {
 export type ChallengePagination = {
   page?: number;
   limit?: number;
-  orderBy?: "createdAt" | "lockedAt" | "canceledAt" | "resolvedAt";
+  orderBy?:
+    | "createdAt"
+    | "lockedAt"
+    | "canceledAt"
+    | "resolvedAt"
+    | "claimedAt";
   sort?: "asc" | "desc";
 };
 
@@ -33,23 +38,10 @@ export class ChallengeAPIClient {
   }
 
   async _apiGetChallenge(id: number) {
-    return this.ludexChallengeApi<{
-      id: number;
-      blockchainAddress?: string;
-      creatingAt?: string;
-      createdAt?: string;
-      endedAt?: string;
-      lockingAt?: string;
-      lockedAt?: string;
-      cancelingAt?: string;
-      canceledAt?: string;
-      resolvingAt?: string;
-      resolvedAt?: string;
-      verifyingAt?: string;
-      verifiedAt?: string;
-      redeemingAt?: string;
-      redeemedAt?: string;
-    }>({ method: "GET", path: id.toString() });
+    return this.ludexChallengeApi<FTChallenge>({
+      method: "GET",
+      path: id.toString(),
+    });
   }
 
   async _apiLockChallenge(id: number) {
@@ -196,7 +188,7 @@ export class ChallengeAPIClient {
       },
     });
 
-    return challenge as typeof challenge & ChallengeExtensions;
+    return challenge as FTChallenge & ChallengeExtensions;
   }
 
   async create(payoutId: number, limit: number = 2, chain: string = "SOLANA") {

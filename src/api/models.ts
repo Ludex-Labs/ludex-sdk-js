@@ -14,6 +14,7 @@ export type FTChallenge = {
   verifiedAt?: string;
   redeemingAt?: string;
   redeemedAt?: string;
+  claimedAt?: string;
   payout: Payout;
 };
 
