@@ -4,6 +4,7 @@ import { _ludexChallengeApi, ApiConfig } from "./utils";
 export type ChallengeFilter = {
   chain?: string;
   type?: string;
+  nftSubType?: string;
   payoutId?: number;
   mint?: string;
   nftSubType?: string;
@@ -89,6 +90,9 @@ export class ChallengeAPIClient {
         if (filter.type) {
           params.append("type", filter.type);
         }
+        if (filter.nftSubType) {
+          params.append("nftSubType", filter.nftSubType);
+        }
         if (filter.payoutId) {
           params.append("payoutId", filter.payoutId.toString());
         }
@@ -121,6 +125,9 @@ export class ChallengeAPIClient {
         }
         if (filter.type) {
           params.append("type", filter.type);
+        }
+        if (filter.nftSubType) {
+          params.append("nftSubType", filter.nftSubType);
         }
         if (filter.payoutId) {
           params.append("payoutId", filter.payoutId.toString());
