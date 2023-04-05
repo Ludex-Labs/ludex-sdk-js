@@ -7,6 +7,7 @@ export type ChallengeFilter = {
   nftSubType?: string;
   payoutId?: number;
   mint?: string;
+  nftSubType?: string;
 };
 
 export type ChallengePagination = {
@@ -133,6 +134,9 @@ export class ChallengeAPIClient {
         }
         if (filter.mint) {
           params.append("mint", filter.mint);
+        }
+        if (filter.nftSubType) {
+          params.append("nftSubType", filter.nftSubType);
         }
       }
     }
