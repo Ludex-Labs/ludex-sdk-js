@@ -11,3 +11,18 @@ npm i @ludex-labs/ludex-sdk-js
 ## Usage
 
 For usage and documentation head over to our [official documentation](https://docs.ludex.gg/ludex-sdks/javascript-sdk).
+
+
+## Pushing new version 
+
+```shell
+npm version <new_version_number>
+```
+
+```shell
+git tag -a <new_version_number> -m "version <new_version_number>"
+```
+
+```shell
+git push origin --tags
+```
