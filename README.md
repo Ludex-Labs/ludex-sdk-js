@@ -20,9 +20,5 @@ npm version <new_version_number>
 ```
 
 ```shell
-git tag -a <new_version_number> -m "version <new_version_number>"
-```
-
-```shell
 git push origin --tags
 ```
