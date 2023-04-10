@@ -7,6 +7,9 @@ export type ChallengeFilter = {
   payoutId?: number;
   mint?: string;
   nftSubType?: string;
+  isShelf?: boolean;
+  search?: string;
+  state?: string;
 };
 
 export type ChallengePagination = {
@@ -98,6 +101,15 @@ export class ChallengeAPIClient {
         if (filter.mint) {
           params.append("mint", filter.mint);
         }
+        if (filter.state) {
+          params.append("state", filter.state);
+        }
+        if (filter.search) {
+          params.append("search", filter.search);
+        }
+        if (filter.isShelf) {
+          params.append("isShelf", "true");
+        }
       }
     }
 
@@ -133,6 +145,15 @@ export class ChallengeAPIClient {
         }
         if (filter.mint) {
           params.append("mint", filter.mint);
+        }
+        if (filter.state) {
+          params.append("state", filter.state);
+        }
+        if (filter.search) {
+          params.append("search", filter.search);
+        }
+        if (filter.isShelf) {
+          params.append("isShelf", "true");
         }
       }
     }
