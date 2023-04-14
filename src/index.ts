@@ -11,6 +11,7 @@ import {
 } from "./web3/solana/nft-challenge";
 import { NftChallengeTXClient as NftChallengeTXClientClass } from "./web3/solana/nft-challenge/client";
 
+export { NativeChallengeTXClient } from "./web3/solana/challenge/nativeChallengeClient";
 export { Ludex } from "./api/ludex";
 
 export namespace Challenge {
