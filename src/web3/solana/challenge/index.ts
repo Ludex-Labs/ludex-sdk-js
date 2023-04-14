@@ -1,5 +1,5 @@
 export type Challenge = {
-  "version": "0.1.59",
+  "version": "0.1.65",
   "name": "challenge",
   "instructions": [
     {
@@ -96,6 +96,42 @@ export type Challenge = {
           "name": "tokenProgram",
           "isMut": false,
           "isSigner": false
+        },
+        {
+          "name": "rent",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "addLamportPool",
+      "accounts": [
+        {
+          "name": "provider",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "providerVault",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "pool",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "authority",
+          "isMut": true,
+          "isSigner": true
         },
         {
           "name": "rent",
@@ -356,6 +392,47 @@ export type Challenge = {
       "args": []
     },
     {
+      "name": "joinWithLamports",
+      "accounts": [
+        {
+          "name": "provider",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "pool",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "challenge",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "player",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "payer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "user",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
       "name": "verifiedJoin",
       "accounts": [
         {
@@ -483,6 +560,47 @@ export type Challenge = {
       "args": []
     },
     {
+      "name": "leaveWithLamports",
+      "accounts": [
+        {
+          "name": "provider",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "pool",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "challenge",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "player",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "playerPayer",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "user",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
       "name": "lockChallenge",
       "accounts": [
         {
@@ -529,7 +647,10 @@ export type Challenge = {
         {
           "name": "payoutTokenAccount",
           "isMut": false,
-          "isSigner": false
+          "isSigner": false,
+          "docs": [
+            "or that this is an account owned by the system program in the case of a lamport challenge"
+          ]
         },
         {
           "name": "payer",
@@ -661,6 +782,57 @@ export type Challenge = {
       "args": []
     },
     {
+      "name": "verifyLamportsPayment",
+      "accounts": [
+        {
+          "name": "provider",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "pool",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "mediatorAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "providerAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "challenge",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "payment",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "player",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "rent",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
       "name": "redeemPayment",
       "accounts": [
         {
@@ -722,6 +894,57 @@ export type Challenge = {
       "args": []
     },
     {
+      "name": "redeemLamports",
+      "accounts": [
+        {
+          "name": "provider",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "pool",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "challenge",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "payment",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "player",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "user",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "playerPayer",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "rent",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
       "name": "adminCloseChallenge",
       "accounts": [
         {
@@ -740,18 +963,13 @@ export type Challenge = {
           "isSigner": false
         },
         {
-          "name": "providerAuthority",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
           "name": "paymentPayer",
           "isMut": true,
           "isSigner": false
         },
         {
           "name": "authority",
-          "isMut": true,
+          "isMut": false,
           "isSigner": true
         },
         {
@@ -786,82 +1004,13 @@ export type Challenge = {
           "isSigner": false
         },
         {
-          "name": "providerAuthority",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
           "name": "paymentPayer",
           "isMut": true,
           "isSigner": false
         },
         {
-          "name": "rent",
+          "name": "providerAuthority",
           "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "systemProgram",
-          "isMut": false,
-          "isSigner": false
-        }
-      ],
-      "args": []
-    },
-    {
-      "name": "partialResolve",
-      "accounts": [
-        {
-          "name": "challenge",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "payment",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "authority",
-          "isMut": true,
-          "isSigner": true
-        }
-      ],
-      "args": [
-        {
-          "name": "payments",
-          "type": {
-            "defined": "PaymentArgAcc"
-          }
-        }
-      ]
-    },
-    {
-      "name": "startPartialResolve",
-      "accounts": [
-        {
-          "name": "challenge",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "payment",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "authority",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
-          "name": "payoutTokenAccount",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "payer",
-          "isMut": true,
           "isSigner": true
         },
         {
@@ -984,6 +1133,87 @@ export type Challenge = {
           "name": "tokenProgram",
           "isMut": false,
           "isSigner": false
+        },
+        {
+          "name": "rent",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        },
+        {
+          "name": "index",
+          "type": "u64"
+        },
+        {
+          "name": "proof",
+          "type": {
+            "vec": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "solRedeemPaymentNode",
+      "accounts": [
+        {
+          "name": "provider",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "pool",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "challenge",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "payment",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "paymentStatus",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "player",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "user",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "playerPayer",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "payer",
+          "isMut": true,
+          "isSigner": true
         },
         {
           "name": "rent",
@@ -1339,206 +1569,171 @@ export type Challenge = {
   "errors": [
     {
       "code": 6000,
-      "name": "Unauthorized",
-      "msg": "You are not admin for this provider"
-    },
-    {
-      "code": 6001,
-      "name": "NonExaustiveRemainingAccounts",
-      "msg": "Not all player accounts are present"
-    },
-    {
-      "code": 6002,
-      "name": "DifferentScale",
-      "msg": "Scale is different"
-    },
-    {
-      "code": 6003,
-      "name": "PayoutMissmatch",
-      "msg": "Payout doesn't match"
-    },
-    {
-      "code": 6004,
-      "name": "MediatorPayoutMissmatch",
-      "msg": "Payout for mediator is incorrect"
-    },
-    {
-      "code": 6005,
-      "name": "ProviderPayoutMissmatch",
-      "msg": "Payout for provider is incorrect"
-    },
-    {
-      "code": 6006,
-      "name": "LockedChallenge",
-      "msg": "Challenge Locked"
-    },
-    {
-      "code": 6007,
-      "name": "UnlockedChallenge",
-      "msg": "Cannot resolve unlocked Challenge"
-    },
-    {
-      "code": 6008,
-      "name": "ChallengeInactive",
-      "msg": "Challenge is no longer tracked"
-    },
-    {
-      "code": 6009,
-      "name": "ChallengeFull",
-      "msg": "Challenge is full"
-    },
-    {
-      "code": 6010,
-      "name": "InsufficientFunds",
-      "msg": "Insufficient funds"
-    },
-    {
-      "code": 6011,
-      "name": "HeaderMissmatch",
-      "msg": "Challenge Header Missmatch"
-    },
-    {
-      "code": 6012,
-      "name": "NotPaid",
-      "msg": "Can't close until all paid"
-    },
-    {
-      "code": 6013,
-      "name": "InvalidPool",
-      "msg": "Pool is not in provider"
-    },
-    {
-      "code": 6014,
-      "name": "InvalidChallenge",
-      "msg": "Invalid Challenge"
-    },
-    {
-      "code": 6015,
-      "name": "InvalidMint",
-      "msg": "Invalid Mint"
-    },
-    {
-      "code": 6016,
-      "name": "InvalidMediator",
-      "msg": "Invalid Mediator"
-    },
-    {
-      "code": 6017,
-      "name": "AlreadyJoined",
-      "msg": "Already Joined"
-    },
-    {
-      "code": 6018,
-      "name": "AlreadyVerified",
-      "msg": "Already Verified"
-    },
-    {
-      "code": 6019,
-      "name": "SuperAdmin",
-      "msg": "Not Super Admin"
-    },
-    {
-      "code": 6020,
-      "name": "ExpectedIssue",
-      "msg": "Expected higher than possible"
-    },
-    {
-      "code": 6021,
-      "name": "ChallengeExpectedPlayerFull",
-      "msg": "Challenge already reached expected player"
-    },
-    {
-      "code": 6022,
-      "name": "NeedToBeExpectedPlayer",
-      "msg": "Need to be expected player to join challenge"
-    },
-    {
-      "code": 6023,
       "name": "ExpectedPlayerNotInChallenge",
       "msg": "Expected player not part of challenge"
     },
     {
-      "code": 6024,
+      "code": 6001,
+      "name": "ChallengeExpectedPlayerFull",
+      "msg": "Challenge already reached expected player"
+    },
+    {
+      "code": 6002,
+      "name": "ProviderAuthorityIncorrect",
+      "msg": "Provider authority incorrect, make sure to get the provider authority from the provider account"
+    },
+    {
+      "code": 6003,
       "name": "ExpectedPlayerNotProvidedToJoin",
       "msg": "Expected player not provided on join"
     },
     {
-      "code": 6025,
-      "name": "VerifyPayment",
-      "msg": "Payment needs to be verified"
+      "code": 6004,
+      "name": "NeedToBeExpectedPlayer",
+      "msg": "Need to be expected player to join challenge"
     },
     {
-      "code": 6026,
+      "code": 6100,
+      "name": "Unauthorized",
+      "msg": "You are not admin for this provider"
+    },
+    {
+      "code": 6101,
+      "name": "ProviderUnauthorizedChallenge",
+      "msg": "The provider is not authorized for this challenge"
+    },
+    {
+      "code": 6102,
+      "name": "ProviderUnauthorizedPool",
+      "msg": "The provider is not authorized for this pool"
+    },
+    {
+      "code": 6103,
+      "name": "MediatorUnauthorizedChallenge",
+      "msg": "The mediator is not authorized for this challenge"
+    },
+    {
+      "code": 6104,
+      "name": "IncorrectRefundPayer",
+      "msg": "Trying to close an account and refund the lamports to the incorrect payer"
+    },
+    {
+      "code": 6200,
+      "name": "LockedChallenge",
+      "msg": "Challenge is locked"
+    },
+    {
+      "code": 6201,
+      "name": "UnlockedChallenge",
+      "msg": "Cannot resolve unlocked challenge"
+    },
+    {
+      "code": 6202,
+      "name": "ChallengeFull",
+      "msg": "Challenge is full"
+    },
+    {
+      "code": 6203,
+      "name": "VerifiedJoin",
+      "msg": "Challenge must be joined using verified join"
+    },
+    {
+      "code": 6204,
+      "name": "PoolMismatch",
+      "msg": "Wrong pool for the challenge"
+    },
+    {
+      "code": 6220,
+      "name": "InvalidPoolTokenAccount",
+      "msg": "The provided pool token account does not match"
+    },
+    {
+      "code": 6221,
+      "name": "UnexpectedPoolType",
+      "msg": "The provided pool is not a lamport pool"
+    },
+    {
+      "code": 6230,
+      "name": "InvalidPlayerTokenAccount",
+      "msg": "The provided player token account does not match"
+    },
+    {
+      "code": 6240,
       "name": "PaymentAlreadyPaid",
       "msg": "Payment already paid"
     },
     {
-      "code": 6027,
-      "name": "PoolMismatch",
-      "msg": "Pool mismatch"
+      "code": 6241,
+      "name": "PaymentAlreadyVerified",
+      "msg": "Payment already Verified"
     },
     {
-      "code": 6028,
-      "name": "IncorrectPaymentAmount",
-      "msg": "Payment doesn't match total entry fees paid"
+      "code": 6242,
+      "name": "VerifyPayment",
+      "msg": "Payment needs to be verified"
     },
     {
-      "code": 6029,
-      "name": "NoPayments",
-      "msg": "No payments provided in request"
+      "code": 6243,
+      "name": "PaymentLengthMismatch",
+      "msg": "Must include one payment per player"
     },
     {
-      "code": 6030,
-      "name": "TooManyPayments",
-      "msg": "Too many payments were provided"
+      "code": 6244,
+      "name": "PlayerHasNoPayment",
+      "msg": "Player does not have a payment, is the player part of the challenge?"
     },
     {
-      "code": 6031,
-      "name": "PlayerNotInChallenge",
-      "msg": "Player isn't in the challenge"
+      "code": 6250,
+      "name": "ProviderPayoutMissmatch",
+      "msg": "Payout token account for provider is incorrect"
     },
     {
-      "code": 6032,
-      "name": "PaymentAlreadyMigrated",
-      "msg": "The payment is already migrated"
+      "code": 6251,
+      "name": "ProviderLamportPayoutMissmatch",
+      "msg": "Payout payout account for provider is incorrect"
     },
     {
-      "code": 6033,
+      "code": 6260,
+      "name": "MediatorPayoutMismatch",
+      "msg": "Payout for mediator is incorrect"
+    },
+    {
+      "code": 6261,
+      "name": "InvalidMint",
+      "msg": "Invalid Mint"
+    },
+    {
+      "code": 6300,
       "name": "InvalidProof",
       "msg": "Invalid proof"
     },
     {
-      "code": 6034,
+      "code": 6301,
       "name": "ProofsMissing",
       "msg": "Missing proofs"
     },
     {
-      "code": 6035,
+      "code": 6302,
       "name": "ProofsAccountLengthMismatch",
       "msg": "Proofs and account count mismatch"
     },
     {
-      "code": 6036,
-      "name": "VerifiedJoin",
-      "msg": "Must be a verified Join"
-    },
-    {
-      "code": 6037,
-      "name": "InvalidPlayerPayer",
-      "msg": "Invalid player payer"
-    },
-    {
-      "code": 6038,
-      "name": "WrongPayoutAccount",
-      "msg": "Wrong payout account"
-    },
-    {
-      "code": 6039,
+      "code": 6320,
       "name": "PayoutTooLarge",
-      "msg": "Payouts larger than entry fee"
+      "msg": "The sum of payouts are larger than the entry fee"
     },
     {
-      "code": 6040,
+      "code": 6321,
+      "name": "InsufficientFunds",
+      "msg": "Provided user token account doesn't have enough tokens"
+    },
+    {
+      "code": 6322,
+      "name": "PaymentAmountMismatch",
+      "msg": "Payment total doesn't match total entry fees paid"
+    },
+    {
+      "code": 6323,
       "name": "PaymentAmountNotEqual",
       "msg": "Total payment amount doesn't match expected amount"
     }
@@ -1546,7 +1741,7 @@ export type Challenge = {
 };
 
 export const IDL: Challenge = {
-  "version": "0.1.59",
+  "version": "0.1.65",
   "name": "challenge",
   "instructions": [
     {
@@ -1643,6 +1838,42 @@ export const IDL: Challenge = {
           "name": "tokenProgram",
           "isMut": false,
           "isSigner": false
+        },
+        {
+          "name": "rent",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "addLamportPool",
+      "accounts": [
+        {
+          "name": "provider",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "providerVault",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "pool",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "authority",
+          "isMut": true,
+          "isSigner": true
         },
         {
           "name": "rent",
@@ -1903,6 +2134,47 @@ export const IDL: Challenge = {
       "args": []
     },
     {
+      "name": "joinWithLamports",
+      "accounts": [
+        {
+          "name": "provider",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "pool",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "challenge",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "player",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "payer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "user",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
       "name": "verifiedJoin",
       "accounts": [
         {
@@ -2030,6 +2302,47 @@ export const IDL: Challenge = {
       "args": []
     },
     {
+      "name": "leaveWithLamports",
+      "accounts": [
+        {
+          "name": "provider",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "pool",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "challenge",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "player",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "playerPayer",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "user",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
       "name": "lockChallenge",
       "accounts": [
         {
@@ -2076,7 +2389,10 @@ export const IDL: Challenge = {
         {
           "name": "payoutTokenAccount",
           "isMut": false,
-          "isSigner": false
+          "isSigner": false,
+          "docs": [
+            "or that this is an account owned by the system program in the case of a lamport challenge"
+          ]
         },
         {
           "name": "payer",
@@ -2208,6 +2524,57 @@ export const IDL: Challenge = {
       "args": []
     },
     {
+      "name": "verifyLamportsPayment",
+      "accounts": [
+        {
+          "name": "provider",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "pool",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "mediatorAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "providerAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "challenge",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "payment",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "player",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "rent",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
       "name": "redeemPayment",
       "accounts": [
         {
@@ -2269,6 +2636,57 @@ export const IDL: Challenge = {
       "args": []
     },
     {
+      "name": "redeemLamports",
+      "accounts": [
+        {
+          "name": "provider",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "pool",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "challenge",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "payment",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "player",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "user",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "playerPayer",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "rent",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
       "name": "adminCloseChallenge",
       "accounts": [
         {
@@ -2287,18 +2705,13 @@ export const IDL: Challenge = {
           "isSigner": false
         },
         {
-          "name": "providerAuthority",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
           "name": "paymentPayer",
           "isMut": true,
           "isSigner": false
         },
         {
           "name": "authority",
-          "isMut": true,
+          "isMut": false,
           "isSigner": true
         },
         {
@@ -2333,82 +2746,13 @@ export const IDL: Challenge = {
           "isSigner": false
         },
         {
-          "name": "providerAuthority",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
           "name": "paymentPayer",
           "isMut": true,
           "isSigner": false
         },
         {
-          "name": "rent",
+          "name": "providerAuthority",
           "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "systemProgram",
-          "isMut": false,
-          "isSigner": false
-        }
-      ],
-      "args": []
-    },
-    {
-      "name": "partialResolve",
-      "accounts": [
-        {
-          "name": "challenge",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "payment",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "authority",
-          "isMut": true,
-          "isSigner": true
-        }
-      ],
-      "args": [
-        {
-          "name": "payments",
-          "type": {
-            "defined": "PaymentArgAcc"
-          }
-        }
-      ]
-    },
-    {
-      "name": "startPartialResolve",
-      "accounts": [
-        {
-          "name": "challenge",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "payment",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "authority",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
-          "name": "payoutTokenAccount",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "payer",
-          "isMut": true,
           "isSigner": true
         },
         {
@@ -2531,6 +2875,87 @@ export const IDL: Challenge = {
           "name": "tokenProgram",
           "isMut": false,
           "isSigner": false
+        },
+        {
+          "name": "rent",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        },
+        {
+          "name": "index",
+          "type": "u64"
+        },
+        {
+          "name": "proof",
+          "type": {
+            "vec": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "solRedeemPaymentNode",
+      "accounts": [
+        {
+          "name": "provider",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "pool",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "challenge",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "payment",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "paymentStatus",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "player",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "user",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "playerPayer",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "payer",
+          "isMut": true,
+          "isSigner": true
         },
         {
           "name": "rent",
@@ -2886,206 +3311,171 @@ export const IDL: Challenge = {
   "errors": [
     {
       "code": 6000,
-      "name": "Unauthorized",
-      "msg": "You are not admin for this provider"
-    },
-    {
-      "code": 6001,
-      "name": "NonExaustiveRemainingAccounts",
-      "msg": "Not all player accounts are present"
-    },
-    {
-      "code": 6002,
-      "name": "DifferentScale",
-      "msg": "Scale is different"
-    },
-    {
-      "code": 6003,
-      "name": "PayoutMissmatch",
-      "msg": "Payout doesn't match"
-    },
-    {
-      "code": 6004,
-      "name": "MediatorPayoutMissmatch",
-      "msg": "Payout for mediator is incorrect"
-    },
-    {
-      "code": 6005,
-      "name": "ProviderPayoutMissmatch",
-      "msg": "Payout for provider is incorrect"
-    },
-    {
-      "code": 6006,
-      "name": "LockedChallenge",
-      "msg": "Challenge Locked"
-    },
-    {
-      "code": 6007,
-      "name": "UnlockedChallenge",
-      "msg": "Cannot resolve unlocked Challenge"
-    },
-    {
-      "code": 6008,
-      "name": "ChallengeInactive",
-      "msg": "Challenge is no longer tracked"
-    },
-    {
-      "code": 6009,
-      "name": "ChallengeFull",
-      "msg": "Challenge is full"
-    },
-    {
-      "code": 6010,
-      "name": "InsufficientFunds",
-      "msg": "Insufficient funds"
-    },
-    {
-      "code": 6011,
-      "name": "HeaderMissmatch",
-      "msg": "Challenge Header Missmatch"
-    },
-    {
-      "code": 6012,
-      "name": "NotPaid",
-      "msg": "Can't close until all paid"
-    },
-    {
-      "code": 6013,
-      "name": "InvalidPool",
-      "msg": "Pool is not in provider"
-    },
-    {
-      "code": 6014,
-      "name": "InvalidChallenge",
-      "msg": "Invalid Challenge"
-    },
-    {
-      "code": 6015,
-      "name": "InvalidMint",
-      "msg": "Invalid Mint"
-    },
-    {
-      "code": 6016,
-      "name": "InvalidMediator",
-      "msg": "Invalid Mediator"
-    },
-    {
-      "code": 6017,
-      "name": "AlreadyJoined",
-      "msg": "Already Joined"
-    },
-    {
-      "code": 6018,
-      "name": "AlreadyVerified",
-      "msg": "Already Verified"
-    },
-    {
-      "code": 6019,
-      "name": "SuperAdmin",
-      "msg": "Not Super Admin"
-    },
-    {
-      "code": 6020,
-      "name": "ExpectedIssue",
-      "msg": "Expected higher than possible"
-    },
-    {
-      "code": 6021,
-      "name": "ChallengeExpectedPlayerFull",
-      "msg": "Challenge already reached expected player"
-    },
-    {
-      "code": 6022,
-      "name": "NeedToBeExpectedPlayer",
-      "msg": "Need to be expected player to join challenge"
-    },
-    {
-      "code": 6023,
       "name": "ExpectedPlayerNotInChallenge",
       "msg": "Expected player not part of challenge"
     },
     {
-      "code": 6024,
+      "code": 6001,
+      "name": "ChallengeExpectedPlayerFull",
+      "msg": "Challenge already reached expected player"
+    },
+    {
+      "code": 6002,
+      "name": "ProviderAuthorityIncorrect",
+      "msg": "Provider authority incorrect, make sure to get the provider authority from the provider account"
+    },
+    {
+      "code": 6003,
       "name": "ExpectedPlayerNotProvidedToJoin",
       "msg": "Expected player not provided on join"
     },
     {
-      "code": 6025,
-      "name": "VerifyPayment",
-      "msg": "Payment needs to be verified"
+      "code": 6004,
+      "name": "NeedToBeExpectedPlayer",
+      "msg": "Need to be expected player to join challenge"
     },
     {
-      "code": 6026,
+      "code": 6100,
+      "name": "Unauthorized",
+      "msg": "You are not admin for this provider"
+    },
+    {
+      "code": 6101,
+      "name": "ProviderUnauthorizedChallenge",
+      "msg": "The provider is not authorized for this challenge"
+    },
+    {
+      "code": 6102,
+      "name": "ProviderUnauthorizedPool",
+      "msg": "The provider is not authorized for this pool"
+    },
+    {
+      "code": 6103,
+      "name": "MediatorUnauthorizedChallenge",
+      "msg": "The mediator is not authorized for this challenge"
+    },
+    {
+      "code": 6104,
+      "name": "IncorrectRefundPayer",
+      "msg": "Trying to close an account and refund the lamports to the incorrect payer"
+    },
+    {
+      "code": 6200,
+      "name": "LockedChallenge",
+      "msg": "Challenge is locked"
+    },
+    {
+      "code": 6201,
+      "name": "UnlockedChallenge",
+      "msg": "Cannot resolve unlocked challenge"
+    },
+    {
+      "code": 6202,
+      "name": "ChallengeFull",
+      "msg": "Challenge is full"
+    },
+    {
+      "code": 6203,
+      "name": "VerifiedJoin",
+      "msg": "Challenge must be joined using verified join"
+    },
+    {
+      "code": 6204,
+      "name": "PoolMismatch",
+      "msg": "Wrong pool for the challenge"
+    },
+    {
+      "code": 6220,
+      "name": "InvalidPoolTokenAccount",
+      "msg": "The provided pool token account does not match"
+    },
+    {
+      "code": 6221,
+      "name": "UnexpectedPoolType",
+      "msg": "The provided pool is not a lamport pool"
+    },
+    {
+      "code": 6230,
+      "name": "InvalidPlayerTokenAccount",
+      "msg": "The provided player token account does not match"
+    },
+    {
+      "code": 6240,
       "name": "PaymentAlreadyPaid",
       "msg": "Payment already paid"
     },
     {
-      "code": 6027,
-      "name": "PoolMismatch",
-      "msg": "Pool mismatch"
+      "code": 6241,
+      "name": "PaymentAlreadyVerified",
+      "msg": "Payment already Verified"
     },
     {
-      "code": 6028,
-      "name": "IncorrectPaymentAmount",
-      "msg": "Payment doesn't match total entry fees paid"
+      "code": 6242,
+      "name": "VerifyPayment",
+      "msg": "Payment needs to be verified"
     },
     {
-      "code": 6029,
-      "name": "NoPayments",
-      "msg": "No payments provided in request"
+      "code": 6243,
+      "name": "PaymentLengthMismatch",
+      "msg": "Must include one payment per player"
     },
     {
-      "code": 6030,
-      "name": "TooManyPayments",
-      "msg": "Too many payments were provided"
+      "code": 6244,
+      "name": "PlayerHasNoPayment",
+      "msg": "Player does not have a payment, is the player part of the challenge?"
     },
     {
-      "code": 6031,
-      "name": "PlayerNotInChallenge",
-      "msg": "Player isn't in the challenge"
+      "code": 6250,
+      "name": "ProviderPayoutMissmatch",
+      "msg": "Payout token account for provider is incorrect"
     },
     {
-      "code": 6032,
-      "name": "PaymentAlreadyMigrated",
-      "msg": "The payment is already migrated"
+      "code": 6251,
+      "name": "ProviderLamportPayoutMissmatch",
+      "msg": "Payout payout account for provider is incorrect"
     },
     {
-      "code": 6033,
+      "code": 6260,
+      "name": "MediatorPayoutMismatch",
+      "msg": "Payout for mediator is incorrect"
+    },
+    {
+      "code": 6261,
+      "name": "InvalidMint",
+      "msg": "Invalid Mint"
+    },
+    {
+      "code": 6300,
       "name": "InvalidProof",
       "msg": "Invalid proof"
     },
     {
-      "code": 6034,
+      "code": 6301,
       "name": "ProofsMissing",
       "msg": "Missing proofs"
     },
     {
-      "code": 6035,
+      "code": 6302,
       "name": "ProofsAccountLengthMismatch",
       "msg": "Proofs and account count mismatch"
     },
     {
-      "code": 6036,
-      "name": "VerifiedJoin",
-      "msg": "Must be a verified Join"
-    },
-    {
-      "code": 6037,
-      "name": "InvalidPlayerPayer",
-      "msg": "Invalid player payer"
-    },
-    {
-      "code": 6038,
-      "name": "WrongPayoutAccount",
-      "msg": "Wrong payout account"
-    },
-    {
-      "code": 6039,
+      "code": 6320,
       "name": "PayoutTooLarge",
-      "msg": "Payouts larger than entry fee"
+      "msg": "The sum of payouts are larger than the entry fee"
     },
     {
-      "code": 6040,
+      "code": 6321,
+      "name": "InsufficientFunds",
+      "msg": "Provided user token account doesn't have enough tokens"
+    },
+    {
+      "code": 6322,
+      "name": "PaymentAmountMismatch",
+      "msg": "Payment total doesn't match total entry fees paid"
+    },
+    {
+      "code": 6323,
       "name": "PaymentAmountNotEqual",
       "msg": "Total payment amount doesn't match expected amount"
     }
