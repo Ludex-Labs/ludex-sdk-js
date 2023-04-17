@@ -58,6 +58,9 @@ export class NftChallengeAPIClient {
     });
   }
 
+  /**
+   *  @deprecated
+   */
   async get(id: number) {
     const challenge = await this._apiGetChallenge(id);
 
@@ -83,10 +86,11 @@ export class NftChallengeAPIClient {
     payoutId: number = 1,
     limit: number = 2,
     chain: string = "SOLANA",
-    nftSubType: string = "CHALLENGE",
+    nftSubType: string = "CHALLENGE"
   ) {
-    const challengeId = (await this._apiCreateChallenge(payoutId, limit, chain, nftSubType))
-      .id;
+    const challengeId = (
+      await this._apiCreateChallenge(payoutId, limit, chain, nftSubType)
+    ).id;
     const challenge = await this._apiGetChallenge(challengeId);
     return { challengeId, blockchainAddress: challenge.blockchainAddress! };
   }
