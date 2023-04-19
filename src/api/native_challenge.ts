@@ -46,7 +46,7 @@ export class NativeChallengeAPIClient {
     return await this.ludexChallengeApi({
       method: "POST",
       path: `${id}/resolve`,
-      body: JSON.stringify({ chain, payments: [{ winner }] }),
+      body: JSON.stringify({ chain, payments: [{ to: winner }] }),
     });
   }
 
