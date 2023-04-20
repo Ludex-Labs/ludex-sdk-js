@@ -41,7 +41,7 @@ export const _ludexChallengeApi =
       throw new Error((await response.json()).message);
     }
 
-    if (config.method === "HEAD") {
+    if (config.method === "HEAD" || response.status === 204) {
       return {} as T;
     }
 
