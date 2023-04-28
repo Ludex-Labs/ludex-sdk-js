@@ -15,11 +15,6 @@ export interface Wallet {
 }
 
 export const createFakeWallet = () => {
-  if (typeof window === "undefined") {
-    const { Wallet: AnchorWallet } = require("@project-serum/anchor");
-    return new AnchorWallet(Keypair.generate()) as Wallet;
-  }
-
   return {
     signTransaction: async (tx: Transaction) => tx,
     signAllTransactions: async (txs: Transaction[]) => txs,

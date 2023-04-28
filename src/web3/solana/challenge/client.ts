@@ -1,12 +1,20 @@
 import { AnchorProvider, Program, web3 } from "@project-serum/anchor";
 import {
-  ASSOCIATED_TOKEN_PROGRAM_ID, createAssociatedTokenAccountInstruction, getAssociatedTokenAddress,
-  NATIVE_MINT, TOKEN_PROGRAM_ID
+  ASSOCIATED_TOKEN_PROGRAM_ID,
+  createAssociatedTokenAccountInstruction,
+  getAssociatedTokenAddress,
+  NATIVE_MINT,
+  TOKEN_PROGRAM_ID,
 } from "@solana/spl-token";
 import { WalletAdapterProps } from "@solana/wallet-adapter-base";
-import { Connection, Keypair, PublicKey } from "@solana/web3.js";
+import { Connection, PublicKey } from "@solana/web3.js";
 
-import { accountExists, createFakeWallet, transferWrappedSol, Wallet } from "../utils";
+import {
+  accountExists,
+  createFakeWallet,
+  transferWrappedSol,
+  Wallet,
+} from "../utils";
 import { Challenge as IDL_TYPE, IDL } from "./";
 
 export const CHALLENGE_PROGRAM_ID =
@@ -224,9 +232,7 @@ const parseOptions = (
   }
 
   if (!options.wallet) {
-    // TODO: This will fail in a browser
-    const { Wallet: AnchorWallet } = require("@project-serum/anchor");
-    options.wallet = new AnchorWallet(new Keypair()) as Wallet;
+    options.wallet = createFakeWallet();
   }
 
   let programAddress = new PublicKey(CHALLENGE_PROGRAM_ID);
