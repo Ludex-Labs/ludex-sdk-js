@@ -2,6 +2,7 @@ import { ChallengeExtensions, FTChallenge, Player, Signature } from "./models";
 import { _ludexChallengeApi, ApiConfig } from "./utils";
 
 export type ChallengeFilter = {
+  environment?: string;
   chain?: string;
   type?: string;
   payoutId?: number;
@@ -86,6 +87,9 @@ export class ChallengeAPIClient {
       if (typeof filter === "string") {
         params.append("search", filter);
       } else {
+        if (filter.environment) {
+          params.append("environment", filter.environment);
+        }
         if (filter.chain) {
           params.append("chain", filter.chain);
         }
@@ -131,6 +135,9 @@ export class ChallengeAPIClient {
       if (typeof filter === "string") {
         params.append("search", filter);
       } else {
+        if (filter.environment) {
+          params.append("environment", filter.environment);
+        }
         if (filter.chain) {
           params.append("chain", filter.chain);
         }
