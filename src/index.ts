@@ -1,7 +1,9 @@
 import { ChallengeAPIClient as ChallengeAPIClientClass } from './api/challenge';
 import { NativeChallengeAPIClient as NativeChallengeAPIClientClass } from './api/native_challenge';
 import { NftChallengeAPIClient as NFTChallengeAPIClientClass } from './api/nft_challenge';
-import { Challenge as ChallengeType, IDL as ChallengeIDL } from './web3/solana/challenge';
+import { Challenge as NearChallenge } from './web3/near';
+import { Challenge as EvmChallenge } from './web3/polygon';
+import { Challenge as SolanaChallengeType, IDL as ChallengeIDL } from './web3/solana/challenge';
 import { ChallengeTXClient as ChallengeTXClientClass } from './web3/solana/challenge/client';
 import {
   NativeChallengeTXClient as NativeChallengeTXClientClass
@@ -16,7 +18,7 @@ import {
 export { Ludex } from "./api/ludex";
 
 export namespace Challenge {
-  export type Challenge = ChallengeType;
+  export type Challenge = SolanaChallengeType;
   export const IDL = ChallengeIDL;
 
   export type ChallengeAPIClient = ChallengeAPIClientClass;
@@ -39,7 +41,7 @@ export namespace NFTChallenge {
 
 export namespace SolanaChallenges {
   // Token challenges
-  export type Challenge = ChallengeType;
+  export type Challenge = SolanaChallengeType;
 
   export type ChallengeAPIClient = ChallengeAPIClientClass;
   export const ChallengeAPIClient = ChallengeAPIClientClass;
@@ -62,4 +64,28 @@ export namespace SolanaChallenges {
 
   export type NativeChallengeAPIClient = NativeChallengeAPIClientClass;
   export const NativeChallengeAPIClient = NativeChallengeAPIClientClass;
+}
+
+export namespace NearChallenges {
+  // Token challenges
+  export type Challenge = NearChallenge;
+  export const Challenge = NearChallenge;
+
+  export type ChallengeAPIClient = ChallengeAPIClientClass;
+  export const ChallengeAPIClient = ChallengeAPIClientClass;
+
+  export type ChallengeTXClient = ChallengeTXClientClass;
+  export const ChallengeTXClient = ChallengeTXClientClass;
+}
+
+export namespace PolygonChallenges {
+  // Token challenges
+  export type Challenge = EvmChallenge;
+  export const Challenge = EvmChallenge;
+
+  export type ChallengeAPIClient = ChallengeAPIClientClass;
+  export const ChallengeAPIClient = ChallengeAPIClientClass;
+
+  export type ChallengeTXClient = ChallengeTXClientClass;
+  export const ChallengeTXClient = ChallengeTXClientClass;
 }
