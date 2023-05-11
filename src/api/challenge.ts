@@ -9,6 +9,7 @@ export type ChallengeFilter = {
   mint?: string;
   nftSubType?: string;
   isShelf?: boolean;
+  isVerifiedJoin?: boolean;
   search?: string;
   state?: string;
 };
@@ -114,6 +115,9 @@ export class ChallengeAPIClient {
         if (filter.isShelf) {
           params.append("isShelf", "true");
         }
+        if (filter.isVerifiedJoin) {
+          params.append("isVerifiedJoin", "true");
+        }
       }
     }
 
@@ -161,6 +165,9 @@ export class ChallengeAPIClient {
         }
         if (filter.isShelf) {
           params.append("isShelf", "true");
+        }
+        if (filter.isVerifiedJoin) {
+          params.append("isVerifiedJoin", "true");
         }
       }
     }
