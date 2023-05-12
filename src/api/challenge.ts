@@ -35,11 +35,12 @@ export class ChallengeAPIClient {
   async _apiCreateChallenge(
     payoutId: number,
     limit: number = 2,
-    chain: string = "SOLANA"
+    chain: string = "SOLANA",
+    isVerifiedJoin: boolean = false
   ) {
     return this.ludexChallengeApi<{ id: number }>({
       method: "POST",
-      body: JSON.stringify({ payoutId, limit, chain }),
+      body: JSON.stringify({ payoutId, limit, chain, verifiedJoin: isVerifiedJoin }),
     });
   }
 
@@ -233,8 +234,9 @@ export class ChallengeAPIClient {
     return challenge as FTChallenge & ChallengeExtensions;
   }
 
-  async create(payoutId: number, limit: number = 2, chain: string = "SOLANA") {
-    const challengeId = (await this._apiCreateChallenge(payoutId, limit, chain))
+  /** @todo would be great if this method could accept 1 object instead of many params */
+  async create(payoutId: number, limit: number = 2, chain: string = "SOLANA", isVerifiedJoin: boolean = false) {
+    const challengeId = (await this._apiCreateChallenge(payoutId, limit, chain, isVerifiedJoin))
       .id;
     const challenge = await this._apiGetChallenge(challengeId);
     return { challengeId, blockchainAddress: challenge.blockchainAddress! };
