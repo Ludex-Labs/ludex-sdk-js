@@ -1,20 +1,24 @@
 export type FTChallenge = {
   id: number;
   blockchainAddress?: string;
+  cancelingAt?: string;
+  canceledAt?: string;
+  claimedAt?: string;
   creatingAt?: string;
   createdAt?: string;
   endedAt?: string;
   lockingAt?: string;
   lockedAt?: string;
-  cancelingAt?: string;
-  canceledAt?: string;
+  payoutId: number;
   resolvingAt?: string;
   resolvedAt?: string;
+  state?: string;
+  type?: string;
   verifyingAt?: string;
   verifiedAt?: string;
   redeemingAt?: string;
   redeemedAt?: string;
-  claimedAt?: string;
+
   payout: Payout;
 };
 
