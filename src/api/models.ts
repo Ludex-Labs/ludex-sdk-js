@@ -9,6 +9,7 @@ export type FTChallenge = {
   endedAt?: string;
   lockingAt?: string;
   lockedAt?: string;
+  payoutId: number;
   resolvingAt?: string;
   resolvedAt?: string;
   state?: string;
