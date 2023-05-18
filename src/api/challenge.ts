@@ -239,7 +239,14 @@ export class ChallengeAPIClient {
     const challengeId = (await this._apiCreateChallenge(payoutId, limit, chain, isVerifiedJoin))
       .id;
     const challenge = await this._apiGetChallenge(challengeId);
-    return { challengeId, blockchainAddress: challenge.blockchainAddress! };
+    return {
+      challengeId,
+      id: challenge.id,
+      blockchainAddress: challenge.blockchainAddress!,
+      state: challenge.state,
+      type: challenge.type,
+      payoutId: challenge.payoutId,
+    };
   }
 
   async lock(id: number, _: boolean = false) {
