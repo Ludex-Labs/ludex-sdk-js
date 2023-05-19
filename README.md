@@ -11,3 +11,9 @@ npm i @ludex-labs/ludex-sdk-js
 ## Usage
 
 For usage and documentation head over to our [official documentation](https://docs.ludex.gg/ludex-sdks/javascript-sdk).
+
+## How to udpate
+
+```sh
+npm version v1.x.x git push git push --tags
+```
