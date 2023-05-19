@@ -40,7 +40,12 @@ export class ChallengeAPIClient {
   ) {
     return this.ludexChallengeApi<{ id: number }>({
       method: "POST",
-      body: JSON.stringify({ payoutId, limit, chain, verifiedJoin: isVerifiedJoin }),
+      body: JSON.stringify({
+        payoutId,
+        limit,
+        chain,
+        verifiedJoin: isVerifiedJoin,
+      }),
     });
   }
 
@@ -205,6 +210,12 @@ export class ChallengeAPIClient {
             path: `${challenge.id}/players`,
           });
         },
+        updatePlayers: () => {
+          return this.ludexChallengeApi({
+            path: `${challenge.id}?action=add_players`,
+            method: "HEAD",
+          });
+        },
         getSignatures: () => {
           return this.ludexChallengeApi<Signature[]>({
             path: `${challenge.id}/signatures`,
@@ -224,6 +235,12 @@ export class ChallengeAPIClient {
       getPlayers: () => {
         return this.ludexChallengeApi<Player[]>({ path: `${id}/players` });
       },
+      updatePlayers: () => {
+        return this.ludexChallengeApi({
+          path: `${id}?action=add_players`,
+          method: "HEAD",
+        });
+      },
       getSignatures: () => {
         return this.ludexChallengeApi<Signature[]>({
           path: `${id}/signatures`,
@@ -235,9 +252,15 @@ export class ChallengeAPIClient {
   }
 
   /** @todo would be great if this method could accept 1 object instead of many params */
-  async create(payoutId: number, limit: number = 2, chain: string = "SOLANA", isVerifiedJoin: boolean = false) {
-    const challengeId = (await this._apiCreateChallenge(payoutId, limit, chain, isVerifiedJoin))
-      .id;
+  async create(
+    payoutId: number,
+    limit: number = 2,
+    chain: string = "SOLANA",
+    isVerifiedJoin: boolean = false
+  ) {
+    const challengeId = (
+      await this._apiCreateChallenge(payoutId, limit, chain, isVerifiedJoin)
+    ).id;
     const challenge = await this._apiGetChallenge(challengeId);
     return {
       challengeId,

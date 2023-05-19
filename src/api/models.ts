@@ -24,6 +24,7 @@ export type FTChallenge = {
 
 export interface ChallengeExtensions {
   getPlayers: () => Promise<Player[]>;
+  updatePlayers: () => Promise<void>;
   getSignatures: () => Promise<Signature[]>;
 }
 
