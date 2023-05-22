@@ -1,21 +1,23 @@
-import { ChallengeAPIClient as ChallengeAPIClientClass } from './api/challenge';
-import { NativeChallengeAPIClient as NativeChallengeAPIClientClass } from './api/native_challenge';
-import { NftChallengeAPIClient as NFTChallengeAPIClientClass } from './api/nft_challenge';
-import { Challenge as NearChallenge } from './web3/near';
-import { Challenge as EvmChallenge } from './web3/polygon';
-import { Challenge as SolanaChallengeType, IDL as ChallengeIDL } from './web3/solana/challenge';
-import { ChallengeTXClient as ChallengeTXClientClass } from './web3/solana/challenge/client';
+import { ChallengeAPIClient as ChallengeAPIClientClass } from "./api/challenge";
+import { NativeChallengeAPIClient as NativeChallengeAPIClientClass } from "./api/native_challenge";
+import { NftChallengeAPIClient as NFTChallengeAPIClientClass } from "./api/nft_challenge";
+import { Challenge as NearChallenge } from "./web3/near";
+import { Challenge as EvmChallenge } from "./web3/polygon";
 import {
-  NativeChallengeTXClient as NativeChallengeTXClientClass
-} from './web3/solana/challenge/nativeChallengeClient';
+  Challenge as SolanaChallengeType,
+  IDL as ChallengeIDL,
+} from "./web3/solana/challenge";
+import { ChallengeTXClient as ChallengeTXClientClass } from "./web3/solana/challenge/client";
+import { NativeChallengeTXClient as NativeChallengeTXClientClass } from "./web3/solana/challenge/nativeChallengeClient";
 import {
-  IDL as NFTChallengeIDL, NftChallenge as NFTChallengeType
-} from './web3/solana/nft-challenge';
-import {
-  NftChallengeTXClient as NftChallengeTXClientClass
-} from './web3/solana/nft-challenge/client';
+  IDL as NFTChallengeIDL,
+  NftChallenge as NFTChallengeType,
+} from "./web3/solana/nft-challenge";
+import { NftChallengeTXClient as NftChallengeTXClientClass } from "./web3/solana/nft-challenge/client";
 
 export { Ludex } from "./api/ludex";
+
+export { VaultAPIClient } from "./api/vault";
 
 export namespace Challenge {
   export type Challenge = SolanaChallengeType;
