@@ -86,6 +86,32 @@ export class ChallengeAPIClient {
     });
   }
 
+  async _apiGetApiJoin(
+    id: number,
+    user: string,
+    isVerifiedJoin: boolean,
+    isGaslessJoin: boolean
+  ) {
+    return this.ludexChallengeApi<string>({
+      method: "POST",
+      path: `${id}/join?user=${user}`,
+      body: JSON.stringify({
+        verified: isVerifiedJoin,
+        gasless: isGaslessJoin,
+      }),
+    });
+  }
+
+  async _apiGetApiLeave(id: number, user: string, isGaslessJoin: boolean) {
+    return this.ludexChallengeApi<string>({
+      method: "POST",
+      path: `${id}/leave?userPubkey=${user}`,
+      body: JSON.stringify({
+        gasless: isGaslessJoin,
+      }),
+    });
+  }
+
   async count(filter?: ChallengeFilter | string) {
     let path = "count";
     const params = new URLSearchParams();
@@ -282,6 +308,19 @@ export class ChallengeAPIClient {
 
   async resolve(id: number, winner: string, _: boolean = false) {
     await this._apiResolveChallenge(id, winner);
+  }
+
+  async getApiJoin(
+    id: number,
+    user: string,
+    isVerifiedJoin: boolean = false,
+    isGaslessJoin: boolean = false
+  ) {
+    return this._apiGetApiJoin(id, user, isVerifiedJoin, isGaslessJoin);
+  }
+
+  async getApiLeave(id: number, user: string, isGaslessJoin: boolean = false) {
+    return this._apiGetApiLeave(id, user, isGaslessJoin);
   }
 
   /* TODO: Coming soon with applying your own specific payments */
