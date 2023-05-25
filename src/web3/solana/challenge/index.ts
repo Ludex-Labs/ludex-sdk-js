@@ -1,5 +1,5 @@
 export type Challenge = {
-  "version": "0.1.65",
+  "version": "0.1.89",
   "name": "challenge",
   "instructions": [
     {
@@ -489,6 +489,52 @@ export type Challenge = {
           "name": "tokenProgram",
           "isMut": false,
           "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "verifiedJoinWithLamports",
+      "accounts": [
+        {
+          "name": "provider",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "pool",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "challenge",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "player",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "providerAuthority",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "payer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "user",
+          "isMut": true,
+          "isSigner": true
         },
         {
           "name": "systemProgram",
@@ -1247,6 +1293,37 @@ export type Challenge = {
           }
         }
       ]
+    },
+    {
+      "name": "fixVerifiedJoin",
+      "accounts": [
+        {
+          "name": "provider",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "challenge",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "player",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "providerAuthority",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
     }
   ],
   "accounts": [
@@ -1741,7 +1818,7 @@ export type Challenge = {
 };
 
 export const IDL: Challenge = {
-  "version": "0.1.65",
+  "version": "0.1.89",
   "name": "challenge",
   "instructions": [
     {
@@ -2231,6 +2308,52 @@ export const IDL: Challenge = {
           "name": "tokenProgram",
           "isMut": false,
           "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "verifiedJoinWithLamports",
+      "accounts": [
+        {
+          "name": "provider",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "pool",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "challenge",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "player",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "providerAuthority",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "payer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "user",
+          "isMut": true,
+          "isSigner": true
         },
         {
           "name": "systemProgram",
@@ -2989,6 +3112,37 @@ export const IDL: Challenge = {
           }
         }
       ]
+    },
+    {
+      "name": "fixVerifiedJoin",
+      "accounts": [
+        {
+          "name": "provider",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "challenge",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "player",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "providerAuthority",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
     }
   ],
   "accounts": [
