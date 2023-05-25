@@ -40,7 +40,12 @@ export class ChallengeAPIClient {
   ) {
     return this.ludexChallengeApi<{ id: number }>({
       method: "POST",
-      body: JSON.stringify({ payoutId, limit, chain, verifiedJoin: isVerifiedJoin }),
+      body: JSON.stringify({
+        payoutId,
+        limit,
+        chain,
+        verifiedJoin: isVerifiedJoin,
+      }),
     });
   }
 
@@ -78,6 +83,32 @@ export class ChallengeAPIClient {
     await this.ludexChallengeApi({
       method: "HEAD",
       path: `${id}?action=resolve&payment=${JSON.stringify(payment)}`,
+    });
+  }
+
+  async _apiGetApiJoin(
+    id: number,
+    user: string,
+    isVerifiedJoin: boolean,
+    isGaslessJoin: boolean
+  ) {
+    return this.ludexChallengeApi<string>({
+      method: "POST",
+      path: `${id}/join?user=${user}`,
+      body: JSON.stringify({
+        verified: isVerifiedJoin,
+        gasless: isGaslessJoin,
+      }),
+    });
+  }
+
+  async _apiGetApiLeave(id: number, user: string, isGaslessJoin: boolean) {
+    return this.ludexChallengeApi<string>({
+      method: "POST",
+      path: `${id}/leave?userPubkey=${user}`,
+      body: JSON.stringify({
+        gasless: isGaslessJoin,
+      }),
     });
   }
 
@@ -205,6 +236,12 @@ export class ChallengeAPIClient {
             path: `${challenge.id}/players`,
           });
         },
+        updatePlayers: () => {
+          return this.ludexChallengeApi({
+            path: `${challenge.id}?action=add_players`,
+            method: "HEAD",
+          });
+        },
         getSignatures: () => {
           return this.ludexChallengeApi<Signature[]>({
             path: `${challenge.id}/signatures`,
@@ -224,6 +261,12 @@ export class ChallengeAPIClient {
       getPlayers: () => {
         return this.ludexChallengeApi<Player[]>({ path: `${id}/players` });
       },
+      updatePlayers: () => {
+        return this.ludexChallengeApi({
+          path: `${id}?action=add_players`,
+          method: "HEAD",
+        });
+      },
       getSignatures: () => {
         return this.ludexChallengeApi<Signature[]>({
           path: `${id}/signatures`,
@@ -235,11 +278,24 @@ export class ChallengeAPIClient {
   }
 
   /** @todo would be great if this method could accept 1 object instead of many params */
-  async create(payoutId: number, limit: number = 2, chain: string = "SOLANA", isVerifiedJoin: boolean = false) {
-    const challengeId = (await this._apiCreateChallenge(payoutId, limit, chain, isVerifiedJoin))
-      .id;
+  async create(
+    payoutId: number,
+    limit: number = 2,
+    chain: string = "SOLANA",
+    isVerifiedJoin: boolean = false
+  ) {
+    const challengeId = (
+      await this._apiCreateChallenge(payoutId, limit, chain, isVerifiedJoin)
+    ).id;
     const challenge = await this._apiGetChallenge(challengeId);
-    return { challengeId, blockchainAddress: challenge.blockchainAddress! };
+    return {
+      challengeId,
+      id: challenge.id,
+      blockchainAddress: challenge.blockchainAddress!,
+      state: challenge.state,
+      type: challenge.type,
+      payoutId: challenge.payoutId,
+    };
   }
 
   async lock(id: number, _: boolean = false) {
@@ -252,6 +308,19 @@ export class ChallengeAPIClient {
 
   async resolve(id: number, winner: string, _: boolean = false) {
     await this._apiResolveChallenge(id, winner);
+  }
+
+  async getApiJoin(
+    id: number,
+    user: string,
+    isVerifiedJoin: boolean = false,
+    isGaslessJoin: boolean = false
+  ) {
+    return this._apiGetApiJoin(id, user, isVerifiedJoin, isGaslessJoin);
+  }
+
+  async getApiLeave(id: number, user: string, isGaslessJoin: boolean = false) {
+    return this._apiGetApiLeave(id, user, isGaslessJoin);
   }
 
   /* TODO: Coming soon with applying your own specific payments */

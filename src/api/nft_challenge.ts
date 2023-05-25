@@ -1,5 +1,5 @@
-import { Player, Signature } from './models';
-import { _ludexChallengeApi, ApiConfig } from './utils';
+import { Player, Signature } from "./models";
+import { _ludexChallengeApi, ApiConfig } from "./utils";
 
 export class NftChallengeAPIClient {
   ludexChallengeApi: <T>(config: ApiConfig) => Promise<T>;
@@ -68,6 +68,12 @@ export class NftChallengeAPIClient {
     Object.assign(challenge, {
       getPlayers: () => {
         return this.ludexChallengeApi<Player[]>({ path: `${id}/players` });
+      },
+      updatePlayers: () => {
+        return this.ludexChallengeApi({
+          path: `${challenge.id}?action=add_players`,
+          method: "HEAD",
+        });
       },
       getSignatures: () => {
         return this.ludexChallengeApi<Signature[]>({
