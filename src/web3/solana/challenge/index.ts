@@ -1,5 +1,5 @@
 export type Challenge = {
-  "version": "0.1.89",
+  "version": "0.1.93",
   "name": "challenge",
   "instructions": [
     {
@@ -1295,6 +1295,63 @@ export type Challenge = {
       ]
     },
     {
+      "name": "closeAuthorizedRefundee",
+      "accounts": [
+        {
+          "name": "provider",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "authority",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "autorizedRefundee",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "createAuthorizedRefundee",
+      "accounts": [
+        {
+          "name": "provider",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "authority",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "autorizedRefundee",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "refundee",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
       "name": "fixVerifiedJoin",
       "accounts": [
         {
@@ -1580,6 +1637,22 @@ export type Challenge = {
           {
             "name": "bump",
             "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "authorizedRefundee",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "provider",
+            "type": "publicKey"
+          },
+          {
+            "name": "refundAddress",
+            "type": "publicKey"
           }
         ]
       }
@@ -1818,7 +1891,7 @@ export type Challenge = {
 };
 
 export const IDL: Challenge = {
-  "version": "0.1.89",
+  "version": "0.1.93",
   "name": "challenge",
   "instructions": [
     {
@@ -3114,6 +3187,63 @@ export const IDL: Challenge = {
       ]
     },
     {
+      "name": "closeAuthorizedRefundee",
+      "accounts": [
+        {
+          "name": "provider",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "authority",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "autorizedRefundee",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "createAuthorizedRefundee",
+      "accounts": [
+        {
+          "name": "provider",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "authority",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "autorizedRefundee",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "refundee",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
       "name": "fixVerifiedJoin",
       "accounts": [
         {
@@ -3399,6 +3529,22 @@ export const IDL: Challenge = {
           {
             "name": "bump",
             "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "authorizedRefundee",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "provider",
+            "type": "publicKey"
+          },
+          {
+            "name": "refundAddress",
+            "type": "publicKey"
           }
         ]
       }
