@@ -47,6 +47,7 @@ export type Player = {
   walletAddress: string;
   joinedAt: string;
   joinedSignature: string;
+  amountWonDecimal: number;
 };
 
 export type Signature = {
