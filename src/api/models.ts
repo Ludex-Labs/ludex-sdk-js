@@ -38,6 +38,8 @@ export type Payout = {
   chain: Chain;
   name?: string;
   organizationId?: number;
+  mintId?: number;
+  Mint?: Mint;
 };
 
 export type Player = {
@@ -55,6 +57,16 @@ export type Signature = {
   challengeState: ChallengeState;
   signature: string;
   createdAt?: string;
+};
+
+export type Mint = {
+  id: number;
+  name: string;
+  icon?: string;
+  ticker?: string;
+  blockchainAddress: string;
+  decimalPosition: number;
+  chain: Chain;
 };
 
 export type Chain = "SOLANA" | "POLYGON" | "ETH" | "SUI" | "NEAR";
