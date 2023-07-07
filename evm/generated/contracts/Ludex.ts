@@ -32,22 +32,22 @@ export interface LudexInterface extends utils.Interface {
   functions: {
     "ADMIN()": FunctionFragment;
     "DEFAULT_ADMIN_ROLE()": FunctionFragment;
-    "createFtPool(address)": FunctionFragment;
-    "createFtWager(address,address,uint256,uint256,uint256,uint256,uint256,uint256)": FunctionFragment;
+    "createFtWager(address,address,uint256,uint256,uint256,uint256,uint256,uint256,bool,uint256)": FunctionFragment;
+    "createNativeWager(address,uint256,uint256,uint256,uint256,uint256,uint256,bool,uint256)": FunctionFragment;
     "ftwagers(address)": FunctionFragment;
     "getRoleAdmin(bytes32)": FunctionFragment;
     "grantRole(bytes32,address)": FunctionFragment;
     "hasRole(bytes32,address)": FunctionFragment;
-    "initialize(address)": FunctionFragment;
-    "providerDump()": FunctionFragment;
+    "initialize()": FunctionFragment;
+    "nativeChallenges()": FunctionFragment;
     "proxiableUUID()": FunctionFragment;
     "renounceRole(bytes32,address)": FunctionFragment;
     "revokeRole(bytes32,address)": FunctionFragment;
     "supportsInterface(bytes4)": FunctionFragment;
-    "updateFtPool(address)": FunctionFragment;
+    "updateFtPool(address,address)": FunctionFragment;
     "updateFtWager(uint8,address,bytes32)": FunctionFragment;
-    "updateProviderDump(address,address)": FunctionFragment;
-    "updateProviderDump(address)": FunctionFragment;
+    "updateNativePool(address)": FunctionFragment;
+    "updateNativeWager(uint8,bytes32)": FunctionFragment;
     "upgradeTo(address)": FunctionFragment;
     "upgradeToAndCall(address,bytes)": FunctionFragment;
   };
@@ -56,22 +56,22 @@ export interface LudexInterface extends utils.Interface {
     nameOrSignatureOrTopic:
       | "ADMIN"
       | "DEFAULT_ADMIN_ROLE"
-      | "createFtPool"
       | "createFtWager"
+      | "createNativeWager"
       | "ftwagers"
       | "getRoleAdmin"
       | "grantRole"
       | "hasRole"
       | "initialize"
-      | "providerDump"
+      | "nativeChallenges"
       | "proxiableUUID"
       | "renounceRole"
       | "revokeRole"
       | "supportsInterface"
       | "updateFtPool"
       | "updateFtWager"
-      | "updateProviderDump(address,address)"
-      | "updateProviderDump(address)"
+      | "updateNativePool"
+      | "updateNativeWager"
       | "upgradeTo"
       | "upgradeToAndCall"
   ): FunctionFragment;
@@ -80,10 +80,6 @@ export interface LudexInterface extends utils.Interface {
   encodeFunctionData(
     functionFragment: "DEFAULT_ADMIN_ROLE",
     values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "createFtPool",
-    values: [PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
     functionFragment: "createFtWager",
@@ -95,6 +91,22 @@ export interface LudexInterface extends utils.Interface {
       PromiseOrValue<BigNumberish>,
       PromiseOrValue<BigNumberish>,
       PromiseOrValue<BigNumberish>,
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<boolean>,
+      PromiseOrValue<BigNumberish>
+    ]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "createNativeWager",
+    values: [
+      PromiseOrValue<string>,
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<boolean>,
       PromiseOrValue<BigNumberish>
     ]
   ): string;
@@ -116,10 +128,10 @@ export interface LudexInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "initialize",
-    values: [PromiseOrValue<string>]
+    values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: "providerDump",
+    functionFragment: "nativeChallenges",
     values?: undefined
   ): string;
   encodeFunctionData(
@@ -140,7 +152,7 @@ export interface LudexInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "updateFtPool",
-    values: [PromiseOrValue<string>]
+    values: [PromiseOrValue<string>, PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
     functionFragment: "updateFtWager",
@@ -151,12 +163,12 @@ export interface LudexInterface extends utils.Interface {
     ]
   ): string;
   encodeFunctionData(
-    functionFragment: "updateProviderDump(address,address)",
-    values: [PromiseOrValue<string>, PromiseOrValue<string>]
+    functionFragment: "updateNativePool",
+    values: [PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
-    functionFragment: "updateProviderDump(address)",
-    values: [PromiseOrValue<string>]
+    functionFragment: "updateNativeWager",
+    values: [PromiseOrValue<BigNumberish>, PromiseOrValue<BytesLike>]
   ): string;
   encodeFunctionData(
     functionFragment: "upgradeTo",
@@ -173,11 +185,11 @@ export interface LudexInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "createFtPool",
+    functionFragment: "createFtWager",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "createFtWager",
+    functionFragment: "createNativeWager",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "ftwagers", data: BytesLike): Result;
@@ -189,7 +201,7 @@ export interface LudexInterface extends utils.Interface {
   decodeFunctionResult(functionFragment: "hasRole", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "initialize", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "providerDump",
+    functionFragment: "nativeChallenges",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -214,11 +226,11 @@ export interface LudexInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "updateProviderDump(address,address)",
+    functionFragment: "updateNativePool",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "updateProviderDump(address)",
+    functionFragment: "updateNativeWager",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "upgradeTo", data: BytesLike): Result;
@@ -349,11 +361,6 @@ export interface Ludex extends BaseContract {
 
     DEFAULT_ADMIN_ROLE(overrides?: CallOverrides): Promise<[string]>;
 
-    createFtPool(
-      tokenAddress: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
-
     createFtWager(
       _mediator: PromiseOrValue<string>,
       _tokenType: PromiseOrValue<string>,
@@ -363,6 +370,21 @@ export interface Ludex extends BaseContract {
       _mediatorAmount: PromiseOrValue<BigNumberish>,
       _limit: PromiseOrValue<BigNumberish>,
       _ludexId: PromiseOrValue<BigNumberish>,
+      _verified: PromiseOrValue<boolean>,
+      _out: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    createNativeWager(
+      _mediator: PromiseOrValue<string>,
+      _fee: PromiseOrValue<BigNumberish>,
+      _entryAmount: PromiseOrValue<BigNumberish>,
+      _providerAmount: PromiseOrValue<BigNumberish>,
+      _mediatorAmount: PromiseOrValue<BigNumberish>,
+      _limit: PromiseOrValue<BigNumberish>,
+      _ludexId: PromiseOrValue<BigNumberish>,
+      _verified: PromiseOrValue<boolean>,
+      _out: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
@@ -389,11 +411,10 @@ export interface Ludex extends BaseContract {
     ): Promise<[boolean]>;
 
     initialize(
-      _providerDump: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
-    providerDump(overrides?: CallOverrides): Promise<[string]>;
+    nativeChallenges(overrides?: CallOverrides): Promise<[string]>;
 
     proxiableUUID(overrides?: CallOverrides): Promise<[string]>;
 
@@ -416,6 +437,7 @@ export interface Ludex extends BaseContract {
 
     updateFtPool(
       tokenAddress: PromiseOrValue<string>,
+      _pool: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
@@ -426,14 +448,14 @@ export interface Ludex extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
-    "updateProviderDump(address,address)"(
-      _providerDump: PromiseOrValue<string>,
-      _tokenAddress: PromiseOrValue<string>,
+    updateNativePool(
+      _native_pool: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
-    "updateProviderDump(address)"(
-      _providerDump: PromiseOrValue<string>,
+    updateNativeWager(
+      nativeUpdate: PromiseOrValue<BigNumberish>,
+      id: PromiseOrValue<BytesLike>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
@@ -453,11 +475,6 @@ export interface Ludex extends BaseContract {
 
   DEFAULT_ADMIN_ROLE(overrides?: CallOverrides): Promise<string>;
 
-  createFtPool(
-    tokenAddress: PromiseOrValue<string>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
   createFtWager(
     _mediator: PromiseOrValue<string>,
     _tokenType: PromiseOrValue<string>,
@@ -467,6 +484,21 @@ export interface Ludex extends BaseContract {
     _mediatorAmount: PromiseOrValue<BigNumberish>,
     _limit: PromiseOrValue<BigNumberish>,
     _ludexId: PromiseOrValue<BigNumberish>,
+    _verified: PromiseOrValue<boolean>,
+    _out: PromiseOrValue<BigNumberish>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  createNativeWager(
+    _mediator: PromiseOrValue<string>,
+    _fee: PromiseOrValue<BigNumberish>,
+    _entryAmount: PromiseOrValue<BigNumberish>,
+    _providerAmount: PromiseOrValue<BigNumberish>,
+    _mediatorAmount: PromiseOrValue<BigNumberish>,
+    _limit: PromiseOrValue<BigNumberish>,
+    _ludexId: PromiseOrValue<BigNumberish>,
+    _verified: PromiseOrValue<boolean>,
+    _out: PromiseOrValue<BigNumberish>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
@@ -493,11 +525,10 @@ export interface Ludex extends BaseContract {
   ): Promise<boolean>;
 
   initialize(
-    _providerDump: PromiseOrValue<string>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
-  providerDump(overrides?: CallOverrides): Promise<string>;
+  nativeChallenges(overrides?: CallOverrides): Promise<string>;
 
   proxiableUUID(overrides?: CallOverrides): Promise<string>;
 
@@ -520,6 +551,7 @@ export interface Ludex extends BaseContract {
 
   updateFtPool(
     tokenAddress: PromiseOrValue<string>,
+    _pool: PromiseOrValue<string>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
@@ -530,14 +562,14 @@ export interface Ludex extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
-  "updateProviderDump(address,address)"(
-    _providerDump: PromiseOrValue<string>,
-    _tokenAddress: PromiseOrValue<string>,
+  updateNativePool(
+    _native_pool: PromiseOrValue<string>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
-  "updateProviderDump(address)"(
-    _providerDump: PromiseOrValue<string>,
+  updateNativeWager(
+    nativeUpdate: PromiseOrValue<BigNumberish>,
+    id: PromiseOrValue<BytesLike>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
@@ -557,11 +589,6 @@ export interface Ludex extends BaseContract {
 
     DEFAULT_ADMIN_ROLE(overrides?: CallOverrides): Promise<string>;
 
-    createFtPool(
-      tokenAddress: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
     createFtWager(
       _mediator: PromiseOrValue<string>,
       _tokenType: PromiseOrValue<string>,
@@ -571,6 +598,21 @@ export interface Ludex extends BaseContract {
       _mediatorAmount: PromiseOrValue<BigNumberish>,
       _limit: PromiseOrValue<BigNumberish>,
       _ludexId: PromiseOrValue<BigNumberish>,
+      _verified: PromiseOrValue<boolean>,
+      _out: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    createNativeWager(
+      _mediator: PromiseOrValue<string>,
+      _fee: PromiseOrValue<BigNumberish>,
+      _entryAmount: PromiseOrValue<BigNumberish>,
+      _providerAmount: PromiseOrValue<BigNumberish>,
+      _mediatorAmount: PromiseOrValue<BigNumberish>,
+      _limit: PromiseOrValue<BigNumberish>,
+      _ludexId: PromiseOrValue<BigNumberish>,
+      _verified: PromiseOrValue<boolean>,
+      _out: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -596,12 +638,9 @@ export interface Ludex extends BaseContract {
       overrides?: CallOverrides
     ): Promise<boolean>;
 
-    initialize(
-      _providerDump: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<void>;
+    initialize(overrides?: CallOverrides): Promise<void>;
 
-    providerDump(overrides?: CallOverrides): Promise<string>;
+    nativeChallenges(overrides?: CallOverrides): Promise<string>;
 
     proxiableUUID(overrides?: CallOverrides): Promise<string>;
 
@@ -624,6 +663,7 @@ export interface Ludex extends BaseContract {
 
     updateFtPool(
       tokenAddress: PromiseOrValue<string>,
+      _pool: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -634,14 +674,14 @@ export interface Ludex extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
-    "updateProviderDump(address,address)"(
-      _providerDump: PromiseOrValue<string>,
-      _tokenAddress: PromiseOrValue<string>,
+    updateNativePool(
+      _native_pool: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<void>;
 
-    "updateProviderDump(address)"(
-      _providerDump: PromiseOrValue<string>,
+    updateNativeWager(
+      nativeUpdate: PromiseOrValue<BigNumberish>,
+      id: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -723,11 +763,6 @@ export interface Ludex extends BaseContract {
 
     DEFAULT_ADMIN_ROLE(overrides?: CallOverrides): Promise<BigNumber>;
 
-    createFtPool(
-      tokenAddress: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
     createFtWager(
       _mediator: PromiseOrValue<string>,
       _tokenType: PromiseOrValue<string>,
@@ -737,6 +772,21 @@ export interface Ludex extends BaseContract {
       _mediatorAmount: PromiseOrValue<BigNumberish>,
       _limit: PromiseOrValue<BigNumberish>,
       _ludexId: PromiseOrValue<BigNumberish>,
+      _verified: PromiseOrValue<boolean>,
+      _out: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    createNativeWager(
+      _mediator: PromiseOrValue<string>,
+      _fee: PromiseOrValue<BigNumberish>,
+      _entryAmount: PromiseOrValue<BigNumberish>,
+      _providerAmount: PromiseOrValue<BigNumberish>,
+      _mediatorAmount: PromiseOrValue<BigNumberish>,
+      _limit: PromiseOrValue<BigNumberish>,
+      _ludexId: PromiseOrValue<BigNumberish>,
+      _verified: PromiseOrValue<boolean>,
+      _out: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
@@ -763,11 +813,10 @@ export interface Ludex extends BaseContract {
     ): Promise<BigNumber>;
 
     initialize(
-      _providerDump: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
-    providerDump(overrides?: CallOverrides): Promise<BigNumber>;
+    nativeChallenges(overrides?: CallOverrides): Promise<BigNumber>;
 
     proxiableUUID(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -790,6 +839,7 @@ export interface Ludex extends BaseContract {
 
     updateFtPool(
       tokenAddress: PromiseOrValue<string>,
+      _pool: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
@@ -800,14 +850,14 @@ export interface Ludex extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
-    "updateProviderDump(address,address)"(
-      _providerDump: PromiseOrValue<string>,
-      _tokenAddress: PromiseOrValue<string>,
+    updateNativePool(
+      _native_pool: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
-    "updateProviderDump(address)"(
-      _providerDump: PromiseOrValue<string>,
+    updateNativeWager(
+      nativeUpdate: PromiseOrValue<BigNumberish>,
+      id: PromiseOrValue<BytesLike>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
@@ -830,11 +880,6 @@ export interface Ludex extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    createFtPool(
-      tokenAddress: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
     createFtWager(
       _mediator: PromiseOrValue<string>,
       _tokenType: PromiseOrValue<string>,
@@ -844,6 +889,21 @@ export interface Ludex extends BaseContract {
       _mediatorAmount: PromiseOrValue<BigNumberish>,
       _limit: PromiseOrValue<BigNumberish>,
       _ludexId: PromiseOrValue<BigNumberish>,
+      _verified: PromiseOrValue<boolean>,
+      _out: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    createNativeWager(
+      _mediator: PromiseOrValue<string>,
+      _fee: PromiseOrValue<BigNumberish>,
+      _entryAmount: PromiseOrValue<BigNumberish>,
+      _providerAmount: PromiseOrValue<BigNumberish>,
+      _mediatorAmount: PromiseOrValue<BigNumberish>,
+      _limit: PromiseOrValue<BigNumberish>,
+      _ludexId: PromiseOrValue<BigNumberish>,
+      _verified: PromiseOrValue<boolean>,
+      _out: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -870,11 +930,10 @@ export interface Ludex extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     initialize(
-      _providerDump: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
-    providerDump(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    nativeChallenges(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     proxiableUUID(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
@@ -897,6 +956,7 @@ export interface Ludex extends BaseContract {
 
     updateFtPool(
       tokenAddress: PromiseOrValue<string>,
+      _pool: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -907,14 +967,14 @@ export interface Ludex extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
-    "updateProviderDump(address,address)"(
-      _providerDump: PromiseOrValue<string>,
-      _tokenAddress: PromiseOrValue<string>,
+    updateNativePool(
+      _native_pool: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
-    "updateProviderDump(address)"(
-      _providerDump: PromiseOrValue<string>,
+    updateNativeWager(
+      nativeUpdate: PromiseOrValue<BigNumberish>,
+      id: PromiseOrValue<BytesLike>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 

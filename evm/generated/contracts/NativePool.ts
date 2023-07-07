@@ -28,25 +28,29 @@ import type {
   PromiseOrValue,
 } from "../common";
 
-export type PaymentStruct = {
-  to: PromiseOrValue<string>;
-  amount: PromiseOrValue<BigNumberish>;
-  paid: PromiseOrValue<boolean>;
-};
+export declare namespace Pool {
+  export type PaymentStruct = {
+    to: PromiseOrValue<string>;
+    amount: PromiseOrValue<BigNumberish>;
+    paid: PromiseOrValue<boolean>;
+  };
 
-export type PaymentStructOutput = [string, BigNumber, boolean] & {
-  to: string;
-  amount: BigNumber;
-  paid: boolean;
-};
+  export type PaymentStructOutput = [string, BigNumber, boolean] & {
+    to: string;
+    amount: BigNumber;
+    paid: boolean;
+  };
+}
 
-export interface FtChallengePoolInterface extends utils.Interface {
+export interface NativePoolInterface extends utils.Interface {
   functions: {
     "ADMIN()": FunctionFragment;
     "DEFAULT_ADMIN_ROLE()": FunctionFragment;
     "cancel(bytes32)": FunctionFragment;
-    "create(address,uint256,uint256,uint256,uint256,uint256,uint256)": FunctionFragment;
+    "create(address,uint256,uint256,uint256,uint256,uint256,uint256,bool,uint256)": FunctionFragment;
+    "getNumDigits(uint256)": FunctionFragment;
     "getRoleAdmin(bytes32)": FunctionFragment;
+    "getTrimmedNumber(uint256,uint256)": FunctionFragment;
     "grantRole(bytes32,address)": FunctionFragment;
     "hasRole(bytes32,address)": FunctionFragment;
     "join(bytes32)": FunctionFragment;
@@ -61,6 +65,8 @@ export interface FtChallengePoolInterface extends utils.Interface {
     "revokeRole(bytes32,address)": FunctionFragment;
     "supportsInterface(bytes4)": FunctionFragment;
     "updateProviderDump(address)": FunctionFragment;
+    "verifiedJoin(bytes32,uint256[2],uint256[2][2],uint256[2],uint256[2])": FunctionFragment;
+    "verifyProof(uint256[2],uint256[2][2],uint256[2],uint256[2])": FunctionFragment;
     "wagerCount()": FunctionFragment;
     "wagers(bytes32)": FunctionFragment;
   };
@@ -71,7 +77,9 @@ export interface FtChallengePoolInterface extends utils.Interface {
       | "DEFAULT_ADMIN_ROLE"
       | "cancel"
       | "create"
+      | "getNumDigits"
       | "getRoleAdmin"
+      | "getTrimmedNumber"
       | "grantRole"
       | "hasRole"
       | "join"
@@ -86,6 +94,8 @@ export interface FtChallengePoolInterface extends utils.Interface {
       | "revokeRole"
       | "supportsInterface"
       | "updateProviderDump"
+      | "verifiedJoin"
+      | "verifyProof"
       | "wagerCount"
       | "wagers"
   ): FunctionFragment;
@@ -108,12 +118,22 @@ export interface FtChallengePoolInterface extends utils.Interface {
       PromiseOrValue<BigNumberish>,
       PromiseOrValue<BigNumberish>,
       PromiseOrValue<BigNumberish>,
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<boolean>,
       PromiseOrValue<BigNumberish>
     ]
   ): string;
   encodeFunctionData(
+    functionFragment: "getNumDigits",
+    values: [PromiseOrValue<BigNumberish>]
+  ): string;
+  encodeFunctionData(
     functionFragment: "getRoleAdmin",
     values: [PromiseOrValue<BytesLike>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getTrimmedNumber",
+    values: [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
     functionFragment: "grantRole",
@@ -154,7 +174,11 @@ export interface FtChallengePoolInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "resolve",
-    values: [PromiseOrValue<BytesLike>, PromiseOrValue<string>, PaymentStruct[]]
+    values: [
+      PromiseOrValue<BytesLike>,
+      PromiseOrValue<string>,
+      Pool.PaymentStruct[]
+    ]
   ): string;
   encodeFunctionData(
     functionFragment: "revokeRole",
@@ -167,6 +191,31 @@ export interface FtChallengePoolInterface extends utils.Interface {
   encodeFunctionData(
     functionFragment: "updateProviderDump",
     values: [PromiseOrValue<string>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "verifiedJoin",
+    values: [
+      PromiseOrValue<BytesLike>,
+      [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>],
+      [
+        [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>],
+        [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>]
+      ],
+      [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>],
+      [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>]
+    ]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "verifyProof",
+    values: [
+      [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>],
+      [
+        [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>],
+        [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>]
+      ],
+      [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>],
+      [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>]
+    ]
   ): string;
   encodeFunctionData(
     functionFragment: "wagerCount",
@@ -185,7 +234,15 @@ export interface FtChallengePoolInterface extends utils.Interface {
   decodeFunctionResult(functionFragment: "cancel", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "create", data: BytesLike): Result;
   decodeFunctionResult(
+    functionFragment: "getNumDigits",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "getRoleAdmin",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getTrimmedNumber",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "grantRole", data: BytesLike): Result;
@@ -212,6 +269,14 @@ export interface FtChallengePoolInterface extends utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "updateProviderDump",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "verifiedJoin",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "verifyProof",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "wagerCount", data: BytesLike): Result;
@@ -295,18 +360,14 @@ export type UnpausedEvent = TypedEvent<[string], UnpausedEventObject>;
 
 export type UnpausedEventFilter = TypedEventFilter<UnpausedEvent>;
 
-export interface ChallengeCanceledEventObject {
+export interface WagerCanceledEventObject {
   id: string;
 }
-export type ChallengeCanceledEvent = TypedEvent<
-  [string],
-  ChallengeCanceledEventObject
->;
+export type WagerCanceledEvent = TypedEvent<[string], WagerCanceledEventObject>;
 
-export type ChallengeCanceledEventFilter =
-  TypedEventFilter<ChallengeCanceledEvent>;
+export type WagerCanceledEventFilter = TypedEventFilter<WagerCanceledEvent>;
 
-export interface ChallengeCreatedEventObject {
+export interface WagerCreatedEventObject {
   id: string;
   ludexId: BigNumber;
   _mediator: string;
@@ -316,7 +377,7 @@ export interface ChallengeCreatedEventObject {
   _mediatorAmount: BigNumber;
   _limit: BigNumber;
 }
-export type ChallengeCreatedEvent = TypedEvent<
+export type WagerCreatedEvent = TypedEvent<
   [
     string,
     BigNumber,
@@ -327,61 +388,50 @@ export type ChallengeCreatedEvent = TypedEvent<
     BigNumber,
     BigNumber
   ],
-  ChallengeCreatedEventObject
+  WagerCreatedEventObject
 >;
 
-export type ChallengeCreatedEventFilter =
-  TypedEventFilter<ChallengeCreatedEvent>;
+export type WagerCreatedEventFilter = TypedEventFilter<WagerCreatedEvent>;
 
-export interface ChallengeJoinedEventObject {
+export interface WagerJoinedEventObject {
   id: string;
   _player: string;
 }
-export type ChallengeJoinedEvent = TypedEvent<
+export type WagerJoinedEvent = TypedEvent<
   [string, string],
-  ChallengeJoinedEventObject
+  WagerJoinedEventObject
 >;
 
-export type ChallengeJoinedEventFilter = TypedEventFilter<ChallengeJoinedEvent>;
+export type WagerJoinedEventFilter = TypedEventFilter<WagerJoinedEvent>;
 
-export interface ChallengeLeftEventObject {
+export interface WagerLeftEventObject {
   id: string;
   _player: string;
 }
-export type ChallengeLeftEvent = TypedEvent<
-  [string, string],
-  ChallengeLeftEventObject
->;
+export type WagerLeftEvent = TypedEvent<[string, string], WagerLeftEventObject>;
 
-export type ChallengeLeftEventFilter = TypedEventFilter<ChallengeLeftEvent>;
+export type WagerLeftEventFilter = TypedEventFilter<WagerLeftEvent>;
 
-export interface ChallengeLockedEventObject {
+export interface WagerLockedEventObject {
   id: string;
 }
-export type ChallengeLockedEvent = TypedEvent<
-  [string],
-  ChallengeLockedEventObject
->;
+export type WagerLockedEvent = TypedEvent<[string], WagerLockedEventObject>;
 
-export type ChallengeLockedEventFilter = TypedEventFilter<ChallengeLockedEvent>;
+export type WagerLockedEventFilter = TypedEventFilter<WagerLockedEvent>;
 
-export interface ChallengeResolvedEventObject {
+export interface WagerResolvedEventObject {
   id: string;
 }
-export type ChallengeResolvedEvent = TypedEvent<
-  [string],
-  ChallengeResolvedEventObject
->;
+export type WagerResolvedEvent = TypedEvent<[string], WagerResolvedEventObject>;
 
-export type ChallengeResolvedEventFilter =
-  TypedEventFilter<ChallengeResolvedEvent>;
+export type WagerResolvedEventFilter = TypedEventFilter<WagerResolvedEvent>;
 
-export interface FtChallengePool extends BaseContract {
+export interface NativePool extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
   attach(addressOrName: string): this;
   deployed(): Promise<this>;
 
-  interface: FtChallengePoolInterface;
+  interface: NativePoolInterface;
 
   queryFilter<TEvent extends TypedEvent>(
     event: TypedEventFilter<TEvent>,
@@ -420,13 +470,26 @@ export interface FtChallengePool extends BaseContract {
       _mediatorAmount: PromiseOrValue<BigNumberish>,
       _limit: PromiseOrValue<BigNumberish>,
       _ludexId: PromiseOrValue<BigNumberish>,
+      _verified: PromiseOrValue<boolean>,
+      _out: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
+
+    getNumDigits(
+      num: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
 
     getRoleAdmin(
       role: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
     ): Promise<[string]>;
+
+    getTrimmedNumber(
+      num: PromiseOrValue<BigNumberish>,
+      digits: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
 
     grantRole(
       role: PromiseOrValue<BytesLike>,
@@ -486,7 +549,7 @@ export interface FtChallengePool extends BaseContract {
     resolve(
       id: PromiseOrValue<BytesLike>,
       mediatorVault: PromiseOrValue<string>,
-      _payment: PaymentStruct[],
+      _payment: Pool.PaymentStruct[],
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
@@ -506,6 +569,29 @@ export interface FtChallengePool extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
+    verifiedJoin(
+      id: PromiseOrValue<BytesLike>,
+      a: [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>],
+      b: [
+        [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>],
+        [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>]
+      ],
+      c: [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>],
+      input: [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>],
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    verifyProof(
+      a: [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>],
+      b: [
+        [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>],
+        [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>]
+      ],
+      c: [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>],
+      input: [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>],
+      overrides?: CallOverrides
+    ): Promise<[boolean] & { r: boolean }>;
+
     wagerCount(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     wagers(
@@ -520,7 +606,9 @@ export interface FtChallengePool extends BaseContract {
         BigNumber,
         BigNumber,
         BigNumber,
-        number
+        number,
+        boolean,
+        BigNumber
       ] & {
         _mediator: string;
         _fee: BigNumber;
@@ -530,6 +618,8 @@ export interface FtChallengePool extends BaseContract {
         _limit: BigNumber;
         _amountJoined: BigNumber;
         _state: number;
+        _verified: boolean;
+        _out: BigNumber;
       }
     >;
   };
@@ -551,13 +641,26 @@ export interface FtChallengePool extends BaseContract {
     _mediatorAmount: PromiseOrValue<BigNumberish>,
     _limit: PromiseOrValue<BigNumberish>,
     _ludexId: PromiseOrValue<BigNumberish>,
+    _verified: PromiseOrValue<boolean>,
+    _out: PromiseOrValue<BigNumberish>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
+
+  getNumDigits(
+    num: PromiseOrValue<BigNumberish>,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
 
   getRoleAdmin(
     role: PromiseOrValue<BytesLike>,
     overrides?: CallOverrides
   ): Promise<string>;
+
+  getTrimmedNumber(
+    num: PromiseOrValue<BigNumberish>,
+    digits: PromiseOrValue<BigNumberish>,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
 
   grantRole(
     role: PromiseOrValue<BytesLike>,
@@ -617,7 +720,7 @@ export interface FtChallengePool extends BaseContract {
   resolve(
     id: PromiseOrValue<BytesLike>,
     mediatorVault: PromiseOrValue<string>,
-    _payment: PaymentStruct[],
+    _payment: Pool.PaymentStruct[],
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
@@ -637,6 +740,29 @@ export interface FtChallengePool extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
+  verifiedJoin(
+    id: PromiseOrValue<BytesLike>,
+    a: [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>],
+    b: [
+      [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>],
+      [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>]
+    ],
+    c: [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>],
+    input: [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>],
+    overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  verifyProof(
+    a: [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>],
+    b: [
+      [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>],
+      [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>]
+    ],
+    c: [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>],
+    input: [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>],
+    overrides?: CallOverrides
+  ): Promise<boolean>;
+
   wagerCount(overrides?: CallOverrides): Promise<BigNumber>;
 
   wagers(
@@ -651,7 +777,9 @@ export interface FtChallengePool extends BaseContract {
       BigNumber,
       BigNumber,
       BigNumber,
-      number
+      number,
+      boolean,
+      BigNumber
     ] & {
       _mediator: string;
       _fee: BigNumber;
@@ -661,6 +789,8 @@ export interface FtChallengePool extends BaseContract {
       _limit: BigNumber;
       _amountJoined: BigNumber;
       _state: number;
+      _verified: boolean;
+      _out: BigNumber;
     }
   >;
 
@@ -682,13 +812,26 @@ export interface FtChallengePool extends BaseContract {
       _mediatorAmount: PromiseOrValue<BigNumberish>,
       _limit: PromiseOrValue<BigNumberish>,
       _ludexId: PromiseOrValue<BigNumberish>,
+      _verified: PromiseOrValue<boolean>,
+      _out: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<void>;
+
+    getNumDigits(
+      num: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     getRoleAdmin(
       role: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
     ): Promise<string>;
+
+    getTrimmedNumber(
+      num: PromiseOrValue<BigNumberish>,
+      digits: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     grantRole(
       role: PromiseOrValue<BytesLike>,
@@ -748,7 +891,7 @@ export interface FtChallengePool extends BaseContract {
     resolve(
       id: PromiseOrValue<BytesLike>,
       mediatorVault: PromiseOrValue<string>,
-      _payment: PaymentStruct[],
+      _payment: Pool.PaymentStruct[],
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -768,6 +911,29 @@ export interface FtChallengePool extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
+    verifiedJoin(
+      id: PromiseOrValue<BytesLike>,
+      a: [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>],
+      b: [
+        [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>],
+        [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>]
+      ],
+      c: [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>],
+      input: [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>],
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    verifyProof(
+      a: [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>],
+      b: [
+        [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>],
+        [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>]
+      ],
+      c: [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>],
+      input: [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>],
+      overrides?: CallOverrides
+    ): Promise<boolean>;
+
     wagerCount(overrides?: CallOverrides): Promise<BigNumber>;
 
     wagers(
@@ -782,7 +948,9 @@ export interface FtChallengePool extends BaseContract {
         BigNumber,
         BigNumber,
         BigNumber,
-        number
+        number,
+        boolean,
+        BigNumber
       ] & {
         _mediator: string;
         _fee: BigNumber;
@@ -792,6 +960,8 @@ export interface FtChallengePool extends BaseContract {
         _limit: BigNumber;
         _amountJoined: BigNumber;
         _state: number;
+        _verified: boolean;
+        _out: BigNumber;
       }
     >;
   };
@@ -838,10 +1008,10 @@ export interface FtChallengePool extends BaseContract {
 
     "WagerCanceled(bytes32)"(
       id?: PromiseOrValue<BytesLike> | null
-    ): ChallengeCanceledEventFilter;
+    ): WagerCanceledEventFilter;
     WagerCanceled(
       id?: PromiseOrValue<BytesLike> | null
-    ): ChallengeCanceledEventFilter;
+    ): WagerCanceledEventFilter;
 
     "WagerCreated(bytes32,uint256,address,uint256,uint256,uint256,uint256,uint256)"(
       id?: PromiseOrValue<BytesLike> | null,
@@ -852,7 +1022,7 @@ export interface FtChallengePool extends BaseContract {
       _providerAmount?: null,
       _mediatorAmount?: null,
       _limit?: null
-    ): ChallengeCreatedEventFilter;
+    ): WagerCreatedEventFilter;
     WagerCreated(
       id?: PromiseOrValue<BytesLike> | null,
       ludexId?: PromiseOrValue<BigNumberish> | null,
@@ -862,39 +1032,37 @@ export interface FtChallengePool extends BaseContract {
       _providerAmount?: null,
       _mediatorAmount?: null,
       _limit?: null
-    ): ChallengeCreatedEventFilter;
+    ): WagerCreatedEventFilter;
 
     "WagerJoined(bytes32,address)"(
       id?: PromiseOrValue<BytesLike> | null,
       _player?: PromiseOrValue<string> | null
-    ): ChallengeJoinedEventFilter;
+    ): WagerJoinedEventFilter;
     WagerJoined(
       id?: PromiseOrValue<BytesLike> | null,
       _player?: PromiseOrValue<string> | null
-    ): ChallengeJoinedEventFilter;
+    ): WagerJoinedEventFilter;
 
     "WagerLeft(bytes32,address)"(
       id?: PromiseOrValue<BytesLike> | null,
       _player?: PromiseOrValue<string> | null
-    ): ChallengeLeftEventFilter;
+    ): WagerLeftEventFilter;
     WagerLeft(
       id?: PromiseOrValue<BytesLike> | null,
       _player?: PromiseOrValue<string> | null
-    ): ChallengeLeftEventFilter;
+    ): WagerLeftEventFilter;
 
     "WagerLocked(bytes32)"(
       id?: PromiseOrValue<BytesLike> | null
-    ): ChallengeLockedEventFilter;
-    WagerLocked(
-      id?: PromiseOrValue<BytesLike> | null
-    ): ChallengeLockedEventFilter;
+    ): WagerLockedEventFilter;
+    WagerLocked(id?: PromiseOrValue<BytesLike> | null): WagerLockedEventFilter;
 
     "WagerResolved(bytes32)"(
       id?: PromiseOrValue<BytesLike> | null
-    ): ChallengeResolvedEventFilter;
+    ): WagerResolvedEventFilter;
     WagerResolved(
       id?: PromiseOrValue<BytesLike> | null
-    ): ChallengeResolvedEventFilter;
+    ): WagerResolvedEventFilter;
   };
 
   estimateGas: {
@@ -915,11 +1083,24 @@ export interface FtChallengePool extends BaseContract {
       _mediatorAmount: PromiseOrValue<BigNumberish>,
       _limit: PromiseOrValue<BigNumberish>,
       _ludexId: PromiseOrValue<BigNumberish>,
+      _verified: PromiseOrValue<boolean>,
+      _out: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    getNumDigits(
+      num: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     getRoleAdmin(
       role: PromiseOrValue<BytesLike>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    getTrimmedNumber(
+      num: PromiseOrValue<BigNumberish>,
+      digits: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -975,7 +1156,7 @@ export interface FtChallengePool extends BaseContract {
     resolve(
       id: PromiseOrValue<BytesLike>,
       mediatorVault: PromiseOrValue<string>,
-      _payment: PaymentStruct[],
+      _payment: Pool.PaymentStruct[],
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
@@ -993,6 +1174,29 @@ export interface FtChallengePool extends BaseContract {
     updateProviderDump(
       _providerDump: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    verifiedJoin(
+      id: PromiseOrValue<BytesLike>,
+      a: [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>],
+      b: [
+        [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>],
+        [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>]
+      ],
+      c: [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>],
+      input: [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>],
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    verifyProof(
+      a: [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>],
+      b: [
+        [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>],
+        [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>]
+      ],
+      c: [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>],
+      input: [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>],
+      overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     wagerCount(overrides?: CallOverrides): Promise<BigNumber>;
@@ -1023,11 +1227,24 @@ export interface FtChallengePool extends BaseContract {
       _mediatorAmount: PromiseOrValue<BigNumberish>,
       _limit: PromiseOrValue<BigNumberish>,
       _ludexId: PromiseOrValue<BigNumberish>,
+      _verified: PromiseOrValue<boolean>,
+      _out: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    getNumDigits(
+      num: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     getRoleAdmin(
       role: PromiseOrValue<BytesLike>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getTrimmedNumber(
+      num: PromiseOrValue<BigNumberish>,
+      digits: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
@@ -1083,7 +1300,7 @@ export interface FtChallengePool extends BaseContract {
     resolve(
       id: PromiseOrValue<BytesLike>,
       mediatorVault: PromiseOrValue<string>,
-      _payment: PaymentStruct[],
+      _payment: Pool.PaymentStruct[],
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -1101,6 +1318,29 @@ export interface FtChallengePool extends BaseContract {
     updateProviderDump(
       _providerDump: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    verifiedJoin(
+      id: PromiseOrValue<BytesLike>,
+      a: [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>],
+      b: [
+        [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>],
+        [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>]
+      ],
+      c: [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>],
+      input: [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>],
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    verifyProof(
+      a: [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>],
+      b: [
+        [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>],
+        [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>]
+      ],
+      c: [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>],
+      input: [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>],
+      overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     wagerCount(overrides?: CallOverrides): Promise<PopulatedTransaction>;

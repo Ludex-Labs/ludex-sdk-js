@@ -1,10 +1,10 @@
 {
-  "name": "@ludex-labs/ludex-evm-abi",
+  "name": "@ludex-labs/ludex-evm",
   "version": "1.0.0",
   "description": "",
   "main": "lib/cjs/index.js",
   "module": "lib/esm/index.js",
-  "types": "/lib/index.d.ts",
+  "types": "lib/index.d.ts",
   "scripts": {
     "build": "tsc && tsc -p tsconfig.esm.json"
   },
