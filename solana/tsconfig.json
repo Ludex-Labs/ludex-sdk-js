@@ -17,10 +17,5 @@
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true
   },
-  "include": [
-    "src",
-    "solana/challenge/index.ts",
-    "solana/nft-challenge/index.ts",
-    "solana/infinite-royal/index.ts"
-  ]
+  "include": ["index.ts"]
 }

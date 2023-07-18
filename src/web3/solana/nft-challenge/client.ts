@@ -1,26 +1,16 @@
-import BN from "bn.js";
+import BN from 'bn.js';
 
+import { NftChallenge, NftChallengeIDL as IDL } from '@ludex-labs/ludex-solana';
+import { guestIdentity, Metaplex, TokenMetadataProgram } from '@metaplex-foundation/js';
+import { AnchorProvider, Program, utils, web3 } from '@project-serum/anchor';
 import {
-  guestIdentity,
-  Metaplex,
-  TokenMetadataProgram,
-} from "@metaplex-foundation/js";
-import { AnchorProvider, Program, utils, web3 } from "@project-serum/anchor";
+  ASSOCIATED_TOKEN_PROGRAM_ID, getAssociatedTokenAddress, TOKEN_PROGRAM_ID
+} from '@solana/spl-token';
 import {
-  ASSOCIATED_TOKEN_PROGRAM_ID,
-  getAssociatedTokenAddress,
-  TOKEN_PROGRAM_ID,
-} from "@solana/spl-token";
-import {
-  Connection,
-  PublicKey,
-  SystemProgram,
-  Transaction,
-  TransactionInstruction,
-} from "@solana/web3.js";
+  Connection, PublicKey, SystemProgram, Transaction, TransactionInstruction
+} from '@solana/web3.js';
 
-import { createFakeWallet, Wallet } from "../utils";
-import { IDL, NftChallenge } from "./";
+import { createFakeWallet, Wallet } from '../utils';
 
 export type Offering = {
   publicKey: PublicKey;

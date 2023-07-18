@@ -1,9 +1,9 @@
-import { AnchorProvider, Program, web3 } from "@project-serum/anchor";
-import { WalletAdapterProps } from "@solana/wallet-adapter-base";
-import { PublicKey } from "@solana/web3.js";
+import { Challenge as IDL_TYPE, ChallengeIDL as IDL } from '@ludex-labs/ludex-solana';
+import { AnchorProvider, Program, web3 } from '@project-serum/anchor';
+import { WalletAdapterProps } from '@solana/wallet-adapter-base';
+import { PublicKey } from '@solana/web3.js';
 
-import { createFakeWallet, Wallet } from "../utils";
-import { Challenge as IDL_TYPE, IDL } from "./";
+import { createFakeWallet, Wallet } from '../utils';
 
 export const CHALLENGE_PROGRAM_ID =
   "BuPvutSnk9NdTZHFiA6UZm6oPwGszp6ozMwoAgJMDBGR";

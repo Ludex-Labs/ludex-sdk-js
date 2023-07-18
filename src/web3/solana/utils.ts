@@ -1,12 +1,9 @@
-import { web3 } from "@project-serum/anchor";
-import { createSyncNativeInstruction } from "@solana/spl-token";
-import {
-  Connection,
-  Keypair,
-  PublicKey,
-  SolanaJSONRPCError,
-  Transaction,
-} from "@solana/web3.js";
+import { Challenge as IDL_TYPE, ChallengeIDL as IDL } from '@ludex-labs/ludex-solana';
+import { AnchorProvider, Program, web3 } from '@project-serum/anchor';
+import { createSyncNativeInstruction } from '@solana/spl-token';
+import { Connection, Keypair, PublicKey, SolanaJSONRPCError, Transaction } from '@solana/web3.js';
+
+import { CHALLENGE_PROGRAM_ID, DEVNET_CHALLENGE_PROGRAM_ID } from './challenge/client';
 
 export interface Wallet {
   signTransaction(tx: Transaction): Promise<Transaction>;
@@ -54,5 +51,23 @@ export const transferWrappedSol = (
       lamports: amount,
     }),
     createSyncNativeInstruction(associatedTokenAccount)
+  );
+};
+
+export const getProgram = (connection: Connection, cluster?: string) => {
+  let programAddress = CHALLENGE_PROGRAM_ID;
+
+  if (cluster?.toLowerCase() === "devnet") {
+    programAddress = DEVNET_CHALLENGE_PROGRAM_ID;
+  }
+
+  return new Program<IDL_TYPE>(
+    IDL,
+    programAddress,
+    new AnchorProvider(
+      connection,
+      createFakeWallet(),
+      AnchorProvider.defaultOptions()
+    )
   );
 };
