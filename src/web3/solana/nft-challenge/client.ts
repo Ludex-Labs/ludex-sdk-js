@@ -7,7 +7,8 @@ import {
   ASSOCIATED_TOKEN_PROGRAM_ID, getAssociatedTokenAddress, TOKEN_PROGRAM_ID
 } from '@solana/spl-token';
 import {
-  Connection, PublicKey, SystemProgram, Transaction, TransactionInstruction
+    ConfirmOptions,
+    Connection, PublicKey, sendAndConfirmTransaction, SystemProgram, Transaction, TransactionInstruction
 } from '@solana/web3.js';
 
 import { createFakeWallet, Wallet } from '../utils';
@@ -523,17 +524,11 @@ export class NftChallengeTXClient {
     return this.tx;
   }
 
-  async send(signers: web3.Signer[]) {
+  async send(signers: web3.Signer[], opts?: ConfirmOptions) {
     const instructions = await Promise.all(this.tasks);
     this.tx.add(...instructions);
-    const sig = await this.connection.sendTransaction(this.tx, signers);
-    const latestBlockHash = await this.connection.getLatestBlockhash();
-    await this.connection.confirmTransaction({
-      signature: sig,
-      blockhash: latestBlockHash.blockhash,
-      lastValidBlockHeight: latestBlockHash.lastValidBlockHeight,
-    });
-    return sig;
+    this.tx.recentBlockhash = (await this.connection.getLatestBlockhash()).blockhash;
+    return sendAndConfirmTransaction(this.connection, this.tx, signers, opts);
   }
 
   async getSerializedTx() {
