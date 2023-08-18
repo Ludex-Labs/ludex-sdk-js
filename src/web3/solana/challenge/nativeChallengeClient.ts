@@ -1,7 +1,7 @@
 import { Challenge as IDL_TYPE, ChallengeIDL as IDL } from '@ludex-labs/ludex-solana';
 import { AnchorProvider, Program, web3 } from '@project-serum/anchor';
 import { WalletAdapterProps } from '@solana/wallet-adapter-base';
-import { PublicKey } from '@solana/web3.js';
+import {ConfirmOptions, PublicKey, sendAndConfirmTransaction} from '@solana/web3.js';
 
 import { createFakeWallet, Wallet } from '../utils';
 
@@ -128,17 +128,11 @@ export class NativeChallengeTXClient {
     return this.tx;
   }
 
-  async send(signers: web3.Signer[]) {
+  async send(signers: web3.Signer[], opts?: ConfirmOptions) {
     const instructions = await Promise.all(this.tasks);
     this.tx.add(...instructions);
-    const sig = await this.connection.sendTransaction(this.tx, signers);
-    const latestBlockHash = await this.connection.getLatestBlockhash();
-    await this.connection.confirmTransaction({
-      signature: sig,
-      blockhash: latestBlockHash.blockhash,
-      lastValidBlockHeight: latestBlockHash.lastValidBlockHeight,
-    });
-    return sig;
+    this.tx.recentBlockhash = (await this.connection.getLatestBlockhash()).blockhash;
+    return sendAndConfirmTransaction(this.connection, this.tx, signers, opts);
   }
 
   async sendWithSendTranstion(
