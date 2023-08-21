@@ -1,5 +1,5 @@
 export type Challenge = {
-  "version": "0.1.93",
+  "version": "0.1.110",
   "name": "challenge",
   "instructions": [
     {
@@ -1498,7 +1498,7 @@ export type Challenge = {
             "type": "u8"
           },
           {
-            "name": "auth",
+            "name": "authority",
             "type": "publicKey"
           },
           {
@@ -1506,7 +1506,7 @@ export type Challenge = {
             "type": "publicKey"
           },
           {
-            "name": "amount",
+            "name": "entryFee",
             "type": "u64"
           },
           {
@@ -1891,7 +1891,7 @@ export type Challenge = {
 };
 
 export const IDL: Challenge = {
-  "version": "0.1.93",
+  "version": "0.1.110",
   "name": "challenge",
   "instructions": [
     {
@@ -3390,7 +3390,7 @@ export const IDL: Challenge = {
             "type": "u8"
           },
           {
-            "name": "auth",
+            "name": "authority",
             "type": "publicKey"
           },
           {
@@ -3398,7 +3398,7 @@ export const IDL: Challenge = {
             "type": "publicKey"
           },
           {
-            "name": "amount",
+            "name": "entryFee",
             "type": "u64"
           },
           {

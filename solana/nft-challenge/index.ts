@@ -1,5 +1,5 @@
 export type NftChallenge = {
-  "version": "0.1.50",
+  "version": "0.1.95",
   "name": "nft_challenge",
   "instructions": [
     {
@@ -17,7 +17,7 @@ export type NftChallenge = {
           "isSigner": true
         },
         {
-          "name": "manager",
+          "name": "provider",
           "isMut": true,
           "isSigner": true
         },
@@ -128,7 +128,7 @@ export type NftChallenge = {
           "isSigner": true
         },
         {
-          "name": "manager",
+          "name": "provider",
           "isMut": false,
           "isSigner": false
         },
@@ -780,11 +780,11 @@ export type NftChallenge = {
         "kind": "struct",
         "fields": [
           {
-            "name": "updateAuthority",
+            "name": "authority",
             "type": "publicKey"
           },
           {
-            "name": "feeVault",
+            "name": "vault",
             "type": "publicKey"
           },
           {
@@ -800,7 +800,7 @@ export type NftChallenge = {
         "kind": "struct",
         "fields": [
           {
-            "name": "manager",
+            "name": "provider",
             "type": "publicKey"
           },
           {
@@ -808,11 +808,11 @@ export type NftChallenge = {
             "type": "publicKey"
           },
           {
-            "name": "limit",
+            "name": "playersLimit",
             "type": "u8"
           },
           {
-            "name": "currentAmountJoined",
+            "name": "currentNumberJoined",
             "type": "u8"
           },
           {
@@ -820,7 +820,7 @@ export type NftChallenge = {
             "type": "bool"
           },
           {
-            "name": "offerings",
+            "name": "offeringsCount",
             "type": "u8"
           },
           {
@@ -848,7 +848,7 @@ export type NftChallenge = {
         "kind": "struct",
         "fields": [
           {
-            "name": "game",
+            "name": "challenge",
             "type": "publicKey"
           },
           {
@@ -914,7 +914,7 @@ export type NftChallenge = {
             "type": "publicKey"
           },
           {
-            "name": "game",
+            "name": "challenge",
             "type": "publicKey"
           },
           {
@@ -985,60 +985,100 @@ export type NftChallenge = {
   ],
   "errors": [
     {
-      "code": 6000,
+      "code": 6100,
       "name": "Unauthorized",
       "msg": "You are not admin for this provider"
     },
     {
-      "code": 6001,
-      "name": "NotPaidYet",
-      "msg": "Not all of the payments have been paid yet"
+      "code": 6101,
+      "name": "ProviderUnauthorizedChallenge",
+      "msg": "The provider is not authorized for this challenge"
     },
     {
-      "code": 6002,
-      "name": "PaymentOfferingMissmatch",
-      "msg": "Payment and offering Missmatch"
+      "code": 6102,
+      "name": "MediatorUnauthorizedChallenge",
+      "msg": "The mediator is not authorized for this challenge"
     },
     {
-      "code": 6003,
-      "name": "IncorrectNftDestination",
-      "msg": "Nft destination incorrect"
+      "code": 6200,
+      "name": "ChallengeNotAccepted",
+      "msg": "Challenge hasn't been accepted by all the players"
     },
     {
-      "code": 6004,
-      "name": "InvalidDestination",
-      "msg": "Asset destination incorrect"
+      "code": 6201,
+      "name": "ChallengeFull",
+      "msg": "Challenge is full"
     },
     {
-      "code": 6005,
-      "name": "IsNotSolOffering",
-      "msg": "Is not sol offering"
+      "code": 6220,
+      "name": "InvalidPlayerTokenAccount",
+      "msg": "The provided player token account does not match"
     },
     {
-      "code": 6006,
-      "name": "PublicKeyMismatch",
-      "msg": "PublicKey Mismatch"
+      "code": 6221,
+      "name": "PlayerUnauthorized",
+      "msg": "The signer doesn't have the authority over the player"
     },
     {
-      "code": 6007,
-      "name": "NotFreezable",
-      "msg": "Is not freezable"
+      "code": 6222,
+      "name": "PlayerAlreadyAccepted",
+      "msg": "The player has already accepted"
     },
     {
-      "code": 6008,
+      "code": 6223,
+      "name": "PlayerGameMissmatch",
+      "msg": "The player and game don't match"
+    },
+    {
+      "code": 6230,
       "name": "Escrowed",
       "msg": "Offering is escrowed"
     },
     {
-      "code": 6009,
+      "code": 6231,
       "name": "NotEscrowed",
       "msg": "Offering is not escrowed"
+    },
+    {
+      "code": 6232,
+      "name": "NotFreezable",
+      "msg": "Is not freezable"
+    },
+    {
+      "code": 6240,
+      "name": "NotPaidYet",
+      "msg": "Not all of the payments have been paid yet"
+    },
+    {
+      "code": 6241,
+      "name": "PaymentOfferingMissmatch",
+      "msg": "Payment and offering Missmatch"
+    },
+    {
+      "code": 6242,
+      "name": "IncorrectNftDestination",
+      "msg": "Nft destination incorrect"
+    },
+    {
+      "code": 6243,
+      "name": "InvalidDestination",
+      "msg": "Asset destination incorrect"
+    },
+    {
+      "code": 6244,
+      "name": "IsNotSolOffering",
+      "msg": "Is not sol offering"
+    },
+    {
+      "code": 6245,
+      "name": "PublicKeyMismatch",
+      "msg": "PublicKey Mismatch"
     }
   ]
 };
 
 export const IDL: NftChallenge = {
-  "version": "0.1.50",
+  "version": "0.1.95",
   "name": "nft_challenge",
   "instructions": [
     {
@@ -1056,7 +1096,7 @@ export const IDL: NftChallenge = {
           "isSigner": true
         },
         {
-          "name": "manager",
+          "name": "provider",
           "isMut": true,
           "isSigner": true
         },
@@ -1167,7 +1207,7 @@ export const IDL: NftChallenge = {
           "isSigner": true
         },
         {
-          "name": "manager",
+          "name": "provider",
           "isMut": false,
           "isSigner": false
         },
@@ -1819,11 +1859,11 @@ export const IDL: NftChallenge = {
         "kind": "struct",
         "fields": [
           {
-            "name": "updateAuthority",
+            "name": "authority",
             "type": "publicKey"
           },
           {
-            "name": "feeVault",
+            "name": "vault",
             "type": "publicKey"
           },
           {
@@ -1839,7 +1879,7 @@ export const IDL: NftChallenge = {
         "kind": "struct",
         "fields": [
           {
-            "name": "manager",
+            "name": "provider",
             "type": "publicKey"
           },
           {
@@ -1847,11 +1887,11 @@ export const IDL: NftChallenge = {
             "type": "publicKey"
           },
           {
-            "name": "limit",
+            "name": "playersLimit",
             "type": "u8"
           },
           {
-            "name": "currentAmountJoined",
+            "name": "currentNumberJoined",
             "type": "u8"
           },
           {
@@ -1859,7 +1899,7 @@ export const IDL: NftChallenge = {
             "type": "bool"
           },
           {
-            "name": "offerings",
+            "name": "offeringsCount",
             "type": "u8"
           },
           {
@@ -1887,7 +1927,7 @@ export const IDL: NftChallenge = {
         "kind": "struct",
         "fields": [
           {
-            "name": "game",
+            "name": "challenge",
             "type": "publicKey"
           },
           {
@@ -1953,7 +1993,7 @@ export const IDL: NftChallenge = {
             "type": "publicKey"
           },
           {
-            "name": "game",
+            "name": "challenge",
             "type": "publicKey"
           },
           {
@@ -2024,54 +2064,94 @@ export const IDL: NftChallenge = {
   ],
   "errors": [
     {
-      "code": 6000,
+      "code": 6100,
       "name": "Unauthorized",
       "msg": "You are not admin for this provider"
     },
     {
-      "code": 6001,
-      "name": "NotPaidYet",
-      "msg": "Not all of the payments have been paid yet"
+      "code": 6101,
+      "name": "ProviderUnauthorizedChallenge",
+      "msg": "The provider is not authorized for this challenge"
     },
     {
-      "code": 6002,
-      "name": "PaymentOfferingMissmatch",
-      "msg": "Payment and offering Missmatch"
+      "code": 6102,
+      "name": "MediatorUnauthorizedChallenge",
+      "msg": "The mediator is not authorized for this challenge"
     },
     {
-      "code": 6003,
-      "name": "IncorrectNftDestination",
-      "msg": "Nft destination incorrect"
+      "code": 6200,
+      "name": "ChallengeNotAccepted",
+      "msg": "Challenge hasn't been accepted by all the players"
     },
     {
-      "code": 6004,
-      "name": "InvalidDestination",
-      "msg": "Asset destination incorrect"
+      "code": 6201,
+      "name": "ChallengeFull",
+      "msg": "Challenge is full"
     },
     {
-      "code": 6005,
-      "name": "IsNotSolOffering",
-      "msg": "Is not sol offering"
+      "code": 6220,
+      "name": "InvalidPlayerTokenAccount",
+      "msg": "The provided player token account does not match"
     },
     {
-      "code": 6006,
-      "name": "PublicKeyMismatch",
-      "msg": "PublicKey Mismatch"
+      "code": 6221,
+      "name": "PlayerUnauthorized",
+      "msg": "The signer doesn't have the authority over the player"
     },
     {
-      "code": 6007,
-      "name": "NotFreezable",
-      "msg": "Is not freezable"
+      "code": 6222,
+      "name": "PlayerAlreadyAccepted",
+      "msg": "The player has already accepted"
     },
     {
-      "code": 6008,
+      "code": 6223,
+      "name": "PlayerGameMissmatch",
+      "msg": "The player and game don't match"
+    },
+    {
+      "code": 6230,
       "name": "Escrowed",
       "msg": "Offering is escrowed"
     },
     {
-      "code": 6009,
+      "code": 6231,
       "name": "NotEscrowed",
       "msg": "Offering is not escrowed"
+    },
+    {
+      "code": 6232,
+      "name": "NotFreezable",
+      "msg": "Is not freezable"
+    },
+    {
+      "code": 6240,
+      "name": "NotPaidYet",
+      "msg": "Not all of the payments have been paid yet"
+    },
+    {
+      "code": 6241,
+      "name": "PaymentOfferingMissmatch",
+      "msg": "Payment and offering Missmatch"
+    },
+    {
+      "code": 6242,
+      "name": "IncorrectNftDestination",
+      "msg": "Nft destination incorrect"
+    },
+    {
+      "code": 6243,
+      "name": "InvalidDestination",
+      "msg": "Asset destination incorrect"
+    },
+    {
+      "code": 6244,
+      "name": "IsNotSolOffering",
+      "msg": "Is not sol offering"
+    },
+    {
+      "code": 6245,
+      "name": "PublicKeyMismatch",
+      "msg": "PublicKey Mismatch"
     }
   ]
 };
