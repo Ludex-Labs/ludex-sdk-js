@@ -7,11 +7,25 @@ OPTIND=1         # Reset in case getopts has been used previously in the shell.
 use_ssh=0
 git_pathspec=main
 
-while getopts "sg:" opt; do
+read -r -d '' help_msg <<- EOF
+Usage: $0 [-s] [-g <git pathspec>] [<newversion> | major | minor | patch | premajor | preminor | prepatch | prerelease | from-git ]
+
+  <newversion> package version to set after updating, default: patch
+
+  -s use ssh, clones the evm_ftwagers repo using ssh instead of https
+
+  -g git pathspec, the tag, branch, commit hash to update from, default: main
+EOF
+
+while getopts "sg:h" opt; do
   case "$opt" in
     s)  use_ssh=1
       ;;
     g)  git_pathspec=$OPTARG
+      ;;
+    h)
+        echo "$help_msg"
+        exit 0
       ;;
   esac
 done
