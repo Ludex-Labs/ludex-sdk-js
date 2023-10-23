@@ -1,26 +1,18 @@
 {
   "compilerOptions": {
-    "outDir": "lib/cjs",
-    "target": "es2018",
-    "module": "CommonJS",
-    "moduleResolution": "Node",
-    "declaration": false,
-    "forceConsistentCasingInFileNames": true,
-    "noFallthroughCasesInSwitch": true,
-    "strict": true,
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "noImplicitReturns": true,
-    "noUnusedParameters": true,
-    "noUnusedLocals": true,
-    "skipLibCheck": true,
-    "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true
+      "module": "commonjs",
+      "esModuleInterop": true,
+      "target": "es6",
+      "noImplicitAny": true,
+      "moduleResolution": "node",
+      "declaration": true,
+      "sourceMap": true,
+      "outDir": "dist",
+      "baseUrl": ".",
+      "resolveJsonModule": true,
+      "skipLibCheck": true
   },
   "include": [
-    "src",
-    "solana/challenge/index.ts",
-    "solana/nft-challenge/index.ts",
-    "solana/infinite-royal/index.ts"
+      "./src/**/*"
   ]
 }
