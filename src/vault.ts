@@ -34,10 +34,14 @@ interface UpdateVaultRequest {
 }
 
 enum RedeemType {
-  native = "native", // just native redeem
-  nativeForTokens = "nativeForTokens", // pay tokens to get native
-  tokensForNative = "tokensForNative", // pay native to get tokens
-  tokensForTokens = "tokensForTokens", // pay tokens to get tokens
+  /** just native redeem */
+  native = "native",
+  /** pay tokens to get native */
+  nativeForTokens = "nativeForTokens",
+  /** pay native to get tokens */
+  tokensForNative = "tokensForNative",
+  /** pay tokens to get tokens */
+  tokensForTokens = "tokensForTokens",
 }
 interface GenerateTransactionRequest {
   /** chain of vault */
