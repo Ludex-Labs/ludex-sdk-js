@@ -1,7 +1,7 @@
 import { ApiClient } from "./apiClient";
 import { AxiosOptions } from "./types";
 
-/** Chains vault is currently supported */
+/** Chains vault is currently supporting */
 type CHAIN = "SOLANA";
 
 interface VaultResponse {
