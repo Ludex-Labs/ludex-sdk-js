@@ -35,7 +35,7 @@ export class Payout {
    * @param payoutId payout id
    * @returns payout
    */
-  async getPayout(payoutId: string): Promise<PayoutResponse> {
+  async getPayout(payoutId: number): Promise<PayoutResponse> {
     return this.apiClient.issueGetRequest(`/${payoutId}`);
   }
 

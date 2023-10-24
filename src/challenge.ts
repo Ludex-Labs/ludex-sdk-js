@@ -156,7 +156,7 @@ export class Challenge {
    * @param challengeId challenge id
    * @returns challenge
    */
-  public async getChallenge(challengeId: string): Promise<ChallengeResponse> {
+  public async getChallenge(challengeId: number): Promise<ChallengeResponse> {
     return this.apiClient.issueGetRequest<ChallengeResponse>(`/${challengeId}`);
   }
 

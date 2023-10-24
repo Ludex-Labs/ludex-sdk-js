@@ -55,7 +55,7 @@ export class Client {
    * @param clientId client id
    * @returns client
    */
-  async getClient(clientId: string): Promise<ClientResponse> {
+  async getClient(clientId: number): Promise<ClientResponse> {
     return this.apiClient.issueGetRequest<ClientResponse>(`/${clientId}`);
   }
 
@@ -82,7 +82,7 @@ export class Client {
    * @returns open challenge count
    */
   async getOpenChallengeCount(
-    clientId: string
+    clientId: number
   ): Promise<OpenChallengeCountResponse> {
     return this.apiClient.issueGetRequest<OpenChallengeCountResponse>(
       `/${clientId}/open-challenge-count`
@@ -96,7 +96,7 @@ export class Client {
    * @returns client
    */
   async updateClientWallet(
-    clientId: string,
+    clientId: number,
     wallet: ClientWallet
   ): Promise<ClientResponse> {
     return this.apiClient.issuePatchRequest<ClientResponse>(
@@ -110,7 +110,7 @@ export class Client {
    * @param clientId client id
    * @returns client id of deleted client
    */
-  async deleteClient(clientId: string): Promise<DeleteClientResponse> {
+  async deleteClient(clientId: number): Promise<DeleteClientResponse> {
     return this.apiClient.issueDeleteRequest<DeleteClientResponse>(
       `/${clientId}`
     );

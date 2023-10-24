@@ -5,8 +5,8 @@ import { AxiosOptions } from "./types";
 import { Vault } from "./vault";
 
 class OrganizationScoped {
-  clientApi: Client;
-  payoutApi: Payout;
+  client: Client;
+  payout: Payout;
 
   /**
    * Create organization scoped api client
@@ -18,30 +18,14 @@ class OrganizationScoped {
     public readonly organizationApiKey: string,
     options?: AxiosOptions
   ) {
-    this.clientApi = new Client(organizationApiKey, options);
-    this.payoutApi = new Payout(organizationApiKey, options);
-  }
-
-  /**
-   * Get client api client
-   * @returns client api client
-   */
-  public client(): Client {
-    return this.clientApi;
-  }
-
-  /**
-   * Get payout api client
-   * @returns payout api client
-   */
-  public payout(): Payout {
-    return this.payoutApi;
+    this.client = new Client(organizationApiKey, options);
+    this.payout = new Payout(organizationApiKey, options);
   }
 }
 
 class ClientScoped {
-  challengeApi: Challenge;
-  vaultApi: Vault;
+  challenge: Challenge;
+  vault: Vault;
 
   /**
    * Create client scoped api client
@@ -50,24 +34,8 @@ class ClientScoped {
    * @returns client scoped api client
    */
   constructor(clientApiKey: string, options?: AxiosOptions) {
-    this.challengeApi = new Challenge(clientApiKey, options);
-    this.vaultApi = new Vault(clientApiKey, options);
-  }
-
-  /**
-   * Get challenge api client
-   * @returns challenge api client
-   */
-  public challenge(): Challenge {
-    return this.challengeApi;
-  }
-
-  /**
-   * Get vault api client
-   * @returns vault api client
-   */
-  public vault(): Vault {
-    return this.vaultApi;
+    this.challenge = new Challenge(clientApiKey, options);
+    this.vault = new Vault(clientApiKey, options);
   }
 }
 
