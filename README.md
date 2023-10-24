@@ -21,6 +21,8 @@ Organization Api key for organization scoped API's
 
 Client Api key for client scoped API's
 
+For further information on how to get api keys checkout our [docs](https://docs.ludex.gg/dashboard/get-your-api-keys)
+
 #### Requirements
 
 - [Node.js](https://nodejs.org) v16 or higher.
