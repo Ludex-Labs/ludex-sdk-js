@@ -31,16 +31,22 @@ export class ApiClient {
   }
 
   private getUserAgent(): string {
-    let userAgent = `ludex-sdk-js/${SDK_VERSION}`;
-    if (!this.options?.anonymousPlatform) {
-      userAgent += ` (${os.type()} ${os.release()}; ${platform.name} ${
-        platform.version
-      }; ${os.arch()})`;
+    try {
+      let userAgent = `ludex-sdk-js/${SDK_VERSION}`;
+      if (!this.options?.anonymousPlatform) {
+        userAgent += ` (${os.type()} ${os.release()}; ${platform.name} ${
+          platform.version
+        }; ${os.arch()})`;
+      }
+      if (this.options?.userAgent) {
+        userAgent = `${this.options.userAgent} ${userAgent}`;
+      }
+      return userAgent;
+    } catch (e) {
+      throw new Error(
+        "Error getting user agent: You might be trying to use this in a browser environment"
+      );
     }
-    if (this.options?.userAgent) {
-      userAgent = `${this.options.userAgent} ${userAgent}`;
-    }
-    return userAgent;
   }
 
   public async issueGetRequest<T>(path: string): Promise<T> {
