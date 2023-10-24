@@ -3,7 +3,7 @@ import { AxiosOptions } from "./types";
 
 interface ChallengeResponse {
   /** challenge id */
-  id: number;
+  challengeId: number;
   /** payout */
   payout: {
     /** payout id */
@@ -95,14 +95,14 @@ interface LeaveChallengeResponse {
 
 interface LockChallengeResponse {
   /** the challenge id that has been queued to be locked */
-  id: number;
+  challengeId: number;
   /** timestamp when event has been queued */
   lockingAt: string;
 }
 
 interface CancelChallengeResponse {
   /** the challenge id that has been queued to be locked */
-  id: number;
+  challengeId: number;
   /** timestamp when event has been queued */
   cancelingAt: string;
 }
@@ -130,7 +130,7 @@ interface NonFungibleTokenPayout {
 
 interface ResolveChallengeResponse {
   /** id of challenge */
-  id: number;
+  challengeId: number;
   /** payout of the challenge */
   payout: FungibleTokenPayout[] | NonFungibleTokenPayout[];
   /** timestamp of when event was queued */
