@@ -1,6 +1,8 @@
 import { AxiosProxyConfig, AxiosResponse } from "axios";
 
 export interface AxiosOptions {
+  /** Base url instead of api.ludex */
+  baseUrl?: string;
   /** HTTP request timeout */
   timeoutInMs?: number;
   /** Proxy configurations */

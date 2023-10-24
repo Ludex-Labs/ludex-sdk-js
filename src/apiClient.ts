@@ -4,6 +4,8 @@ import axios, { AxiosInstance } from "axios";
 import { version as SDK_VERSION } from "../package.json";
 import { AxiosOptions } from "./types";
 
+const LUDEX_API = "https://api.ludex";
+
 export class ApiClient {
   private axiosInstance: AxiosInstance;
   private options?: AxiosOptions;
@@ -11,7 +13,7 @@ export class ApiClient {
   constructor(apikey: string, apiBaseUrl: string, options?: AxiosOptions) {
     this.options = options;
     this.axiosInstance = axios.create({
-      baseURL: apiBaseUrl,
+      baseURL: `${options.baseUrl && LUDEX_API}${apiBaseUrl}`,
       proxy: options?.proxy,
       timeout: options?.timeoutInMs,
       headers: {
