@@ -1,8 +1,8 @@
 import { Challenge } from "./challenge";
 import { Client } from "./client";
 import { Payout } from "./payout";
-import { AxiosOptions } from "./types";
 import { Vault } from "./vault";
+import { AxiosOptions } from "./types";
 
 class OrganizationScoped {
   client: Client;

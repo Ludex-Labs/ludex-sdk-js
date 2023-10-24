@@ -19,6 +19,13 @@ export class ApiClient {
         "User-Agent": this.getUserAgent(),
       },
     });
+
+    if (options?.customAxiosOptions?.interceptors?.response) {
+      this.axiosInstance.interceptors.response.use(
+        options.customAxiosOptions.interceptors.response.onFulfilled,
+        options.customAxiosOptions.interceptors.response.onRejected
+      );
+    }
   }
 
   private getUserAgent(): string {

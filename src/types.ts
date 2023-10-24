@@ -1,4 +1,4 @@
-import { AxiosProxyConfig } from "axios";
+import { AxiosProxyConfig, AxiosResponse } from "axios";
 
 export interface AxiosOptions {
   /** HTTP request timeout */
@@ -9,4 +9,16 @@ export interface AxiosOptions {
   anonymousPlatform?: boolean;
   /** Additional product identifier to be prepended to the User-Agent header */
   userAgent?: string;
+
+  /** Providing custom axios options including a response interceptor (https://axios-http.com/docs/interceptors) */
+  customAxiosOptions?: {
+    interceptors?: {
+      response?: {
+        onFulfilled: (
+          value: AxiosResponse<any, any>
+        ) => AxiosResponse<any, any> | Promise<AxiosResponse<any, any>>;
+        onRejected: (error: any) => any;
+      };
+    };
+  };
 }
