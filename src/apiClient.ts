@@ -13,7 +13,7 @@ export class ApiClient {
   constructor(apikey: string, apiBaseUrl: string, options?: AxiosOptions) {
     this.options = options;
     this.axiosInstance = axios.create({
-      baseURL: `${options.baseUrl || LUDEX_API}${apiBaseUrl}`,
+      baseURL: `${options?.baseUrl || LUDEX_API}${apiBaseUrl}`,
       proxy: options?.proxy,
       timeout: options?.timeoutInMs,
       headers: {
