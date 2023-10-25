@@ -12,6 +12,7 @@ export class ApiClient {
 
   constructor(apikey: string, apiBaseUrl: string, options?: AxiosOptions) {
     this.options = options;
+
     this.axiosInstance = axios.create({
       baseURL: `${options?.baseUrl || LUDEX_API}${apiBaseUrl}`,
       proxy: options?.proxy,
@@ -43,9 +44,10 @@ export class ApiClient {
       }
       return userAgent;
     } catch (e) {
-      throw new Error(
+      console.error(
         "Error getting user agent: You might be trying to use this in a browser environment"
       );
+      return;
     }
   }
 
