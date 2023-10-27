@@ -1,5 +1,6 @@
 import { ApiClient } from "./apiClient";
 import { AxiosOptions } from "./types";
+import {AxiosResponse} from "axios";
 
 interface ChallengeResponse {
   /** challenge id */
@@ -156,7 +157,7 @@ export class Challenge {
    * @param challengeId challenge id
    * @returns challenge
    */
-  public async getChallenge(challengeId: number): Promise<ChallengeResponse> {
+  public async getChallenge(challengeId: number): Promise<AxiosResponse<ChallengeResponse>> {
     return this.apiClient.issueGetRequest<ChallengeResponse>(`/${challengeId}`);
   }
 
@@ -164,7 +165,7 @@ export class Challenge {
    * Get challenges
    * @returns challenges
    */
-  public async getChallenges(): Promise<ChallengeResponse[]> {
+  public async getChallenges(): Promise<AxiosResponse<ChallengeResponse[]>> {
     return this.apiClient.issueGetRequest<ChallengeResponse[]>("/");
   }
 
@@ -175,7 +176,7 @@ export class Challenge {
    */
   public async createChallenge(
     challenge: CreateChallengeRequest
-  ): Promise<CreateChallengeResponse> {
+  ): Promise<AxiosResponse<CreateChallengeResponse>> {
     return this.apiClient.issuePostRequest<CreateChallengeResponse>(
       "/",
       challenge
@@ -189,7 +190,7 @@ export class Challenge {
    */
   public async generateJoin(
     joinChallenge: JoinChallengeRequest
-  ): Promise<JoinChallengeResponse> {
+  ): Promise<AxiosResponse<JoinChallengeResponse>> {
     const { challengeId, ...joinChallengeBody } = joinChallenge;
     return this.apiClient.issuePostRequest<JoinChallengeResponse>(
       `/${challengeId}/join`,
@@ -204,7 +205,7 @@ export class Challenge {
    */
   public async generateLeave(
     leaveChallenge: LeaveChallengeRequest
-  ): Promise<LeaveChallengeResponse> {
+  ): Promise<AxiosResponse<LeaveChallengeResponse>> {
     const { challengeId, ...leaveChallengeBody } = leaveChallenge;
     return this.apiClient.issuePostRequest<LeaveChallengeResponse>(
       `/${challengeId}/leave`,
@@ -219,7 +220,7 @@ export class Challenge {
    */
   public async lockChallenge(
     challengeId: string
-  ): Promise<LockChallengeResponse> {
+  ): Promise<AxiosResponse<LockChallengeResponse>> {
     return this.apiClient.issuePatchRequest<LockChallengeResponse>(
       `/${challengeId}/lock`,
       {}
@@ -233,7 +234,7 @@ export class Challenge {
    */
   public async cancelChallenge(
     challengeId: string
-  ): Promise<CancelChallengeResponse> {
+  ): Promise<AxiosResponse<CancelChallengeResponse>> {
     return this.apiClient.issuePatchRequest<CancelChallengeResponse>(
       `/${challengeId}/cancel`,
       {}
@@ -247,7 +248,7 @@ export class Challenge {
    */
   public async resolveChallenge(
     resolveChallenge: ResolveChallengeRequest
-  ): Promise<ResolveChallengeResponse> {
+  ): Promise<AxiosResponse<ResolveChallengeResponse>> {
     const { challengeId, ...resolveChallengeBody } = resolveChallenge;
     return this.apiClient.issuePatchRequest<ResolveChallengeResponse>(
       `/${challengeId}/resolve`,

@@ -1,5 +1,6 @@
 import { ApiClient } from "./apiClient";
 import { AxiosOptions } from "./types";
+import {AxiosResponse} from "axios";
 
 interface PayoutResponse {
   /** Payout id */
@@ -35,7 +36,7 @@ export class Payout {
    * @param payoutId payout id
    * @returns payout
    */
-  async getPayout(payoutId: number): Promise<PayoutResponse> {
+  async getPayout(payoutId: number): Promise<AxiosResponse<PayoutResponse>> {
     return this.apiClient.issueGetRequest(`/${payoutId}`);
   }
 
@@ -43,7 +44,7 @@ export class Payout {
    * Get payouts
    * @returns payouts
    */
-  async getPayouts(): Promise<PayoutResponse[]> {
+  async getPayouts(): Promise<AxiosResponse<PayoutResponse[]>> {
     return this.apiClient.issueGetRequest("/");
   }
 }

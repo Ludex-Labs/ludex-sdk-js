@@ -125,3 +125,19 @@ You can get more data on the Ludex error using the following fields:
 
 - `error.response.data.code`: The Ludex error code (HTTP code)
 - `error.response.data.message`: Explanation of the Ludex error
+
+
+#### Response Handling
+
+The SDK returns an [AxiosResponse](https://axios-http.com/docs/res_schema) upon successful API requests.
+
+```json
+{
+  "data": {},
+  "status": 200,
+  "statusText": "OK",
+  "headers": {},
+  "config": {},
+  "request": {}
+}
+```

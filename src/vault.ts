@@ -1,5 +1,6 @@
 import { ApiClient } from "./apiClient";
 import { AxiosOptions } from "./types";
+import {AxiosResponse} from "axios";
 
 /** Chains vault is currently supporting */
 type CHAIN = "SOLANA";
@@ -97,7 +98,7 @@ export class Vault {
    * @param chain chain of vault
    * @returns vault
    */
-  async getVault(chain: CHAIN): Promise<VaultResponse> {
+  async getVault(chain: CHAIN): Promise<AxiosResponse<VaultResponse>> {
     return this.apiClient.issueGetRequest<VaultResponse>(`/${chain}`);
   }
 
@@ -106,7 +107,7 @@ export class Vault {
    * @param vault vault
    * @returns vault
    */
-  async createVault(vault: CreateVaultRequest): Promise<VaultResponse> {
+  async createVault(vault: CreateVaultRequest): Promise<AxiosResponse<VaultResponse>> {
     return this.apiClient.issuePostRequest<VaultResponse>("/", vault);
   }
 
@@ -115,7 +116,7 @@ export class Vault {
    * @param vault vault
    * @returns vault
    */
-  async updateVault(vault: UpdateVaultRequest): Promise<VaultResponse> {
+  async updateVault(vault: UpdateVaultRequest): Promise<AxiosResponse<VaultResponse>> {
     const { chain, ...vaultBody } = vault;
     return this.apiClient.issuePatchRequest<VaultResponse>(
       `/${chain}`,
@@ -130,7 +131,7 @@ export class Vault {
    */
   async generateTransaction(
     transaction: GenerateTransactionRequest
-  ): Promise<GenerateTransactionResponse> {
+  ): Promise<AxiosResponse<GenerateTransactionResponse>> {
     const { chain, ...transactionBody } = transaction;
     return this.apiClient.issuePostRequest<GenerateTransactionResponse>(
       `/${chain}/transaction`,
@@ -143,7 +144,7 @@ export class Vault {
    * @param chain chain of vault
    * @returns transactions
    */
-  async getTransactions(chain: CHAIN): Promise<TransactionResponse[]> {
+  async getTransactions(chain: CHAIN): Promise<AxiosResponse<TransactionResponse[]>> {
     return this.apiClient.issueGetRequest<TransactionResponse[]>(
       `/${chain}/transaction`
     );
@@ -158,7 +159,7 @@ export class Vault {
   async getTransaction(
     chain: CHAIN,
     transactionId: string
-  ): Promise<TransactionResponse> {
+  ): Promise<AxiosResponse<TransactionResponse>> {
     return this.apiClient.issueGetRequest<TransactionResponse>(
       `/${chain}/transaction/${transactionId}`
     );

@@ -1,6 +1,6 @@
 import os from "os";
 import platform from "platform";
-import axios, { AxiosInstance } from "axios";
+import axios, {AxiosInstance, AxiosResponse, isAxiosError} from "axios";
 import { version as SDK_VERSION } from "../package.json";
 import { AxiosOptions } from "./types";
 
@@ -51,23 +51,19 @@ export class ApiClient {
     }
   }
 
-  public async issueGetRequest<T>(path: string): Promise<T> {
-    const res = await this.axiosInstance.get(path);
-    return res.data;
+  public async issueGetRequest<T>(path: string): Promise<AxiosResponse<T>> {
+    return this.axiosInstance.get<T>(path);
   }
 
-  public async issuePostRequest<T>(path: string, body: any): Promise<T> {
-    const response = await this.axiosInstance.post<T>(path, body);
-    return response.data;
+  public async issuePostRequest<T>(path: string, body: any): Promise<AxiosResponse<T>> {
+    return this.axiosInstance.post<T>(path, body);
   }
 
-  public async issuePatchRequest<T>(path: string, body: any): Promise<T> {
-    const res = await this.axiosInstance.patch<T>(path, body);
-    return res.data;
+  public async issuePatchRequest<T>(path: string, body: any): Promise<AxiosResponse<T>> {
+    return this.axiosInstance.patch<T>(path, body);
   }
 
-  public async issueDeleteRequest<T>(path: string): Promise<T> {
-    const res = await this.axiosInstance.delete<T>(path);
-    return res.data;
+  public async issueDeleteRequest<T>(path: string): Promise<AxiosResponse<T>> {
+    return this.axiosInstance.delete<T>(path);
   }
 }

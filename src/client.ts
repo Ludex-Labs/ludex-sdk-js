@@ -1,5 +1,6 @@
 import { ApiClient } from "./apiClient";
 import { AxiosOptions } from "./types";
+import {AxiosResponse} from "axios";
 
 interface ClientResponse {
   /** client id */
@@ -55,7 +56,7 @@ export class Client {
    * @param clientId client id
    * @returns client
    */
-  async getClient(clientId: number): Promise<ClientResponse> {
+  async getClient(clientId: number): Promise<AxiosResponse<ClientResponse>> {
     return this.apiClient.issueGetRequest<ClientResponse>(`/${clientId}`);
   }
 
@@ -63,7 +64,7 @@ export class Client {
    * Get clients
    * @returns clients
    */
-  async getClients(): Promise<ClientResponse[]> {
+  async getClients(): Promise<AxiosResponse<ClientResponse[]>> {
     return this.apiClient.issueGetRequest<ClientResponse[]>("/");
   }
 
@@ -72,7 +73,7 @@ export class Client {
    * @param client client
    * @returns client
    */
-  async createClient(client: CreateClientRequest): Promise<ClientResponse> {
+  async createClient(client: CreateClientRequest): Promise<AxiosResponse<ClientResponse>> {
     return this.apiClient.issuePostRequest<ClientResponse>("/", client);
   }
 
@@ -83,7 +84,7 @@ export class Client {
    */
   async getOpenChallengeCount(
     clientId: number
-  ): Promise<OpenChallengeCountResponse> {
+  ): Promise<AxiosResponse<OpenChallengeCountResponse>> {
     return this.apiClient.issueGetRequest<OpenChallengeCountResponse>(
       `/${clientId}/open-challenge-count`
     );
@@ -98,7 +99,7 @@ export class Client {
   async updateClientWallet(
     clientId: number,
     wallet: ClientWallet
-  ): Promise<ClientResponse> {
+  ): Promise<AxiosResponse<ClientResponse>> {
     return this.apiClient.issuePatchRequest<ClientResponse>(
       `/${clientId}/wallet`,
       wallet
@@ -110,7 +111,7 @@ export class Client {
    * @param clientId client id
    * @returns client id of deleted client
    */
-  async deleteClient(clientId: number): Promise<DeleteClientResponse> {
+  async deleteClient(clientId: number): Promise<AxiosResponse<DeleteClientResponse>> {
     return this.apiClient.issueDeleteRequest<DeleteClientResponse>(
       `/${clientId}`
     );
