@@ -1,6 +1,6 @@
 import { ApiClient } from "./apiClient";
 import { AxiosOptions } from "./types";
-import {AxiosResponse} from "axios";
+import { AxiosResponse } from "axios";
 
 interface ChallengeResponse {
   /** challenge id */
@@ -117,7 +117,7 @@ interface ResolveChallengeRequest {
 
 interface FungibleTokenPayout {
   /** amount of the pot */
-  amount: number;
+  amount: string;
   /** address of player within the challenge */
   to: string;
 }
@@ -157,7 +157,9 @@ export class Challenge {
    * @param challengeId challenge id
    * @returns challenge
    */
-  public async getChallenge(challengeId: number): Promise<AxiosResponse<ChallengeResponse>> {
+  public async getChallenge(
+    challengeId: number
+  ): Promise<AxiosResponse<ChallengeResponse>> {
     return this.apiClient.issueGetRequest<ChallengeResponse>(`/${challengeId}`);
   }
 
