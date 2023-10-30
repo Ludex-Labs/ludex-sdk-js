@@ -1,6 +1,7 @@
 import { ApiClient } from "./apiClient";
 import { AxiosOptions } from "./types";
 import { AxiosResponse } from "axios";
+import queryString from "query-string";
 
 interface ChallengeResponse {
   /** challenge id */
@@ -31,6 +32,32 @@ interface NftPlayer {
   player: string;
   /** all offerings player has put in nft challenge */
   offerings: string[];
+}
+
+interface ChallengeListRequest {
+  /** payout id */
+  payoutId?: number;
+  /** environment type of challenges (MAINNET/DEVNET) */
+  environment?: string;
+  /** state of challenge */
+  state?: string;
+  /** type of challenge (FT, NATIVE, NFT) */
+  type?: string;
+  /** chain of challenge */
+  chain?: string;
+  /** cursor */
+  page?: string;
+  /** limit of challenges to return max 1000 */
+  pageLimit?: number;
+}
+
+interface ChallengeListResponse {
+  /** list of challenges */
+  challenges: ChallengeResponse[];
+  /** cursor for pagination by timestamp of claimed at */
+  cursor?: string;
+  /** remaining records for pagination */
+  remainingRecords?: number;
 }
 
 interface CreateChallengeRequest {
@@ -165,10 +192,15 @@ export class Challenge {
 
   /**
    * Get challenges
+   * @param filters challenge list request
    * @returns challenges
    */
-  public async getChallenges(): Promise<AxiosResponse<ChallengeResponse[]>> {
-    return this.apiClient.issueGetRequest<ChallengeResponse[]>("/");
+  public async getChallenges(
+    filters: ChallengeListRequest
+  ): Promise<AxiosResponse<ChallengeListResponse>> {
+    return this.apiClient.issueGetRequest<ChallengeListResponse>(
+      `/?${queryString.stringify(filters)}`
+    );
   }
 
   /**

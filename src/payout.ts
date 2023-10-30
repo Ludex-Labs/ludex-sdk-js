@@ -1,6 +1,7 @@
 import { ApiClient } from "./apiClient";
 import { AxiosOptions } from "./types";
-import {AxiosResponse} from "axios";
+import { AxiosResponse } from "axios";
+import queryString from "query-string";
 
 interface PayoutResponse {
   /** Payout id */
@@ -15,6 +16,30 @@ interface PayoutResponse {
   providerRake: string;
   /**  Type of the payout (NFT, FT, Native) */
   type: "NFT" | "FT" | "Native";
+}
+
+interface PayoutListRequest {
+  /** mint id */
+  mintId?: number;
+  /** state of payout */
+  state?: string;
+  /** type of payout */
+  type?: string;
+  /** chain of payout */
+  chain?: string;
+  /** cursor by id of payout */
+  cursor?: number;
+  /** limit of payouts to return max 1000 */
+  pageLimit?: number;
+}
+
+interface PayoutListResponse {
+  /** list of payouts */
+  payouts: PayoutResponse[];
+  /** cursor for pagination */
+  cursor?: number;
+  /** remaining records for pagination */
+  remainingRecords?: number;
 }
 
 export class Payout {
@@ -42,9 +67,14 @@ export class Payout {
 
   /**
    * Get payouts
+   * @param filters payout list request
    * @returns payouts
    */
-  async getPayouts(): Promise<AxiosResponse<PayoutResponse[]>> {
-    return this.apiClient.issueGetRequest("/");
+  async getPayouts(
+    filters: PayoutListRequest
+  ): Promise<AxiosResponse<PayoutListResponse>> {
+    return this.apiClient.issueGetRequest(
+      `/?${queryString.stringify(filters)}`
+    );
   }
 }
