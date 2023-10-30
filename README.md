@@ -141,3 +141,36 @@ The SDK returns an [AxiosResponse](https://axios-http.com/docs/res_schema) upon 
   "request": {}
 }
 ```
+
+For example, to get a challenge you can do the following:
+
+```ts
+import { Ludex } from "@ludex-labs/ludex-sdk-js";
+const ludexClientApi = new Ludex.ClientScoped(clientApiKey);
+const challengeId = 1;
+const response = await ludexClientApi.getChallenge(challengeId);
+const challenge = response.data;
+```
+
+The challenge object should have the following structure:
+```json
+{
+  "id": 1,
+  "limit": 2,
+  "state": "LOCKED",
+  "blockchainAddress": "0x000000",
+  "payout": {
+    "id": 1,
+    "entryFee": 3000000,
+    "mediatorRake": 100000,
+    "providerRake": 200000,
+    "chain": "SOLANA",
+    "uiValues": {
+      "entryFee": 0.003,
+      "mediatorRake": 0.0001,
+      "providerRake": 0.0002
+    }
+  },
+  "players": ["0x000000", "0x000000"],
+}
+```
