@@ -1,7 +1,6 @@
 import { ApiClient } from "./apiClient";
 import { AxiosOptions } from "./types";
 import { AxiosResponse } from "axios";
-import queryString from "query-string";
 
 interface ChallengeResponse {
   /** challenge id */
@@ -197,9 +196,14 @@ export class Challenge {
    */
   public async getChallenges(
     filters: ChallengeListRequest
-  ): Promise<AxiosResponse<ChallengeListResponse>> {
-    return this.apiClient.issueGetRequest<ChallengeListResponse>(
-      `/?${queryString.stringify(filters)}`
+  ): Promise<AxiosResponse<ChallengeResponse[]>> {
+    const queryString = Object.keys(filters)
+      .map((key) => {
+        return `${key}=${filters[key as keyof ChallengeListRequest]}`;
+      })
+      .join("&");
+    return this.apiClient.issueGetRequest<ChallengeResponse[]>(
+      `/?${queryString}`
     );
   }
 
