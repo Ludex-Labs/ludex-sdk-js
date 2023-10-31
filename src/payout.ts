@@ -1,4 +1,5 @@
 import { ApiClient } from "./apiClient";
+import { queryString } from "./queryString";
 import { AxiosOptions } from "./types";
 import { AxiosResponse } from "axios";
 
@@ -72,12 +73,6 @@ export class Payout {
   async getPayouts(
     filters: PayoutListRequest
   ): Promise<AxiosResponse<PayoutListResponse>> {
-    const queryString = Object.keys(filters)
-      .map((key) => {
-        return `${key}=${filters[key as keyof PayoutListRequest]}`;
-      })
-      .join("&");
-
-    return this.apiClient.issueGetRequest(`/?${queryString}`);
+    return this.apiClient.issueGetRequest(`/?${queryString(filters)}`);
   }
 }
