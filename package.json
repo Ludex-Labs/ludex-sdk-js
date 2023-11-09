@@ -1,6 +1,6 @@
 {
   "name": "@ludex-labs/ludex-sdk-js",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "author": "Ludex-Labs",
   "main": "dist/src/index.js",
   "types": "dist/src/index.d.ts",
