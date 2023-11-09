@@ -4,7 +4,7 @@ import axios, { AxiosInstance, AxiosResponse, isAxiosError } from "axios";
 import { version as SDK_VERSION } from "../package.json";
 import { AxiosOptions } from "./types";
 
-const LUDEX_API = "https://api.ludex/api";
+const LUDEX_API = "https://api.ludex.gg/api";
 
 export class ApiClient {
   private axiosInstance: AxiosInstance;
