@@ -1,10 +1,10 @@
 import os from "os";
 import platform from "platform";
-import axios, {AxiosInstance, AxiosResponse, isAxiosError} from "axios";
+import axios, { AxiosInstance, AxiosResponse, isAxiosError } from "axios";
 import { version as SDK_VERSION } from "../package.json";
 import { AxiosOptions } from "./types";
 
-const LUDEX_API = "https://api.ludex";
+const LUDEX_API = "https://api.ludex/api";
 
 export class ApiClient {
   private axiosInstance: AxiosInstance;
@@ -55,11 +55,17 @@ export class ApiClient {
     return this.axiosInstance.get<T>(path);
   }
 
-  public async issuePostRequest<T>(path: string, body: any): Promise<AxiosResponse<T>> {
+  public async issuePostRequest<T>(
+    path: string,
+    body: any
+  ): Promise<AxiosResponse<T>> {
     return this.axiosInstance.post<T>(path, body);
   }
 
-  public async issuePatchRequest<T>(path: string, body: any): Promise<AxiosResponse<T>> {
+  public async issuePatchRequest<T>(
+    path: string,
+    body: any
+  ): Promise<AxiosResponse<T>> {
     return this.axiosInstance.patch<T>(path, body);
   }
 
