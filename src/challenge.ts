@@ -90,23 +90,33 @@ interface CreateChallengeResponse {
   type: string;
 }
 
-interface JoinChallengeRequest {
-  /** challenge id */
-  challengeId: number;
-  /** public key of player you want to join to challenge */
-  playerPubkey: string;
-  /** should join be gassless */
-  gasless?: boolean;
-  /** if challenge is nft to add offerings */
-  offerings?: Offering[];
-}
+const Offering = z.object({
+mint: z.string(),
+amount: z.number()
+})
 
-interface Offering {
-  /** mint of token */
-  mint: string;
-  /** amount of token to join with */
-  amount: number;
-}
+/**
+ * Offering
+ * @property {string} mint - The mint of the token.
+ * @property {number} amount - The amount of the token to join with.
+ */
+type Offering = z.input<typeof Offering>
+
+const JoinChallengeRequest = z.object({
+  challengeId: z.number(),
+  playerPubkey: z.string(),
+  gasless: z.boolean().optional(),
+  offerings: z.array(Offering).optional()
+})
+
+/**
+ * JoinChallengeRequest
+ * @property {number} challengeId - The ID of the challenge.
+ * @property {string} playerPubkey - The public key of the player you want to join to the challenge.
+ * @property {boolean} [gasless] - Indicates whether the join should be gasless (optional).
+ * @property {Offering[]} [offerings] - An array of offerings if the challenge is an NFT (optional).
+ */
+type JoinChallengeRequest = z.input<typeof JoinChallengeRequest>
 
 interface JoinChallengeResponse {
   /** base64 encoded transaction ready to be signed and sent */
@@ -231,8 +241,9 @@ export class Challenge {
    * @returns join challenge transaction
    */
   public async generateJoin(
-    joinChallenge: JoinChallengeRequest
+    _joinChallenge: JoinChallengeRequest
   ): Promise<AxiosResponse<JoinChallengeResponse>> {
+    const joinChallenge = JoinChallengeRequest.parse(_joinChallenge)
     const { challengeId, ...joinChallengeBody } = joinChallenge;
     return this.apiClient.issuePostRequest<JoinChallengeResponse>(
       `/${challengeId}/join`,
