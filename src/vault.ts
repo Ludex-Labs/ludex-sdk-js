@@ -1,9 +1,10 @@
+import { z } from "zod";
 import { ApiClient } from "./apiClient";
-import { AxiosOptions } from "./types";
+import { AxiosOptions, Chain } from "./types";
 import {AxiosResponse} from "axios";
 
-/** Chains vault is currently supporting */
-type CHAIN = "SOLANA";
+// /** Chains vault is currently supporting */
+// type CHAIN = "SOLANA";
 
 interface VaultResponse {
   /** name of vault */
@@ -16,14 +17,19 @@ interface VaultResponse {
   feeRecipient: string;
 }
 
-interface CreateVaultRequest {
-  /** name of vault */
-  name: string;
-  /** chain of vault */
-  chain: CHAIN;
-  /** default fee recipient */
-  feeRecipient: string;
-}
+const CreateVaultRequest = z.object({
+  name: z.string(),
+  chain: Chain,
+  feeRecipient: z.string()
+})
+
+/**
+ * CreateVaultRequest
+ * @property {string} name - The name of the vault.
+ * @property {Chain} chain - The chain of the vault.
+ * @property {string} feeRecipient - The default fee recipient.
+ */
+type CreateVaultRequest = z.input<typeof CreateVaultRequest>
 
 interface UpdateVaultRequest {
   /** name of vault */
