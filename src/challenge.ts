@@ -198,8 +198,9 @@ export class Challenge {
   public async getChallenges(
     filters?: ChallengeListRequest
   ): Promise<AxiosResponse<ChallengeResponse[]>> {
-    const path = filters ? `/?${queryString(filters)}` : '/';
-    return this.apiClient.issueGetRequest<ChallengeResponse[]>(path)
+    return this.apiClient.issueGetRequest<ChallengeResponse[]>(
+      `/${queryString(filters)}`
+    );
   }
 
   /**
