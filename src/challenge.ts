@@ -35,23 +35,6 @@ interface NftPlayer {
   offerings: string[];
 }
 
-// interface ChallengeListRequest {
-//   /** payout id */
-//   payoutId?: number;
-//   /** environment type of challenges (MAINNET/DEVNET) */
-//   environment?: string;
-//   /** state of challenge */
-//   state?: string;
-//   /** type of challenge (FT, NATIVE, NFT) */
-//   type?: string;
-//   /** chain of challenge */
-//   chain?: string;
-//   /** cursor */
-//   page?: string;
-//   /** limit of challenges to return max 1000 */
-//   pageLimit?: number;
-// }
-
 const ChallengeListRequest = z.object({
   payoutId: z.number().optional(),
   environment: Environment.optional(),
@@ -84,14 +67,13 @@ interface ChallengeListResponse {
   remainingRecords?: number;
 }
 
-interface CreateChallengeRequest {
-  /** payout id */
-  payoutId: number;
-  /** limit of players will default to 2 */
-  limit?: number;
-  /** if challenge should be closed to public */
-  isVerified?: boolean;
-}
+const CreateChallengeRequest = z.object({
+  payoutId: z.number(),
+  limit: z.number().optional(),
+  isVerified: z.boolean().optional(),
+})
+
+type CreateChallengeRequest = z.input<typeof CreateChallengeRequest>
 
 interface CreateChallengeResponse {
   /** challenge id */
@@ -234,8 +216,9 @@ export class Challenge {
    * @returns challenge
    */
   public async createChallenge(
-    challenge: CreateChallengeRequest
+    _challenge: CreateChallengeRequest
   ): Promise<AxiosResponse<CreateChallengeResponse>> {
+    const challenge = CreateChallengeRequest.parse(_challenge)
     return this.apiClient.issuePostRequest<CreateChallengeResponse>(
       "/",
       challenge
