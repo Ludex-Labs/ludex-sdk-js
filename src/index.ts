@@ -11,7 +11,7 @@ class OrganizationScoped {
 
   /**
    * Create organization scoped api client
-   * @param organizationApiKey organization api key
+   * @param _organizationApiKey organization api key
    * @param options axios options
    * @returns organization scoped api client
    */
@@ -31,11 +31,12 @@ class ClientScoped {
 
   /**
    * Create client scoped api client
-   * @param clientApiKey client api key
+   * @param _clientApiKey client api key
    * @param options axios options
    * @returns client scoped api client
    */
-  constructor(clientApiKey: string, options?: AxiosOptions) {
+  constructor(_clientApiKey: string, options?: AxiosOptions) {
+    const clientApiKey = z.string().parse(_clientApiKey)
     this.challenge = new Challenge(clientApiKey, options);
     this.vault = new Vault(clientApiKey, options);
   }
