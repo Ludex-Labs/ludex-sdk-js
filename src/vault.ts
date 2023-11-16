@@ -5,6 +5,7 @@ import {AxiosResponse} from "axios";
 
 // /** Chains vault is currently supporting */
 // type CHAIN = "SOLANA";
+type Chain = z.input<typeof Chain>
 
 interface VaultResponse {
   /** name of vault */
@@ -12,7 +13,7 @@ interface VaultResponse {
   /** blockchain address of vault */
   blockchainAddress: string | null;
   /** chain of vault */
-  chain: CHAIN;
+  chain: Chain;
   /** default fee recipient */
   feeRecipient: string;
 }
@@ -96,7 +97,8 @@ export class Vault {
    * @param options axios options
    * @returns vault api client
    */
-  constructor(clientKey: string, options?: AxiosOptions) {
+  constructor(_clientKey: string, options?: AxiosOptions) {
+    const clientKey = z.string().parse(_clientKey);
     this.apiClient = new ApiClient(clientKey, this.BASE_PATH, options);
   }
 
@@ -105,7 +107,7 @@ export class Vault {
    * @param chain chain of vault
    * @returns vault
    */
-  async getVault(chain: CHAIN): Promise<AxiosResponse<VaultResponse>> {
+  async getVault(chain: Chain): Promise<AxiosResponse<VaultResponse>> {
     return this.apiClient.issueGetRequest<VaultResponse>(`/${chain}`);
   }
 
@@ -154,7 +156,7 @@ export class Vault {
    * @param chain chain of vault
    * @returns transactions
    */
-  async getTransactions(chain: CHAIN): Promise<AxiosResponse<TransactionResponse[]>> {
+  async getTransactions(chain: Chain): Promise<AxiosResponse<TransactionResponse[]>> {
     return this.apiClient.issueGetRequest<TransactionResponse[]>(
       `/${chain}/transaction`
     );
@@ -167,9 +169,10 @@ export class Vault {
    * @returns transaction
    */
   async getTransaction(
-    chain: CHAIN,
-    transactionId: string
+    chain: Chain,
+    _transactionId: string
   ): Promise<AxiosResponse<TransactionResponse>> {
+    const transactionId = z.string().parse(_transactionId);
     return this.apiClient.issueGetRequest<TransactionResponse>(
       `/${chain}/transaction/${transactionId}`
     );
