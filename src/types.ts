@@ -34,3 +34,22 @@ export const PayoutState = z.enum([
   "REJECTED",
   "ARCHIVED",
 ]);
+export const Environment = z.enum(["MAINNET", "DEVNET"]);
+export const ChallengeState = z.enum([
+  "CREATING",
+  "CREATED",
+  "LOCKING",
+  "LOCKED",
+  "CANCELING",
+  "CANCELED",
+  "RESOLVING",
+  "RESOLVED",
+  "VERIFYING_CANCEL",
+  "VERIFYING_RESOLVE",
+  "VERIFIED_CANCEL",
+  "VERIFIED_RESOLVE",
+  "REDEEMING_CANCEL",
+  "REDEEMING_RESOLVE",
+  "REDEEMED_CANCEL",
+  "REDEEMED_RESOLVE",
+]);

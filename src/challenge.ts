@@ -1,6 +1,7 @@
+import { z } from "zod";
 import { ApiClient } from "./apiClient";
 import { queryString } from "./queryString";
-import { AxiosOptions } from "./types";
+import { AxiosOptions, Chain, PayoutType, Environment, ChallengeState } from "./types";
 import { AxiosResponse } from "axios";
 
 interface ChallengeResponse {
@@ -34,22 +35,45 @@ interface NftPlayer {
   offerings: string[];
 }
 
-interface ChallengeListRequest {
-  /** payout id */
-  payoutId?: number;
-  /** environment type of challenges (MAINNET/DEVNET) */
-  environment?: string;
-  /** state of challenge */
-  state?: string;
-  /** type of challenge (FT, NATIVE, NFT) */
-  type?: string;
-  /** chain of challenge */
-  chain?: string;
-  /** cursor */
-  page?: string;
-  /** limit of challenges to return max 1000 */
-  pageLimit?: number;
-}
+// interface ChallengeListRequest {
+//   /** payout id */
+//   payoutId?: number;
+//   /** environment type of challenges (MAINNET/DEVNET) */
+//   environment?: string;
+//   /** state of challenge */
+//   state?: string;
+//   /** type of challenge (FT, NATIVE, NFT) */
+//   type?: string;
+//   /** chain of challenge */
+//   chain?: string;
+//   /** cursor */
+//   page?: string;
+//   /** limit of challenges to return max 1000 */
+//   pageLimit?: number;
+// }
+
+const ChallengeListRequest = z.object({
+  payoutId: z.number().optional(),
+  environment: Environment.optional(),
+  state: ChallengeState.optional(),
+  type: PayoutType.optional(),
+  chain: Chain.optional(),
+  page: z.string().optional(),
+  pageLimit: z.number().optional(),
+})
+.optional();
+
+/**
+ * Challenge list request
+ * @param {number} payoutId - The ID of the payout.
+ * @param {Environment} environment - The environment for the challenge.
+ * @param {ChallengeState} state - The state of the challenge.
+ * @param {PayoutType} type - The type of payout.
+ * @param {Chain} chain - The blockchain chain.
+ * @param {string} page - The page for pagination.
+ * @param {number} pageLimit - The limit for the number of items per page.
+ */
+type ChallengeListRequest = z.input<typeof ChallengeListRequest>
 
 interface ChallengeListResponse {
   /** list of challenges */
@@ -196,8 +220,9 @@ export class Challenge {
    * @returns challenges
    */
   public async getChallenges(
-    filters: ChallengeListRequest
+    _filters: ChallengeListRequest
   ): Promise<AxiosResponse<ChallengeResponse[]>> {
+    const filters = ChallengeListRequest.parse(_filters)
     return this.apiClient.issueGetRequest<ChallengeResponse[]>(
       `/?${queryString(filters)}`
     );
