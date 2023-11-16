@@ -123,14 +123,19 @@ interface JoinChallengeResponse {
   transaction: string;
 }
 
-interface LeaveChallengeRequest {
-  /** challenge id */
-  challengeId: number;
-  /** public key of player you want to leave challenge */
-  playerPubkey: string;
-  /** should leave be gassless */
-  gasless?: boolean;
-}
+const LeaveChallengeRequest = z.object({
+  challengeId: z.number(),
+  playerPubkey: z.string(),
+  gasless: z.boolean().optional()
+})
+
+/**
+ * LeaveChallengeRequest
+ * @property {number} challengeId - The challenge id.
+ * @property {string} playerPubkey - The public key of the player who wants to leave the challenge.
+ * @property {boolean} gasless - Indicates whether the leave operation should be gasless (optional).
+ */
+type LeaveChallengeRequest = z.input<typeof LeaveChallengeRequest>
 
 interface LeaveChallengeResponse {
   /** base64 encoded transaction ready to be signed and sent */
@@ -207,7 +212,8 @@ export class Challenge {
    * @param options axios options
    * @returns challenge api client
    */
-  constructor(clientKey: string, options?: AxiosOptions) {
+  constructor(_clientKey: string, options?: AxiosOptions) {
+    const clientKey = z.string().parse(_clientKey);
     this.apiClient = new ApiClient(clientKey, this.BASE_PATH, options);
   }
 
@@ -217,8 +223,9 @@ export class Challenge {
    * @returns challenge
    */
   public async getChallenge(
-    challengeId: number
+    _challengeId: number
   ): Promise<AxiosResponse<ChallengeResponse>> {
+    const challengeId = z.number().parse(_challengeId);
     return this.apiClient.issueGetRequest<ChallengeResponse>(`/${challengeId}`);
   }
 
@@ -273,8 +280,9 @@ export class Challenge {
    * @returns leave challenge transaction
    */
   public async generateLeave(
-    leaveChallenge: LeaveChallengeRequest
+    _leaveChallenge: LeaveChallengeRequest
   ): Promise<AxiosResponse<LeaveChallengeResponse>> {
+    const leaveChallenge = LeaveChallengeRequest.parse(_leaveChallenge);
     const { challengeId, ...leaveChallengeBody } = leaveChallenge;
     return this.apiClient.issuePostRequest<LeaveChallengeResponse>(
       `/${challengeId}/leave`,
@@ -288,8 +296,9 @@ export class Challenge {
    * @returns lock challenge
    */
   public async lockChallenge(
-    challengeId: string
+    _challengeId: string
   ): Promise<AxiosResponse<LockChallengeResponse>> {
+    const challengeId = z.string().parse(_challengeId);
     return this.apiClient.issuePatchRequest<LockChallengeResponse>(
       `/${challengeId}/lock`,
       {}
@@ -302,8 +311,9 @@ export class Challenge {
    * @returns cancel challenge
    */
   public async cancelChallenge(
-    challengeId: string
+    _challengeId: string
   ): Promise<AxiosResponse<CancelChallengeResponse>> {
+    const challengeId = z.string().parse(_challengeId);
     return this.apiClient.issuePatchRequest<CancelChallengeResponse>(
       `/${challengeId}/cancel`,
       {}
