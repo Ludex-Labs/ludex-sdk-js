@@ -31,14 +31,21 @@ const CreateVaultRequest = z.object({
  */
 type CreateVaultRequest = z.input<typeof CreateVaultRequest>
 
-interface UpdateVaultRequest {
-  /** name of vault */
-  name?: string;
-  /** default fee recipient */
-  feeRecipient?: string;
-  /** chain of vault to update */
-  chain: CHAIN;
-}
+const UpdateVaultRequest = z.object({
+  name: z.string().optional(),
+  feeRecipient: z.string().optional(),
+  chain: Chain
+}) 
+
+/**
+ * UpdateVaultRequest
+ * @property {string} [name] - The updated name of the vault (optional).
+ * @property {string} [feeRecipient] - The updated default fee recipient (optional).
+ * @property {Chain} chain - The chain of the vault to update.
+ */
+type UpdateVaultRequest = z.input<typeof UpdateVaultRequest>
+
+
 
 enum RedeemType {
   /** just native redeem */
@@ -113,7 +120,8 @@ export class Vault {
    * @param vault vault
    * @returns vault
    */
-  async createVault(vault: CreateVaultRequest): Promise<AxiosResponse<VaultResponse>> {
+  async createVault(_vault: CreateVaultRequest): Promise<AxiosResponse<VaultResponse>> {
+    const vault = CreateVaultRequest.parse(_vault);
     return this.apiClient.issuePostRequest<VaultResponse>("/", vault);
   }
 
@@ -122,7 +130,8 @@ export class Vault {
    * @param vault vault
    * @returns vault
    */
-  async updateVault(vault: UpdateVaultRequest): Promise<AxiosResponse<VaultResponse>> {
+  async updateVault(_vault: UpdateVaultRequest): Promise<AxiosResponse<VaultResponse>> {
+    const vault = UpdateVaultRequest.parse(_vault);
     const { chain, ...vaultBody } = vault;
     return this.apiClient.issuePatchRequest<VaultResponse>(
       `/${chain}`,
