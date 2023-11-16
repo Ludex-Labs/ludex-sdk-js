@@ -53,3 +53,9 @@ export const ChallengeState = z.enum([
   "REDEEMED_CANCEL",
   "REDEEMED_RESOLVE",
 ]);
+export const RedeemType = z.enum([
+  "native",
+  "nativeForTokens",
+  "tokensForNative",
+  "tokensForTokens"
+])

@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { ApiClient } from "./apiClient";
-import { AxiosOptions, Chain } from "./types";
+import { AxiosOptions, Chain, RedeemType } from "./types";
 import {AxiosResponse} from "axios";
 
 // /** Chains vault is currently supporting */
@@ -45,38 +45,32 @@ const UpdateVaultRequest = z.object({
  */
 type UpdateVaultRequest = z.input<typeof UpdateVaultRequest>
 
+const GenerateTransactionRequest = z.object({
+  chain: Chain,
+  type: RedeemType,
+  gasless: z.boolean(),
+  playerPublicKey: z.string(),
+  amountGiven: z.number().optional(),
+  amountRedeemed: z.number(),
+  overideFeeRecipientPubkey: z.string().optional(),
+  payMint: z.string().optional(),
+  receiveMint: z.string().optional()
+})
 
+/**
+ * GenerateTransactionRequest
+ * @property {Chain} chain - The chain of the vault.
+ * @property {RedeemType} type - The type of transaction.
+ * @property {boolean} gasless - Indicates whether the transaction is gasless.
+ * @property {string} playerPublicKey - The public key of the player.
+ * @property {number} [amountGiven] - The amount given (optional).
+ * @property {number} amountRedeemed - The amount to be redeemed.
+ * @property {string} [overideFeeRecipientPubkey] - The overridden fee recipient public key (optional).
+ * @property {string} [payMint] - The pay mint (optional).
+ * @property {string} [receiveMint] - The receive mint (optional).
+ */
+type GenerateTransactionRequest = z.input<typeof GenerateTransactionRequest>
 
-enum RedeemType {
-  /** just native redeem */
-  native = "native",
-  /** pay tokens to get native */
-  nativeForTokens = "nativeForTokens",
-  /** pay native to get tokens */
-  tokensForNative = "tokensForNative",
-  /** pay tokens to get tokens */
-  tokensForTokens = "tokensForTokens",
-}
-interface GenerateTransactionRequest {
-  /** chain of vault */
-  chain: CHAIN;
-  /** type of transaction */
-  type: RedeemType;
-  /** gasless transaction */
-  gasless: boolean;
-  /** player public key */
-  playerPublicKey: string;
-  /** amount given */
-  amountGiven?: number;
-  /** amount redeemed */
-  amountRedeemed: number;
-  /** override fee recipient public key */
-  overideFeeRecipientPubkey?: string;
-  /** pay mint */
-  payMint?: string;
-  /** receive mint */
-  receiveMint?: string;
-}
 
 interface GenerateTransactionResponse {
   /** id of transaction for look up */
@@ -145,8 +139,9 @@ export class Vault {
    * @returns transaction
    */
   async generateTransaction(
-    transaction: GenerateTransactionRequest
+    _transaction: GenerateTransactionRequest
   ): Promise<AxiosResponse<GenerateTransactionResponse>> {
+    const transaction = GenerateTransactionRequest.parse(_transaction);
     const { chain, ...transactionBody } = transaction;
     return this.apiClient.issuePostRequest<GenerateTransactionResponse>(
       `/${chain}/transaction`,
