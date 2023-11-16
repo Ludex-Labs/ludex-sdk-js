@@ -1,3 +1,4 @@
+import { z } from "zod";
 import { Challenge } from "./challenge";
 import { Client } from "./client";
 import { Payout } from "./payout";
@@ -15,9 +16,10 @@ class OrganizationScoped {
    * @returns organization scoped api client
    */
   constructor(
-    public readonly organizationApiKey: string,
+    public readonly _organizationApiKey: string,
     options?: AxiosOptions
   ) {
+    const organizationApiKey = z.string().parse(_organizationApiKey);
     this.client = new Client(organizationApiKey, options);
     this.payout = new Payout(organizationApiKey, options);
   }
