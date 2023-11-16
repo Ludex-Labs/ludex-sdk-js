@@ -1,4 +1,5 @@
 import { AxiosProxyConfig, AxiosResponse } from "axios";
+import { z } from "zod";
 
 export interface AxiosOptions {
   /** Base url instead of api.ludex */
@@ -24,3 +25,12 @@ export interface AxiosOptions {
     };
   };
 }
+
+export const Chain = z.enum(["SOLANA", "AVALANCHE"]);
+export const PayoutType = z.enum(["NATIVE", "FT", "NFT"]);
+export const PayoutState = z.enum([
+  "APPROVED",
+  "PENDING",
+  "REJECTED",
+  "ARCHIVED",
+]);
