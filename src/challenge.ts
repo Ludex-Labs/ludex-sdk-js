@@ -151,26 +151,42 @@ interface CancelChallengeResponse {
   cancelingAt: string;
 }
 
-interface ResolveChallengeRequest {
-  /** challenge id */
-  challengeId: number;
-  /** payout of the challenge */
-  payout: FungibleTokenPayout[] | NonFungibleTokenPayout[];
-}
+const FungibleTokenPayout = z.object({
+  amount: z.string(),
+  to: z.string()
+})
 
-interface FungibleTokenPayout {
-  /** amount of the pot */
-  amount: string;
-  /** address of player within the challenge */
-  to: string;
-}
+/**
+ * FungibleTokenPayout
+ * @property {string} amount - The amount of the pot.
+ * @property {string} to - The address of the player within the challenge.
+ */
+type FungibleTokenPayout = z.input<typeof FungibleTokenPayout>
 
-interface NonFungibleTokenPayout {
-  /** address of offering */
-  offering: string;
-  /** address of player within the challenge */
-  to: string;
-}
+const NonFungibleTokenPayout = z.object({
+  offering: z.string(),
+  to: z.string()
+})
+
+/**
+ * NonFungibleTokenPayout
+ * @property {string} offering - The address of the offering.
+ * @property {string} to - The address of the player within the challenge.
+ */
+type NonFungibleTokenPayout = z.input<typeof NonFungibleTokenPayout>
+
+const ResolveChallengeRequest = z.object({
+  challengeId: z.number(),
+  payout: z.union([z.array(FungibleTokenPayout), z.array(NonFungibleTokenPayout)])
+})
+
+/**
+ * ResolveChallengeRequest
+ * @property {number} challengeId - The challenge id.
+ * @property {(FungibleTokenPayout[] | NonFungibleTokenPayout[])} payout - The payout of the challenge,
+ * which can be an array of fungible or non-fungible token payouts.
+ */
+type ResolveChallengeRequest = z.input<typeof ResolveChallengeRequest>
 
 interface ResolveChallengeResponse {
   /** id of challenge */
@@ -300,8 +316,9 @@ export class Challenge {
    * @returns resolve challenge
    */
   public async resolveChallenge(
-    resolveChallenge: ResolveChallengeRequest
+    _resolveChallenge: ResolveChallengeRequest
   ): Promise<AxiosResponse<ResolveChallengeResponse>> {
+    const resolveChallenge = ResolveChallengeRequest.parse(_resolveChallenge)
     const { challengeId, ...resolveChallengeBody } = resolveChallenge;
     return this.apiClient.issuePatchRequest<ResolveChallengeResponse>(
       `/${challengeId}/resolve`,
