@@ -27,12 +27,17 @@ interface OpenChallengeCountResponse {
   limit: number;
 }
 
-interface ClientWallet {
-  /** wallet chain */
-  chain: string;
-  /** wallet public key */
-  address: string;
-}
+const ClientWallet = z.object({
+  chain: z.string(),
+  address: z.string()
+})
+
+/**
+ * ClientWallet
+ * @property {string} chain - The wallet chain.
+ * @property {string} address - The wallet public key.
+ */
+type ClientWallet = z.input<typeof ClientWallet>
 
 interface DeleteClientResponse {
   /** id of deleted client */
@@ -100,9 +105,11 @@ export class Client {
    * @returns client
    */
   async updateClientWallet(
-    clientId: number,
-    wallet: ClientWallet
+    _clientId: number,
+    _wallet: ClientWallet
   ): Promise<AxiosResponse<ClientResponse>> {
+    const clientId = z.number().parse(_clientId);
+    const wallet = ClientWallet.parse(_wallet);
     return this.apiClient.issuePatchRequest<ClientResponse>(
       `/${clientId}/wallet`,
       wallet
