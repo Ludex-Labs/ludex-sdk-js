@@ -54,7 +54,8 @@ export class Client {
    * @param options axios options
    * @returns client api client
    */
-  constructor(organizationKey: string, options?: AxiosOptions) {
+  constructor(_organizationKey: string, options?: AxiosOptions) {
+    const organizationKey = z.string().parse(_organizationKey);
     this.apiClient = new ApiClient(organizationKey, this.BASE_PATH, options);
   }
 
@@ -63,7 +64,8 @@ export class Client {
    * @param clientId client id
    * @returns client
    */
-  async getClient(clientId: number): Promise<AxiosResponse<ClientResponse>> {
+  async getClient(_clientId: number): Promise<AxiosResponse<ClientResponse>> {
+    const clientId = z.number().parse(_clientId);
     return this.apiClient.issueGetRequest<ClientResponse>(`/${clientId}`);
   }
 
@@ -91,8 +93,9 @@ export class Client {
    * @returns open challenge count
    */
   async getOpenChallengeCount(
-    clientId: number
+    _clientId: number
   ): Promise<AxiosResponse<OpenChallengeCountResponse>> {
+    const clientId = z.number().parse(_clientId);
     return this.apiClient.issueGetRequest<OpenChallengeCountResponse>(
       `/${clientId}/open-challenge-count`
     );
@@ -121,7 +124,8 @@ export class Client {
    * @param clientId client id
    * @returns client id of deleted client
    */
-  async deleteClient(clientId: number): Promise<AxiosResponse<DeleteClientResponse>> {
+  async deleteClient(_clientId: number): Promise<AxiosResponse<DeleteClientResponse>> {
+    const clientId = z.number().parse(_clientId);
     return this.apiClient.issueDeleteRequest<DeleteClientResponse>(
       `/${clientId}`
     );
