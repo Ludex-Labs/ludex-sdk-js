@@ -134,7 +134,7 @@ export class Vault {
   ): Promise<AxiosResponse<GenerateTransactionResponse>> {
     const { chain, ...transactionBody } = transaction;
     return this.apiClient.issuePostRequest<GenerateTransactionResponse>(
-      `/${chain}/transaction`,
+      `/${chain}/generateTx`,
       transactionBody
     );
   }
