@@ -71,8 +71,8 @@ export class Payout {
    * @returns payouts
    */
   async getPayouts(
-    filters: PayoutListRequest
+    filters?: PayoutListRequest
   ): Promise<AxiosResponse<PayoutListResponse>> {
-    return this.apiClient.issueGetRequest(`/?${queryString(filters)}`);
+    return this.apiClient.issueGetRequest(`/${queryString(filters)}`);
   }
 }
