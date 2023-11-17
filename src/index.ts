@@ -3,7 +3,17 @@ import { Challenge } from "./challenge";
 import { Client } from "./client";
 import { Payout } from "./payout";
 import { Vault } from "./vault";
-import { AxiosOptions } from "./types";
+import {
+  AxiosOptions,
+  Chain,
+  PayoutType,
+  PayoutState,
+  Environment,
+  ChallengeState,
+  RedeemType,
+} from "./types";
+import { AxiosError } from "axios";
+import { ZodError } from "zod";
 
 class OrganizationScoped {
   client: Client;
@@ -36,7 +46,7 @@ class ClientScoped {
    * @returns client scoped api client
    */
   constructor(_clientApiKey: string, options?: AxiosOptions) {
-    const clientApiKey = z.string().parse(_clientApiKey)
+    const clientApiKey = z.string().parse(_clientApiKey);
     this.challenge = new Challenge(clientApiKey, options);
     this.vault = new Vault(clientApiKey, options);
   }
@@ -45,4 +55,15 @@ class ClientScoped {
 export const Ludex = {
   OrganizationScoped,
   ClientScoped,
+};
+
+export {
+  Chain,
+  PayoutType,
+  PayoutState,
+  Environment,
+  ChallengeState,
+  RedeemType,
+  AxiosError,
+  ZodError
 };
