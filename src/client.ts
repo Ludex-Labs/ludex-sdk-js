@@ -1,3 +1,4 @@
+import { z } from "zod";
 import { ApiClient } from "./apiClient";
 import { AxiosOptions } from "./types";
 import {AxiosResponse} from "axios";
@@ -13,10 +14,11 @@ interface ClientResponse {
   wallets: ClientWallet[];
 }
 
-interface CreateClientRequest {
-  /** Client Name */
-  name: string;
-}
+const CreateClientRequest = z.object({
+    name: z.string()
+});
+
+type CreateClientRequest = z.input<typeof CreateClientRequest>
 
 interface OpenChallengeCountResponse {
   /** Current open challenge count */
@@ -73,7 +75,8 @@ export class Client {
    * @param client client
    * @returns client
    */
-  async createClient(client: CreateClientRequest): Promise<AxiosResponse<ClientResponse>> {
+  async createClient(_client: CreateClientRequest): Promise<AxiosResponse<ClientResponse>> {
+    const client = CreateClientRequest.parse(_client);
     return this.apiClient.issuePostRequest<ClientResponse>("/", client);
   }
 
