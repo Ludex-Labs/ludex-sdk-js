@@ -107,7 +107,8 @@ export class Vault {
    * @param chain chain of vault
    * @returns vault
    */
-  async getVault(chain: Chain): Promise<AxiosResponse<VaultResponse>> {
+  async getVault(_chain: Chain): Promise<AxiosResponse<VaultResponse>> {
+    const chain = Chain.parse(_chain);
     return this.apiClient.issueGetRequest<VaultResponse>(`/${chain}`);
   }
 
@@ -156,7 +157,8 @@ export class Vault {
    * @param chain chain of vault
    * @returns transactions
    */
-  async getTransactions(chain: Chain): Promise<AxiosResponse<TransactionResponse[]>> {
+  async getTransactions(_chain: Chain): Promise<AxiosResponse<TransactionResponse[]>> {
+    const chain = Chain.parse(_chain);
     return this.apiClient.issueGetRequest<TransactionResponse[]>(
       `/${chain}/transaction`
     );
@@ -169,9 +171,10 @@ export class Vault {
    * @returns transaction
    */
   async getTransaction(
-    chain: Chain,
+    _chain: Chain,
     _transactionId: string
   ): Promise<AxiosResponse<TransactionResponse>> {
+    const chain = Chain.parse(_chain);
     const transactionId = z.string().parse(_transactionId);
     return this.apiClient.issueGetRequest<TransactionResponse>(
       `/${chain}/transaction/${transactionId}`
