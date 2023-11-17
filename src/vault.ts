@@ -149,7 +149,7 @@ export class Vault {
    */
   async getTransactions(chain: CHAIN): Promise<AxiosResponse<TransactionResponse[]>> {
     return this.apiClient.issueGetRequest<TransactionResponse[]>(
-      `/${chain}/transaction`
+      `/${chain}/transactions`
     );
   }
 
