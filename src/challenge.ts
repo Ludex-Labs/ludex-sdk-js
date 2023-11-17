@@ -37,6 +37,8 @@ interface PayoutResponse {
   providerRake: string;
   /** chain */
   chain: string;
+  /** payout type */
+  type: string;
   /** mint of token */
   mint: MintResponse;
   /** ui values for payout */
@@ -371,9 +373,8 @@ export class Challenge {
 
     let payout: FungibleTokenPayout[] | NonFungibleTokenPayout[] = [];
 
-    // if players are strings then it is FT or Native
-    if (typeof challenge.data.players[0] === "string") {
-      // if challenge is FT or Native then payout is just one player
+    const challengeType = challenge.data.payout.type;
+    if (challengeType === "FT" || challengeType === "NATIVE") {
       payout = [
         {
           amount: challenge.data.totalPot[0].amount,
