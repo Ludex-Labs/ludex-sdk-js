@@ -264,10 +264,10 @@ export class Challenge {
    * @returns challenges
    */
   public async getChallenges(
-    filters: ChallengeListRequest
-  ): Promise<AxiosResponse<ChallengeListResponse>> {
-    return this.apiClient.issueGetRequest<ChallengeListResponse>(
-      `/?${queryString(filters)}`
+    filters?: ChallengeListRequest
+  ): Promise<AxiosResponse<ChallengeResponse[]>> {
+    return this.apiClient.issueGetRequest<ChallengeResponse[]>(
+      `/${queryString(filters)}`
     );
   }
 
