@@ -5,26 +5,89 @@ import { AxiosResponse } from "axios";
 
 interface ChallengeResponse {
   /** challenge id */
-  challengeId: number;
-  /** payout */
-  payout: {
-    /** payout id */
-    id: number;
+  id: number;
+  /** limit of players able to join challenge */
+  limit: number;
+  /** payout configuration */
+  payout: PayoutResponse | null;
+  /** current state of challenge */
+  state: string;
+  /** address of challenge */
+  blockchainAddress?: string;
+  /** contract address of challenge */
+  contractAddress: string;
+  /** all assets within challenge */
+  totalPot: Pot[];
+  /** players in challenge */
+  players: string[] | NftPlayer[];
+  /** winnings for challenge */
+  winnings?: WinningResponse[];
+  /** all transaction signatures that occur for ludex challenge */
+  signatures: Signature[];
+}
+
+interface PayoutResponse {
+  /** payout id */
+  id: number;
+  /** entry fee per player for the challenge */
+  entryFee: string;
+  /** how much of entry fee is taken for game developer */
+  mediatorRake: string;
+  /** how much of entry fee is taken for ludex */
+  providerRake: string;
+  /** chain */
+  chain: string;
+  /** payout type */
+  type: string;
+  /** mint of token */
+  mint: MintResponse;
+  /** ui values for payout */
+  uiValues?: {
     /** entry fee per player for the challenge */
     entryFee: string;
     /** how much of entry fee is taken for game developer */
     mediatorRake: string;
     /** how much of entry fee is taken for ludex */
     providerRake: string;
-    /** chain */
-    chain: string;
   };
-  /** current state of challenge */
+}
+
+interface MintResponse {
+  /** address of mint */
+  blockchainAddress: string;
+  /** the decimal position of mint */
+  decimalPosition: number;
+  /** the icon of mint */
+  icon: string;
+  /** the name of mint */
+  ticker: string;
+}
+
+interface Pot {
+  /** mint of token */
+  mint: string;
+  /** amount of token */
+  amount: string;
+  /** ui amount of token, ex. token / (10^decimalPosition) */
+  uiAmount: string;
+}
+
+interface Signature {
+  /** what the transaction did ex. CREATING, LOCKING... */
   state: string;
-  /** blockchain address of challenge */
-  blockchainAddress?: string;
-  /** player array of which addresses are currently in the challenge */
-  players: string[] | NftPlayer[];
+  /** transaction hash */
+  signature: string;
+  /** timestamp of transaction */
+  timestamp: string;
+}
+
+interface WinningResponse {
+  /** winning player */
+  player: string;
+  /** actual amount won */
+  amount: string;
+  /** ui amount of token won  */
+  uiAmount: string;
 }
 
 interface NftPlayer {
@@ -165,6 +228,13 @@ interface ResolveChallengeResponse {
   resolvingAt: string;
 }
 
+interface ResolveChallengeWithOneWinnerRequest {
+  /** challenge id */
+  challengeId: number;
+  /** payout of the challenge */
+  winner: string;
+}
+
 export class Challenge {
   private readonly apiClient: ApiClient;
   private readonly BASE_PATH = "/v2/challenge";
@@ -287,6 +357,43 @@ export class Challenge {
     return this.apiClient.issuePatchRequest<ResolveChallengeResponse>(
       `/${challengeId}/resolve`,
       resolveChallengeBody
+    );
+  }
+
+  /**
+   * Resolve challenge with one winner
+   * @param resolveChallenge resolve challenge request
+   * @returns resolve challenge
+   */
+  public async resolveChallengeWithOneWinner(
+    resolveChallenge: ResolveChallengeWithOneWinnerRequest
+  ): Promise<AxiosResponse<ResolveChallengeResponse>> {
+    const { challengeId, winner } = resolveChallenge;
+    const challenge = await this.getChallenge(challengeId);
+
+    let payout: FungibleTokenPayout[] | NonFungibleTokenPayout[] = [];
+
+    const challengeType = challenge.data.payout.type;
+    if (challengeType === "FT" || challengeType === "NATIVE") {
+      payout = [
+        {
+          amount: challenge.data.totalPot[0].amount,
+          to: winner,
+        },
+      ];
+    } else {
+      // if challenge is NFT then payout is all offerings to winner
+      payout = challenge.data.totalPot.map((pot) => {
+        return {
+          offering: pot.mint,
+          to: winner,
+        };
+      });
+    }
+
+    return this.apiClient.issuePatchRequest<ResolveChallengeResponse>(
+      `/${challengeId}/resolve`,
+      { payout: payout }
     );
   }
 }
