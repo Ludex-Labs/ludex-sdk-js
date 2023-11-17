@@ -1,3 +1,4 @@
+import { z } from 'zod';
 import os from "os";
 import platform from "platform";
 import axios, { AxiosInstance, AxiosResponse, isAxiosError } from "axios";
@@ -10,7 +11,8 @@ export class ApiClient {
   private axiosInstance: AxiosInstance;
   private options?: AxiosOptions;
 
-  constructor(apikey: string, apiBaseUrl: string, options?: AxiosOptions) {
+  constructor(_apikey: string, apiBaseUrl: string, options?: AxiosOptions) {
+    const apikey = z.string().parse(_apikey);
     this.options = options;
 
     this.axiosInstance = axios.create({
