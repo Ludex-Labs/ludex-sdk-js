@@ -11,8 +11,9 @@ export class ApiClient {
   private axiosInstance: AxiosInstance;
   private options?: AxiosOptions;
 
-  constructor(_apikey: string, apiBaseUrl: string, options?: AxiosOptions) {
+  constructor(_apikey: string, _apiBaseUrl: string, options?: AxiosOptions) {
     const apikey = z.string().parse(_apikey);
+    const apiBaseUrl = z.string().parse(_apiBaseUrl);
     this.options = options;
 
     this.axiosInstance = axios.create({
