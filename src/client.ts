@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { ApiClient } from "./apiClient";
-import { AxiosOptions } from "./types";
+import { AxiosOptions, Chain } from "./types";
 import {AxiosResponse} from "axios";
 
 interface ClientResponse {
@@ -32,7 +32,7 @@ interface OpenChallengeCountResponse {
 }
 
 const ClientWallet = z.object({
-  chain: z.string(),
+  chain: z.nativeEnum(Chain),
   address: z.string()
 })
 

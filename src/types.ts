@@ -26,7 +26,10 @@ export interface AxiosOptions {
   };
 }
 
-export const Chain = z.enum(["SOLANA", "AVALANCHE"]);
+export enum Chain {
+  SOLANA = "SOLANA",
+  AVALANCHE = "AVALANCHE",
+}
 export const PayoutType = z.enum(["NATIVE", "FT", "NFT"]);
 export const PayoutState = z.enum([
   "APPROVED",
@@ -57,5 +60,5 @@ export const RedeemType = z.enum([
   "native",
   "nativeForTokens",
   "tokensForNative",
-  "tokensForTokens"
-])
+  "tokensForTokens",
+]);

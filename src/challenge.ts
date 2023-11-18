@@ -40,7 +40,7 @@ const ChallengeListRequest = z.object({
   environment: Environment.optional(),
   state: ChallengeState.optional(),
   type: PayoutType.optional(),
-  chain: Chain.optional(),
+  chain: z.nativeEnum(Chain).optional(),
   page: z.string().optional(),
   pageLimit: z.number().optional(),
 })

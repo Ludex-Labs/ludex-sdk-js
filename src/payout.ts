@@ -24,7 +24,7 @@ const PayoutListRequest = z
     mintId: z.number().optional(),
     state: PayoutState.optional(),
     type: PayoutType.optional(),
-    chain: Chain.optional(),
+    chain: z.nativeEnum(Chain).optional(),
     cursor: z.number().optional(),
     pageLimit: z.number().optional(),
   })

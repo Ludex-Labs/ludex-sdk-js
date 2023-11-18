@@ -2,11 +2,6 @@ import { z } from "zod";
 import { ApiClient } from "./apiClient";
 import { AxiosOptions, Chain, RedeemType } from "./types";
 import {AxiosResponse} from "axios";
-
-// /** Chains vault is currently supporting */
-// type CHAIN = "SOLANA";
-type Chain = z.input<typeof Chain>
-
 interface VaultResponse {
   /** name of vault */
   name: string;
@@ -20,7 +15,7 @@ interface VaultResponse {
 
 const CreateVaultRequest = z.object({
   name: z.string(),
-  chain: Chain,
+  chain: z.nativeEnum(Chain),
   feeRecipient: z.string()
 })
 
@@ -35,7 +30,7 @@ type CreateVaultRequest = z.input<typeof CreateVaultRequest>
 const UpdateVaultRequest = z.object({
   name: z.string().optional(),
   feeRecipient: z.string().optional(),
-  chain: Chain
+  chain: z.nativeEnum(Chain)
 }) 
 
 /**
@@ -47,7 +42,7 @@ const UpdateVaultRequest = z.object({
 type UpdateVaultRequest = z.input<typeof UpdateVaultRequest>
 
 const GenerateTransactionRequest = z.object({
-  chain: Chain,
+  chain: z.nativeEnum(Chain),
   type: RedeemType,
   gasless: z.boolean(),
   playerPublicKey: z.string(),
@@ -108,7 +103,7 @@ export class Vault {
    * @returns vault
    */
   async getVault(_chain: Chain): Promise<AxiosResponse<VaultResponse>> {
-    const chain = Chain.parse(_chain);
+    const chain = z.nativeEnum(Chain).parse(_chain);
     return this.apiClient.issueGetRequest<VaultResponse>(`/${chain}`);
   }
 
@@ -158,7 +153,7 @@ export class Vault {
    * @returns transactions
    */
   async getTransactions(_chain: Chain): Promise<AxiosResponse<TransactionResponse[]>> {
-    const chain = Chain.parse(_chain);
+    const chain = z.nativeEnum(Chain).parse(_chain);
     return this.apiClient.issueGetRequest<TransactionResponse[]>(
       `/${chain}/transaction`
     );
@@ -174,7 +169,7 @@ export class Vault {
     _chain: Chain,
     _transactionId: string
   ): Promise<AxiosResponse<TransactionResponse>> {
-    const chain = Chain.parse(_chain);
+    const chain = z.nativeEnum(Chain).parse(_chain);
     const transactionId = z.string().parse(_transactionId);
     return this.apiClient.issueGetRequest<TransactionResponse>(
       `/${chain}/transaction/${transactionId}`
