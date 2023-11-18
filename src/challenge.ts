@@ -37,9 +37,9 @@ interface NftPlayer {
 
 const ChallengeListRequest = z.object({
   payoutId: z.number().optional(),
-  environment: Environment.optional(),
-  state: ChallengeState.optional(),
-  type: PayoutType.optional(),
+  environment: z.nativeEnum(Environment).optional(),
+  state: z.nativeEnum(ChallengeState).optional(),
+  type: z.nativeEnum(PayoutType).optional(),
   chain: z.nativeEnum(Chain).optional(),
   page: z.string().optional(),
   pageLimit: z.number().optional(),

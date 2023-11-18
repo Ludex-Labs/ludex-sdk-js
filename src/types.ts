@@ -30,35 +30,47 @@ export enum Chain {
   SOLANA = "SOLANA",
   AVALANCHE = "AVALANCHE",
 }
-export const PayoutType = z.enum(["NATIVE", "FT", "NFT"]);
-export const PayoutState = z.enum([
-  "APPROVED",
-  "PENDING",
-  "REJECTED",
-  "ARCHIVED",
-]);
-export const Environment = z.enum(["MAINNET", "DEVNET"]);
-export const ChallengeState = z.enum([
-  "CREATING",
-  "CREATED",
-  "LOCKING",
-  "LOCKED",
-  "CANCELING",
-  "CANCELED",
-  "RESOLVING",
-  "RESOLVED",
-  "VERIFYING_CANCEL",
-  "VERIFYING_RESOLVE",
-  "VERIFIED_CANCEL",
-  "VERIFIED_RESOLVE",
-  "REDEEMING_CANCEL",
-  "REDEEMING_RESOLVE",
-  "REDEEMED_CANCEL",
-  "REDEEMED_RESOLVE",
-]);
-export const RedeemType = z.enum([
-  "native",
-  "nativeForTokens",
-  "tokensForNative",
-  "tokensForTokens",
-]);
+
+export enum PayoutType {
+  NATIVE = "NATIVE",
+  FT = "FT",
+  NFT = "NFT",
+}
+
+export enum PayoutState {
+  APPROVED = "APPROVED",
+  PENDING = "PENDING",
+  REJECTED = "REJECTED",
+  ARCHIVED = "ARCHIVED",
+}
+
+export enum Environment {
+  MAINNET = "MAINNET",
+  DEVNET = "DEVNET",
+}
+
+export enum ChallengeState {
+  CREATING = "CREATING",
+  CREATED = "CREATED",
+  LOCKING = "LOCKING",
+  LOCKED = "LOCKED",
+  CANCELING = "CANCELING",
+  CANCELED = "CANCELED",
+  RESOLVING = "RESOLVING",
+  RESOLVED = "RESOLVED",
+  VERIFYING_CANCEL = "VERIFYING_CANCEL",
+  VERIFYING_RESOLVE = "VERIFYING_RESOLVE",
+  VERIFIED_CANCEL = "VERIFIED_CANCEL",
+  VERIFIED_RESOLVE = "VERIFIED_RESOLVE",
+  REDEEMING_CANCEL = "REDEEMING_CANCEL",
+  REDEEMING_RESOLVE = "REDEEMING_RESOLVE",
+  REDEEMED_CANCEL = "REDEEMED_CANCEL",
+  REDEEMED_RESOLVE = "REDEEMED_RESOLVE",
+}
+
+export enum RedeemType {
+  native = "native",
+  nativeForTokens = "nativeForTokens",
+  tokensForNative = "tokensForNative",
+  tokensForTokens = "tokensForTokens",
+}

@@ -43,7 +43,7 @@ type UpdateVaultRequest = z.input<typeof UpdateVaultRequest>
 
 const GenerateTransactionRequest = z.object({
   chain: z.nativeEnum(Chain),
-  type: RedeemType,
+  type: z.nativeEnum(RedeemType),
   gasless: z.boolean(),
   playerPublicKey: z.string(),
   amountGiven: z.number().optional(),

@@ -22,8 +22,8 @@ interface PayoutResponse {
 const PayoutListRequest = z
   .object({
     mintId: z.number().optional(),
-    state: PayoutState.optional(),
-    type: PayoutType.optional(),
+    state: z.nativeEnum(PayoutState).optional(),
+    type: z.nativeEnum(PayoutType).optional(),
     chain: z.nativeEnum(Chain).optional(),
     cursor: z.number().optional(),
     pageLimit: z.number().optional(),
