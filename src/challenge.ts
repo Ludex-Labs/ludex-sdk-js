@@ -73,6 +73,12 @@ const CreateChallengeRequest = z.object({
   isVerified: z.boolean().optional(),
 })
 
+/**
+ * CreateChallengeRequest
+ * @param {number} payoutId - The ID of the payout.
+ * @param {number} limit - Player limit of the challenge, default to 2 (optional)
+ * @param {boolean} isVerified - If challenge should be closed to public.
+ */
 type CreateChallengeRequest = z.input<typeof CreateChallengeRequest>
 
 interface CreateChallengeResponse {
