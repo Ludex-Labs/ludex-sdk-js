@@ -133,9 +133,12 @@ export class Vault {
     transaction: GenerateTransactionRequest
   ): Promise<AxiosResponse<GenerateTransactionResponse>> {
     const { chain, ...transactionBody } = transaction;
+    const requestBody = {
+      transaction: transactionBody
+    }
     return this.apiClient.issuePostRequest<GenerateTransactionResponse>(
-      `/${chain}/transaction`,
-      transactionBody
+      `/${chain}/generateTx`,
+      requestBody
     );
   }
 
@@ -146,7 +149,7 @@ export class Vault {
    */
   async getTransactions(chain: CHAIN): Promise<AxiosResponse<TransactionResponse[]>> {
     return this.apiClient.issueGetRequest<TransactionResponse[]>(
-      `/${chain}/transaction`
+      `/${chain}/transactions`
     );
   }
 
