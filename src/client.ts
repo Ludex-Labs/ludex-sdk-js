@@ -18,6 +18,10 @@ const CreateClientRequest = z.object({
     name: z.string()
 });
 
+/**
+ * CreateClientRequest
+ * @property {string} name - The name of the client.
+ */
 type CreateClientRequest = z.input<typeof CreateClientRequest>
 
 interface OpenChallengeCountResponse {
