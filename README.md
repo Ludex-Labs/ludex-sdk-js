@@ -117,15 +117,34 @@ new Ludex.OrganizationScoped(organizationApiKey, {
 
 #### Error Handling
 
-The SDK throws `AxiosError` upon http errors for API requests.
+The SDK throws `AxiosError` upon http errors for API requests and `ZodError` when there is an issue with the data types received from the SDK methods.
 
-You can read more about axios error handling [here](https://axios-http.com/docs/handling_errors).
+The SDK exposes `AxiosError` type and `ZodError` type to facililtate error handling. For example, If you want to handle both types of errors together, you can do so as follows:
 
-You can get more data on the Ludex error using the following fields:
+```ts
+import { Ludex, AxiosError, ZodError } from "@ludex-labs/ludex-sdk-js";
 
-- `error.response.data.code`: The Ludex error code (HTTP code)
-- `error.response.data.message`: Explanation of the Ludex error
+try {
+  const ludexClientApi = new Ludex.ClientScoped(clientApiKey).challenge;
+  const challengeId = 1;
+  const response = await ludexClientApi.getChallenge(challengeId);
+  const challenge = response.data;
+} catch(error) {
+  if (error instanceof AxiosError) {
+    console.error('HTTP error status:', error.response?.status);
+    /* you can extract more data from AxiosError using the following fields */
+    console.error('HTTP error code:', error.response.data.code);
+    console.error('Explanation of the error:', error.response.data.message);
 
+  } else if (error instanceof ZodError) {
+    console.error('Validation error details:', error.errors);
+  } else if (error instanceof Error) {
+    console.error('Unexpected error:', error.message);
+  }
+}
+```
+
+You can read more about axios error handling [here](https://axios-http.com/docs/handling_errors) and zod error handling [here](https://zod.dev/?id=error-handling).
 
 #### Response Handling
 
@@ -153,6 +172,7 @@ const challenge = response.data;
 ```
 
 The challenge object should have the following structure:
+
 ```json
 {
   "id": 1,
@@ -171,6 +191,6 @@ The challenge object should have the following structure:
       "providerRake": 0.0002
     }
   },
-  "players": ["0x000000", "0x000000"],
+  "players": ["0x000000", "0x000000"]
 }
 ```
