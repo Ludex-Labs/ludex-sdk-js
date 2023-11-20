@@ -194,3 +194,29 @@ The challenge object should have the following structure:
   "players": ["0x000000", "0x000000"]
 }
 ```
+
+#### Using TypeScript Enums
+
+The SDK exposes several TypeScript enums to enhance type safety and help users provide correct values when interacting with the SDK. Below are the available enums:
+
+```ts
+import {
+  Ludex,
+  Chain,
+  PayoutType,
+  PayoutState,
+  Environment,
+  ChallengeState,
+  RedeemType,
+} from "@ludex-labs/ludex-sdk-js";
+
+const ludexClientApi = new Ludex.ClientScoped(clientApiKey);
+const filter = {
+  environment: Environment.DEVNET,
+  state: ChallengeState.CREATED,
+  type: PayoutType.NATIVE,
+  chain: Chain.AVALANCHE,
+}
+const response = await ludexClientApi.challenge.getChallenges(filter);
+const challenge = response.data;
+```
