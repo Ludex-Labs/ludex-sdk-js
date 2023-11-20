@@ -141,9 +141,12 @@ export class Vault {
   ): Promise<AxiosResponse<GenerateTransactionResponse>> {
     const transaction = GenerateTransactionRequest.parse(_transaction);
     const { chain, ...transactionBody } = transaction;
+    const requestBody = {
+      transaction: transactionBody
+    }
     return this.apiClient.issuePostRequest<GenerateTransactionResponse>(
-      `/${chain}/transaction`,
-      transactionBody
+      `/${chain}/generateTx`,
+      requestBody
     );
   }
 
@@ -155,7 +158,7 @@ export class Vault {
   async getTransactions(_chain: Chain): Promise<AxiosResponse<TransactionResponse[]>> {
     const chain = z.nativeEnum(Chain).parse(_chain);
     return this.apiClient.issueGetRequest<TransactionResponse[]>(
-      `/${chain}/transaction`
+      `/${chain}/transactions`
     );
   }
 
