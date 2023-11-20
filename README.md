@@ -167,7 +167,7 @@ For example, to get a challenge you can do the following:
 import { Ludex } from "@ludex-labs/ludex-sdk-js";
 const ludexClientApi = new Ludex.ClientScoped(clientApiKey);
 const challengeId = 1;
-const response = await ludexClientApi.getChallenge(challengeId);
+const response = await ludexClientApi.challenge.getChallenge(challengeId);
 const challenge = response.data;
 ```
 
