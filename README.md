@@ -202,11 +202,11 @@ The SDK exposes several TypeScript enums to enhance type safety and help users p
 ```ts
 import {
   Ludex,
-  Chain,
-  PayoutType,
-  PayoutState,
   Environment,
   ChallengeState,
+  PayoutType,
+  Chain,
+  PayoutState,
   RedeemType,
 } from "@ludex-labs/ludex-sdk-js";
 
