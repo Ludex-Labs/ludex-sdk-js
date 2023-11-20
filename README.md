@@ -119,7 +119,7 @@ new Ludex.OrganizationScoped(organizationApiKey, {
 
 The SDK throws `AxiosError` upon http errors for API requests and `ZodError` when there is an issue with the data types received from the SDK methods.
 
-The SDK exposes `AxiosError` type and `ZodError` type to facililtate error handling. For example, If you want to handle both types of errors together, you can do so as follows:
+The SDK exposes `AxiosError` type and `ZodError` type to facilitate error handling. For example, If you want to handle both types of errors together, you can do so as follows:
 
 ```ts
 import { Ludex, AxiosError, ZodError } from "@ludex-labs/ludex-sdk-js";
