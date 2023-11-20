@@ -125,9 +125,9 @@ The SDK exposes `AxiosError` type and `ZodError` type to facilitate error handli
 import { Ludex, AxiosError, ZodError } from "@ludex-labs/ludex-sdk-js";
 
 try {
-  const ludexClientApi = new Ludex.ClientScoped(clientApiKey).challenge;
+  const ludexClientApi = new Ludex.ClientScoped(clientApiKey);
   const challengeId = 1;
-  const response = await ludexClientApi.getChallenge(challengeId);
+  const response = await ludexClientApi.challenge.getChallenge(challengeId);
   const challenge = response.data;
 } catch(error) {
   if (error instanceof AxiosError) {
