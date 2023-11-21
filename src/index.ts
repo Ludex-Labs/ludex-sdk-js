@@ -1,8 +1,19 @@
+import { z } from "zod";
 import { Challenge } from "./challenge";
 import { Client } from "./client";
 import { Payout } from "./payout";
 import { Vault } from "./vault";
-import { AxiosOptions } from "./types";
+import {
+  AxiosOptions,
+  Chain,
+  PayoutType,
+  PayoutState,
+  Environment,
+  ChallengeState,
+  RedeemType,
+} from "./types";
+import { AxiosError } from "axios";
+import { ZodError } from "zod";
 
 class OrganizationScoped {
   client: Client;
@@ -10,14 +21,15 @@ class OrganizationScoped {
 
   /**
    * Create organization scoped api client
-   * @param organizationApiKey organization api key
+   * @param _organizationApiKey organization api key
    * @param options axios options
    * @returns organization scoped api client
    */
   constructor(
-    public readonly organizationApiKey: string,
+    public readonly _organizationApiKey: string,
     options?: AxiosOptions
   ) {
+    const organizationApiKey = z.string().parse(_organizationApiKey);
     this.client = new Client(organizationApiKey, options);
     this.payout = new Payout(organizationApiKey, options);
   }
@@ -29,11 +41,12 @@ class ClientScoped {
 
   /**
    * Create client scoped api client
-   * @param clientApiKey client api key
+   * @param _clientApiKey client api key
    * @param options axios options
    * @returns client scoped api client
    */
-  constructor(clientApiKey: string, options?: AxiosOptions) {
+  constructor(_clientApiKey: string, options?: AxiosOptions) {
+    const clientApiKey = z.string().parse(_clientApiKey);
     this.challenge = new Challenge(clientApiKey, options);
     this.vault = new Vault(clientApiKey, options);
   }
@@ -42,4 +55,15 @@ class ClientScoped {
 export const Ludex = {
   OrganizationScoped,
   ClientScoped,
+};
+
+export {
+  Chain,
+  PayoutType,
+  PayoutState,
+  Environment,
+  ChallengeState,
+  RedeemType,
+  AxiosError,
+  ZodError
 };

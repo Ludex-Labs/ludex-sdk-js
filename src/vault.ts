@@ -1,69 +1,72 @@
+import { z } from "zod";
 import { ApiClient } from "./apiClient";
-import { AxiosOptions } from "./types";
+import { AxiosOptions, Chain, RedeemType } from "./types";
 import {AxiosResponse} from "axios";
-
-/** Chains vault is currently supporting */
-type CHAIN = "SOLANA";
-
 interface VaultResponse {
   /** name of vault */
   name: string;
   /** blockchain address of vault */
   blockchainAddress: string | null;
   /** chain of vault */
-  chain: CHAIN;
+  chain: Chain;
   /** default fee recipient */
   feeRecipient: string;
 }
 
-interface CreateVaultRequest {
-  /** name of vault */
-  name: string;
-  /** chain of vault */
-  chain: CHAIN;
-  /** default fee recipient */
-  feeRecipient: string;
-}
+const CreateVaultRequest = z.object({
+  name: z.string(),
+  chain: z.nativeEnum(Chain),
+  feeRecipient: z.string()
+})
 
-interface UpdateVaultRequest {
-  /** name of vault */
-  name?: string;
-  /** default fee recipient */
-  feeRecipient?: string;
-  /** chain of vault to update */
-  chain: CHAIN;
-}
+/**
+ * CreateVaultRequest
+ * @property {string} name - The name of the vault.
+ * @property {Chain} chain - The chain of the vault.
+ * @property {string} feeRecipient - The default fee recipient.
+ */
+type CreateVaultRequest = z.input<typeof CreateVaultRequest>
 
-enum RedeemType {
-  /** just native redeem */
-  native = "native",
-  /** pay tokens to get native */
-  nativeForTokens = "nativeForTokens",
-  /** pay native to get tokens */
-  tokensForNative = "tokensForNative",
-  /** pay tokens to get tokens */
-  tokensForTokens = "tokensForTokens",
-}
-interface GenerateTransactionRequest {
-  /** chain of vault */
-  chain: CHAIN;
-  /** type of transaction */
-  type: RedeemType;
-  /** gasless transaction */
-  gasless: boolean;
-  /** player public key */
-  playerPublicKey: string;
-  /** amount given */
-  amountGiven?: number;
-  /** amount redeemed */
-  amountRedeemed: number;
-  /** override fee recipient public key */
-  overideFeeRecipientPubkey?: string;
-  /** pay mint */
-  payMint?: string;
-  /** receive mint */
-  receiveMint?: string;
-}
+const UpdateVaultRequest = z.object({
+  name: z.string().optional(),
+  feeRecipient: z.string().optional(),
+  chain: z.nativeEnum(Chain)
+}) 
+
+/**
+ * UpdateVaultRequest
+ * @property {string} [name] - The updated name of the vault (optional).
+ * @property {string} [feeRecipient] - The updated default fee recipient (optional).
+ * @property {Chain} chain - The chain of the vault to update.
+ */
+type UpdateVaultRequest = z.input<typeof UpdateVaultRequest>
+
+const GenerateTransactionRequest = z.object({
+  chain: z.nativeEnum(Chain),
+  type: z.nativeEnum(RedeemType),
+  gasless: z.boolean(),
+  playerPublicKey: z.string(),
+  amountGiven: z.number().optional(),
+  amountRedeemed: z.number(),
+  overideFeeRecipientPubkey: z.string().optional(),
+  payMint: z.string().optional(),
+  receiveMint: z.string().optional()
+})
+
+/**
+ * GenerateTransactionRequest
+ * @property {Chain} chain - The chain of the vault.
+ * @property {RedeemType} type - The type of transaction.
+ * @property {boolean} gasless - Indicates whether the transaction is gasless.
+ * @property {string} playerPublicKey - The public key of the player.
+ * @property {number} [amountGiven] - The amount given (optional).
+ * @property {number} amountRedeemed - The amount to be redeemed.
+ * @property {string} [overideFeeRecipientPubkey] - The overridden fee recipient public key (optional).
+ * @property {string} [payMint] - The pay mint (optional).
+ * @property {string} [receiveMint] - The receive mint (optional).
+ */
+type GenerateTransactionRequest = z.input<typeof GenerateTransactionRequest>
+
 
 interface GenerateTransactionResponse {
   /** id of transaction for look up */
@@ -89,7 +92,8 @@ export class Vault {
    * @param options axios options
    * @returns vault api client
    */
-  constructor(clientKey: string, options?: AxiosOptions) {
+  constructor(_clientKey: string, options?: AxiosOptions) {
+    const clientKey = z.string().parse(_clientKey);
     this.apiClient = new ApiClient(clientKey, this.BASE_PATH, options);
   }
 
@@ -98,7 +102,8 @@ export class Vault {
    * @param chain chain of vault
    * @returns vault
    */
-  async getVault(chain: CHAIN): Promise<AxiosResponse<VaultResponse>> {
+  async getVault(_chain: Chain): Promise<AxiosResponse<VaultResponse>> {
+    const chain = z.nativeEnum(Chain).parse(_chain);
     return this.apiClient.issueGetRequest<VaultResponse>(`/${chain}`);
   }
 
@@ -107,7 +112,8 @@ export class Vault {
    * @param vault vault
    * @returns vault
    */
-  async createVault(vault: CreateVaultRequest): Promise<AxiosResponse<VaultResponse>> {
+  async createVault(_vault: CreateVaultRequest): Promise<AxiosResponse<VaultResponse>> {
+    const vault = CreateVaultRequest.parse(_vault);
     return this.apiClient.issuePostRequest<VaultResponse>("/", vault);
   }
 
@@ -116,7 +122,8 @@ export class Vault {
    * @param vault vault
    * @returns vault
    */
-  async updateVault(vault: UpdateVaultRequest): Promise<AxiosResponse<VaultResponse>> {
+  async updateVault(_vault: UpdateVaultRequest): Promise<AxiosResponse<VaultResponse>> {
+    const vault = UpdateVaultRequest.parse(_vault);
     const { chain, ...vaultBody } = vault;
     return this.apiClient.issuePatchRequest<VaultResponse>(
       `/${chain}`,
@@ -130,8 +137,9 @@ export class Vault {
    * @returns transaction
    */
   async generateTransaction(
-    transaction: GenerateTransactionRequest
+    _transaction: GenerateTransactionRequest
   ): Promise<AxiosResponse<GenerateTransactionResponse>> {
+    const transaction = GenerateTransactionRequest.parse(_transaction);
     const { chain, ...transactionBody } = transaction;
     const requestBody = {
       transaction: transactionBody
@@ -147,7 +155,8 @@ export class Vault {
    * @param chain chain of vault
    * @returns transactions
    */
-  async getTransactions(chain: CHAIN): Promise<AxiosResponse<TransactionResponse[]>> {
+  async getTransactions(_chain: Chain): Promise<AxiosResponse<TransactionResponse[]>> {
+    const chain = z.nativeEnum(Chain).parse(_chain);
     return this.apiClient.issueGetRequest<TransactionResponse[]>(
       `/${chain}/transactions`
     );
@@ -160,9 +169,11 @@ export class Vault {
    * @returns transaction
    */
   async getTransaction(
-    chain: CHAIN,
-    transactionId: string
+    _chain: Chain,
+    _transactionId: string
   ): Promise<AxiosResponse<TransactionResponse>> {
+    const chain = z.nativeEnum(Chain).parse(_chain);
+    const transactionId = z.string().parse(_transactionId);
     return this.apiClient.issueGetRequest<TransactionResponse>(
       `/${chain}/transaction/${transactionId}`
     );

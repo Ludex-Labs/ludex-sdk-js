@@ -1,5 +1,6 @@
+import { z } from "zod";
 import { ApiClient } from "./apiClient";
-import { AxiosOptions } from "./types";
+import { AxiosOptions, Chain } from "./types";
 import {AxiosResponse} from "axios";
 
 interface ClientResponse {
@@ -13,10 +14,15 @@ interface ClientResponse {
   wallets: ClientWallet[];
 }
 
-interface CreateClientRequest {
-  /** Client Name */
-  name: string;
-}
+const CreateClientRequest = z.object({
+    name: z.string()
+});
+
+/**
+ * CreateClientRequest
+ * @property {string} name - The name of the client.
+ */
+type CreateClientRequest = z.input<typeof CreateClientRequest>
 
 interface OpenChallengeCountResponse {
   /** Current open challenge count */
@@ -25,12 +31,17 @@ interface OpenChallengeCountResponse {
   limit: number;
 }
 
-interface ClientWallet {
-  /** wallet chain */
-  chain: string;
-  /** wallet public key */
-  address: string;
-}
+const ClientWallet = z.object({
+  chain: z.nativeEnum(Chain),
+  address: z.string()
+})
+
+/**
+ * ClientWallet
+ * @property {string} chain - The wallet chain.
+ * @property {string} address - The wallet public key.
+ */
+type ClientWallet = z.input<typeof ClientWallet>
 
 interface DeleteClientResponse {
   /** id of deleted client */
@@ -47,7 +58,8 @@ export class Client {
    * @param options axios options
    * @returns client api client
    */
-  constructor(organizationKey: string, options?: AxiosOptions) {
+  constructor(_organizationKey: string, options?: AxiosOptions) {
+    const organizationKey = z.string().parse(_organizationKey);
     this.apiClient = new ApiClient(organizationKey, this.BASE_PATH, options);
   }
 
@@ -56,7 +68,8 @@ export class Client {
    * @param clientId client id
    * @returns client
    */
-  async getClient(clientId: number): Promise<AxiosResponse<ClientResponse>> {
+  async getClient(_clientId: number): Promise<AxiosResponse<ClientResponse>> {
+    const clientId = z.number().parse(_clientId);
     return this.apiClient.issueGetRequest<ClientResponse>(`/${clientId}`);
   }
 
@@ -73,7 +86,8 @@ export class Client {
    * @param client client
    * @returns client
    */
-  async createClient(client: CreateClientRequest): Promise<AxiosResponse<ClientResponse>> {
+  async createClient(_client: CreateClientRequest): Promise<AxiosResponse<ClientResponse>> {
+    const client = CreateClientRequest.parse(_client);
     return this.apiClient.issuePostRequest<ClientResponse>("/", client);
   }
 
@@ -83,8 +97,9 @@ export class Client {
    * @returns open challenge count
    */
   async getOpenChallengeCount(
-    clientId: number
+    _clientId: number
   ): Promise<AxiosResponse<OpenChallengeCountResponse>> {
+    const clientId = z.number().parse(_clientId);
     return this.apiClient.issueGetRequest<OpenChallengeCountResponse>(
       `/${clientId}/open-challenge-count`
     );
@@ -97,9 +112,11 @@ export class Client {
    * @returns client
    */
   async updateClientWallet(
-    clientId: number,
-    wallet: ClientWallet
+    _clientId: number,
+    _wallet: ClientWallet
   ): Promise<AxiosResponse<ClientResponse>> {
+    const clientId = z.number().parse(_clientId);
+    const wallet = ClientWallet.parse(_wallet);
     return this.apiClient.issuePatchRequest<ClientResponse>(
       `/${clientId}/wallet`,
       wallet
@@ -111,7 +128,8 @@ export class Client {
    * @param clientId client id
    * @returns client id of deleted client
    */
-  async deleteClient(clientId: number): Promise<AxiosResponse<DeleteClientResponse>> {
+  async deleteClient(_clientId: number): Promise<AxiosResponse<DeleteClientResponse>> {
+    const clientId = z.number().parse(_clientId);
     return this.apiClient.issueDeleteRequest<DeleteClientResponse>(
       `/${clientId}`
     );

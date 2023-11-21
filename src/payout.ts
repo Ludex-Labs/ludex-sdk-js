@@ -1,6 +1,7 @@
+import { z } from "zod";
 import { ApiClient } from "./apiClient";
 import { queryString } from "./queryString";
-import { AxiosOptions } from "./types";
+import { AxiosOptions, Chain, PayoutState, PayoutType } from "./types";
 import { AxiosResponse } from "axios";
 
 interface PayoutResponse {
@@ -18,20 +19,27 @@ interface PayoutResponse {
   type: "NFT" | "FT" | "Native";
 }
 
-interface PayoutListRequest {
-  /** mint id */
-  mintId?: number;
-  /** state of payout */
-  state?: string;
-  /** type of payout */
-  type?: string;
-  /** chain of payout */
-  chain?: string;
-  /** cursor by id of payout */
-  cursor?: number;
-  /** limit of payouts to return max 1000 */
-  pageLimit?: number;
-}
+const PayoutListRequest = z
+  .object({
+    mintId: z.number().optional(),
+    state: z.nativeEnum(PayoutState).optional(),
+    type: z.nativeEnum(PayoutType).optional(),
+    chain: z.nativeEnum(Chain).optional(),
+    cursor: z.number().optional(),
+    pageLimit: z.number().optional(),
+  })
+  .optional();
+
+/**
+ * Payout list request
+ * @param mintId mint id
+ * @param state payout state
+ * @param type payout type
+ * @param chain payout chain
+ * @param cursor cursor for pagination
+ * @param pageLimit page limit for pagination
+ */
+type PayoutListRequest = z.input<typeof PayoutListRequest>;
 
 interface PayoutListResponse {
   /** list of payouts */
@@ -52,7 +60,8 @@ export class Payout {
    * @param options axios options
    * @returns payout api client
    */
-  constructor(organizationKey: string, options?: AxiosOptions) {
+  constructor(_organizationKey: string, options?: AxiosOptions) {
+    const organizationKey = z.string().parse(_organizationKey);
     this.apiClient = new ApiClient(organizationKey, this.BASE_PATH, options);
   }
 
@@ -61,7 +70,8 @@ export class Payout {
    * @param payoutId payout id
    * @returns payout
    */
-  async getPayout(payoutId: number): Promise<AxiosResponse<PayoutResponse>> {
+  async getPayout(_payoutId: number): Promise<AxiosResponse<PayoutResponse>> {
+    const payoutId = z.number().parse(_payoutId);
     return this.apiClient.issueGetRequest(`/${payoutId}`);
   }
 
@@ -71,8 +81,9 @@ export class Payout {
    * @returns payouts
    */
   async getPayouts(
-    filters?: PayoutListRequest
+    _filters?: PayoutListRequest
   ): Promise<AxiosResponse<PayoutListResponse>> {
-    return this.apiClient.issueGetRequest(`/${queryString(filters)}`);
+    const filters: PayoutListRequest = PayoutListRequest.parse(_filters);
+    return this.apiClient.issueGetRequest(`/?${queryString(filters)}`);
   }
 }
