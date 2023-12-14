@@ -13,7 +13,12 @@ import {
 } from "./challenge";
 import { Client, CreateClientRequest, ClientWallet } from "./client";
 import { Payout, PayoutListRequest } from "./payout";
-import { Vault } from "./vault";
+import {
+  Vault,
+  CreateVaultRequest,
+  UpdateVaultRequest,
+  GenerateTransactionRequest,
+} from "./vault";
 import {
   AxiosOptions,
   Chain,
@@ -93,3 +98,5 @@ export {
 export { CreateClientRequest, ClientWallet };
 
 export { PayoutListRequest };
+
+export { CreateVaultRequest, UpdateVaultRequest, GenerateTransactionRequest };

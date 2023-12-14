@@ -25,7 +25,7 @@ const CreateVaultRequest = z.object({
  * @property {Chain} chain - The chain of the vault.
  * @property {string} feeRecipient - The default fee recipient.
  */
-type CreateVaultRequest = z.input<typeof CreateVaultRequest>
+export type CreateVaultRequest = z.input<typeof CreateVaultRequest>
 
 const UpdateVaultRequest = z.object({
   name: z.string().optional(),
@@ -39,7 +39,7 @@ const UpdateVaultRequest = z.object({
  * @property {string} [feeRecipient] - The updated default fee recipient (optional).
  * @property {Chain} chain - The chain of the vault to update.
  */
-type UpdateVaultRequest = z.input<typeof UpdateVaultRequest>
+export type UpdateVaultRequest = z.input<typeof UpdateVaultRequest>
 
 const GenerateTransactionRequest = z.object({
   chain: z.nativeEnum(Chain),
@@ -65,7 +65,7 @@ const GenerateTransactionRequest = z.object({
  * @property {string} [payMint] - The pay mint (optional).
  * @property {string} [receiveMint] - The receive mint (optional).
  */
-type GenerateTransactionRequest = z.input<typeof GenerateTransactionRequest>
+export type GenerateTransactionRequest = z.input<typeof GenerateTransactionRequest>
 
 
 interface GenerateTransactionResponse {
