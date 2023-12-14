@@ -87,5 +87,5 @@ export {
   FungibleTokenPayout,
   NonFungibleTokenPayout,
   ResolveChallengeRequest,
-  ResolveChallengeWithOneWinnerRequest
+  ResolveChallengeWithOneWinnerRequest,
 };
