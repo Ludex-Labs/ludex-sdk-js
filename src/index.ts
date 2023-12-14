@@ -9,9 +9,9 @@ import {
   FungibleTokenPayout,
   NonFungibleTokenPayout,
   ResolveChallengeRequest,
-  ResolveChallengeWithOneWinnerRequest
+  ResolveChallengeWithOneWinnerRequest,
 } from "./challenge";
-import { Client } from "./client";
+import { Client, CreateClientRequest, ClientWallet } from "./client";
 import { Payout } from "./payout";
 import { Vault } from "./vault";
 import {
@@ -89,3 +89,5 @@ export {
   ResolveChallengeRequest,
   ResolveChallengeWithOneWinnerRequest,
 };
+
+export { CreateClientRequest, ClientWallet };

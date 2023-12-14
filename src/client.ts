@@ -22,7 +22,7 @@ const CreateClientRequest = z.object({
  * CreateClientRequest
  * @property {string} name - The name of the client.
  */
-type CreateClientRequest = z.input<typeof CreateClientRequest>
+export type CreateClientRequest = z.input<typeof CreateClientRequest>
 
 interface OpenChallengeCountResponse {
   /** Current open challenge count */
@@ -41,7 +41,7 @@ const ClientWallet = z.object({
  * @property {string} chain - The wallet chain.
  * @property {string} address - The wallet public key.
  */
-type ClientWallet = z.input<typeof ClientWallet>
+export type ClientWallet = z.input<typeof ClientWallet>
 
 interface DeleteClientResponse {
   /** id of deleted client */
