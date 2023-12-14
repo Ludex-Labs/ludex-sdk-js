@@ -83,6 +83,7 @@ export {
   ZodError,
 };
 
+// type definitions for Challenge
 export {
   ChallengeListRequest,
   CreateChallengeRequest,
@@ -95,8 +96,11 @@ export {
   ResolveChallengeWithOneWinnerRequest,
 };
 
+// type definitions for Client
 export { CreateClientRequest, ClientWallet };
 
+// type definitions for Payout
 export { PayoutListRequest };
 
+// type definitions for Vault
 export { CreateVaultRequest, UpdateVaultRequest, GenerateTransactionRequest };
