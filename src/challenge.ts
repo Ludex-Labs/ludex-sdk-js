@@ -271,12 +271,17 @@ interface ResolveChallengeResponse {
   resolvingAt: string;
 }
 
-interface ResolveChallengeWithOneWinnerRequest {
-  /** challenge id */
-  challengeId: number;
-  /** payout of the challenge */
-  winner: string;
-}
+const ResolveChallengeWithOneWinnerRequest = z.object({
+  challengeId: z.number(),
+  winner: z.string()
+})
+
+/**
+ * Resolve Challenge With One Winner Request
+ * @param {number} challengeId - The ID of the challenge.
+ * @param {string} winner - The winner address of the challenge.
+ */
+export type ResolveChallengeWithOneWinnerRequest = z.input<typeof ResolveChallengeWithOneWinnerRequest>
 
 export class Challenge {
   private readonly apiClient: ApiClient;

@@ -9,6 +9,7 @@ import {
   FungibleTokenPayout,
   NonFungibleTokenPayout,
   ResolveChallengeRequest,
+  ResolveChallengeWithOneWinnerRequest
 } from "./challenge";
 import { Client } from "./client";
 import { Payout } from "./payout";
@@ -86,4 +87,5 @@ export {
   FungibleTokenPayout,
   NonFungibleTokenPayout,
   ResolveChallengeRequest,
+  ResolveChallengeWithOneWinnerRequest
 };
