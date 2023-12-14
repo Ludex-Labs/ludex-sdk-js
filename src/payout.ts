@@ -39,7 +39,7 @@ const PayoutListRequest = z
  * @param cursor cursor for pagination
  * @param pageLimit page limit for pagination
  */
-type PayoutListRequest = z.input<typeof PayoutListRequest>;
+export type PayoutListRequest = z.input<typeof PayoutListRequest>;
 
 interface PayoutListResponse {
   /** list of payouts */

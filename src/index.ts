@@ -12,7 +12,7 @@ import {
   ResolveChallengeWithOneWinnerRequest,
 } from "./challenge";
 import { Client, CreateClientRequest, ClientWallet } from "./client";
-import { Payout } from "./payout";
+import { Payout, PayoutListRequest } from "./payout";
 import { Vault } from "./vault";
 import {
   AxiosOptions,
@@ -91,3 +91,5 @@ export {
 };
 
 export { CreateClientRequest, ClientWallet };
+
+export { PayoutListRequest };
