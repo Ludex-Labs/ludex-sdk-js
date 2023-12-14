@@ -1,5 +1,15 @@
 import { z, ZodError } from "zod";
-import { Challenge } from "./challenge";
+import {
+  Challenge,
+  ChallengeListRequest,
+  CreateChallengeRequest,
+  Offering,
+  JoinChallengeRequest,
+  LeaveChallengeRequest,
+  FungibleTokenPayout,
+  NonFungibleTokenPayout,
+  ResolveChallengeRequest,
+} from "./challenge";
 import { Client } from "./client";
 import { Payout } from "./payout";
 import { Vault } from "./vault";
@@ -64,5 +74,16 @@ export {
   ChallengeState,
   RedeemType,
   AxiosError,
-  ZodError
+  ZodError,
+};
+
+export {
+  ChallengeListRequest,
+  CreateChallengeRequest,
+  Offering,
+  JoinChallengeRequest,
+  LeaveChallengeRequest,
+  FungibleTokenPayout,
+  NonFungibleTokenPayout,
+  ResolveChallengeRequest,
 };
