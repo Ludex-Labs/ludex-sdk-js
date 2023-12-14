@@ -260,7 +260,7 @@ const ResolveChallengeRequest = z.object({
  * @property {(FungibleTokenPayout[] | NonFungibleTokenPayout[])} payout - The payout of the challenge,
  * which can be an array of fungible or non-fungible token payouts.
  */
-type ResolveChallengeRequest = z.input<typeof ResolveChallengeRequest>
+export type ResolveChallengeRequest = z.input<typeof ResolveChallengeRequest>
 
 interface ResolveChallengeResponse {
   /** id of challenge */
