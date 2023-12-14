@@ -1,5 +1,4 @@
 import { AxiosProxyConfig, AxiosResponse } from "axios";
-import { z } from "zod";
 
 export interface AxiosOptions {
   /** Base url instead of api.ludex */

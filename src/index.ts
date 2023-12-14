@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z, ZodError } from "zod";
 import { Challenge } from "./challenge";
 import { Client } from "./client";
 import { Payout } from "./payout";
@@ -13,7 +13,6 @@ import {
   RedeemType,
 } from "./types";
 import { AxiosError } from "axios";
-import { ZodError } from "zod";
 
 class OrganizationScoped {
   client: Client;
