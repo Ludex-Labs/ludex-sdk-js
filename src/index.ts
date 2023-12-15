@@ -11,7 +11,7 @@ import {
   ResolveChallengeRequest,
   ResolveChallengeWithOneWinnerRequest,
   ChallengeResponse,
-  PayoutResponse,
+  PayoutResponse as ChallengePayoutResponse,
   MintResponse,
   Pot,
   Signature,
@@ -31,7 +31,12 @@ import {
   OpenChallengeCountResponse,
   DeleteClientResponse,
 } from "./client";
-import { Payout, PayoutListRequest } from "./payout";
+import {
+  Payout,
+  PayoutListRequest,
+  PayoutResponse,
+  PayoutListResponse,
+} from "./payout";
 import {
   Vault,
   CreateVaultRequest,
@@ -114,7 +119,7 @@ export {
   ResolveChallengeRequest,
   ResolveChallengeWithOneWinnerRequest,
   ChallengeResponse,
-  PayoutResponse,
+  ChallengePayoutResponse,
   MintResponse,
   Pot,
   Signature,
@@ -137,7 +142,7 @@ export {
 };
 
 // type definitions for Payout
-export { PayoutListRequest };
+export { PayoutListRequest, PayoutResponse, PayoutListResponse };
 
 // type definitions for Vault
 export { CreateVaultRequest, UpdateVaultRequest, GenerateTransactionRequest };
