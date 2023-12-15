@@ -4,7 +4,7 @@ import { queryString } from "./queryString";
 import { AxiosOptions, Chain, PayoutState, PayoutType } from "./types";
 import { AxiosResponse } from "axios";
 
-interface PayoutResponse {
+export type PayoutResponse = {
   /** Payout id */
   id: number;
   /**  Chain of the payout */
@@ -39,9 +39,9 @@ const PayoutListRequest = z
  * @param cursor cursor for pagination
  * @param pageLimit page limit for pagination
  */
-type PayoutListRequest = z.input<typeof PayoutListRequest>;
+export type PayoutListRequest = z.input<typeof PayoutListRequest>;
 
-interface PayoutListResponse {
+export type PayoutListResponse = {
   /** list of payouts */
   payouts: PayoutResponse[];
   /** cursor for pagination */

@@ -3,17 +3,7 @@ import { Challenge } from "./challenge";
 import { Client } from "./client";
 import { Payout } from "./payout";
 import { Vault } from "./vault";
-import {
-  AxiosOptions,
-  Chain,
-  PayoutType,
-  PayoutState,
-  Environment,
-  ChallengeState,
-  RedeemType,
-} from "./types";
-import { AxiosError } from "axios";
-import { ZodError } from "zod";
+import { AxiosOptions } from "./types";
 
 class OrganizationScoped {
   client: Client;
@@ -64,6 +54,59 @@ export {
   Environment,
   ChallengeState,
   RedeemType,
-  AxiosError,
-  ZodError
-};
+} from "./types";
+
+export { ZodError } from "zod";
+
+export { AxiosError } from "axios";
+
+// type definitions for Challenge
+export {
+  ChallengeListRequest,
+  CreateChallengeRequest,
+  Offering,
+  JoinChallengeRequest,
+  LeaveChallengeRequest,
+  FungibleTokenPayout,
+  NonFungibleTokenPayout,
+  ResolveChallengeRequest,
+  ResolveChallengeWithOneWinnerRequest,
+  ChallengeResponse,
+  PayoutResponse as ChallengePayoutResponse,
+  MintResponse,
+  Pot,
+  Signature,
+  WinningResponse,
+  CreateChallengeResponse,
+  JoinChallengeResponse,
+  LeaveChallengeResponse,
+  LockChallengeResponse,
+  CancelChallengeResponse,
+  ResolveChallengeResponse,
+} from "./challenge";
+
+// type definitions for Client
+export {
+  CreateClientRequest,
+  ClientWallet,
+  ClientResponse,
+  OpenChallengeCountResponse,
+  DeleteClientResponse,
+} from "./client";
+
+// type definitions for Payout
+export {
+  PayoutListRequest,
+  PayoutResponse,
+  PayoutListResponse,
+} from "./payout";
+
+// type definitions for Vault
+export {
+  CreateVaultRequest,
+  UpdateVaultRequest,
+  GenerateTransactionRequest,
+  VaultResponse,
+  GenerateTransactionResponse,
+  TransactionResponse,
+} from "./vault";

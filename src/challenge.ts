@@ -4,7 +4,7 @@ import { queryString } from "./queryString";
 import { AxiosOptions, Chain, PayoutType, Environment, ChallengeState } from "./types";
 import { AxiosResponse } from "axios";
 
-interface ChallengeResponse {
+export type ChallengeResponse = {
   /** challenge id */
   id: number;
   /** limit of players able to join challenge */
@@ -27,7 +27,7 @@ interface ChallengeResponse {
   signatures: Signature[];
 }
 
-interface PayoutResponse {
+export type PayoutResponse = {
   /** payout id */
   id: number;
   /** entry fee per player for the challenge */
@@ -53,7 +53,7 @@ interface PayoutResponse {
   };
 }
 
-interface MintResponse {
+export type MintResponse = {
   /** address of mint */
   blockchainAddress: string;
   /** the decimal position of mint */
@@ -64,7 +64,7 @@ interface MintResponse {
   ticker: string;
 }
 
-interface Pot {
+export type Pot = {
   /** mint of token */
   mint: string;
   /** amount of token */
@@ -73,7 +73,7 @@ interface Pot {
   uiAmount: string;
 }
 
-interface Signature {
+export type Signature = {
   /** what the transaction did ex. CREATING, LOCKING... */
   state: string;
   /** transaction hash */
@@ -82,7 +82,7 @@ interface Signature {
   timestamp: string;
 }
 
-interface WinningResponse {
+export type WinningResponse = {
   /** winning player */
   player: string;
   /** actual amount won */
@@ -91,7 +91,7 @@ interface WinningResponse {
   uiAmount: string;
 }
 
-interface NftPlayer {
+export type NftPlayer = {
   /** player address */
   player: string;
   /** all offerings player has put in nft challenge */
@@ -119,7 +119,7 @@ const ChallengeListRequest = z.object({
  * @param {string} page - The page for pagination.
  * @param {number} pageLimit - The limit for the number of items per page.
  */
-type ChallengeListRequest = z.input<typeof ChallengeListRequest>
+export type ChallengeListRequest = z.input<typeof ChallengeListRequest>
 
 interface ChallengeListResponse {
   /** list of challenges */
@@ -142,9 +142,9 @@ const CreateChallengeRequest = z.object({
  * @property {number} limit - Player limit of the challenge, default to 2 (optional)
  * @property {boolean} isVerified - If challenge should be closed to public.
  */
-type CreateChallengeRequest = z.input<typeof CreateChallengeRequest>
+export type CreateChallengeRequest = z.input<typeof CreateChallengeRequest>
 
-interface CreateChallengeResponse {
+export type CreateChallengeResponse = {
   /** challenge id */
   challengeId: number;
   /** timestamp when challenge has been queued to be created */
@@ -169,7 +169,7 @@ amount: z.number()
  * @property {string} mint - The mint of the token.
  * @property {number} amount - The amount of the token to join with.
  */
-type Offering = z.input<typeof Offering>
+export type Offering = z.input<typeof Offering>
 
 const JoinChallengeRequest = z.object({
   challengeId: z.number(),
@@ -185,9 +185,9 @@ const JoinChallengeRequest = z.object({
  * @property {boolean} [gasless] - Indicates whether the join should be gasless (optional).
  * @property {Offering[]} [offerings] - An array of offerings if the challenge is an NFT (optional).
  */
-type JoinChallengeRequest = z.input<typeof JoinChallengeRequest>
+export type JoinChallengeRequest = z.input<typeof JoinChallengeRequest>
 
-interface JoinChallengeResponse {
+export type JoinChallengeResponse = {
   /** base64 encoded transaction ready to be signed and sent */
   transaction: string;
 }
@@ -204,21 +204,21 @@ const LeaveChallengeRequest = z.object({
  * @property {string} playerPubkey - The public key of the player who wants to leave the challenge.
  * @property {boolean} gasless - Indicates whether the leave operation should be gasless (optional).
  */
-type LeaveChallengeRequest = z.input<typeof LeaveChallengeRequest>
+export type LeaveChallengeRequest = z.input<typeof LeaveChallengeRequest>
 
-interface LeaveChallengeResponse {
+export type LeaveChallengeResponse = {
   /** base64 encoded transaction ready to be signed and sent */
   transaction: string;
 }
 
-interface LockChallengeResponse {
+export type LockChallengeResponse = {
   /** the challenge id that has been queued to be locked */
   challengeId: number;
   /** timestamp when event has been queued */
   lockingAt: string;
 }
 
-interface CancelChallengeResponse {
+export type CancelChallengeResponse = {
   /** the challenge id that has been queued to be locked */
   challengeId: number;
   /** timestamp when event has been queued */
@@ -235,7 +235,7 @@ const FungibleTokenPayout = z.object({
  * @property {string} amount - The amount of the pot.
  * @property {string} to - The address of the player within the challenge.
  */
-type FungibleTokenPayout = z.input<typeof FungibleTokenPayout>
+export type FungibleTokenPayout = z.input<typeof FungibleTokenPayout>
 
 const NonFungibleTokenPayout = z.object({
   offering: z.string(),
@@ -247,7 +247,7 @@ const NonFungibleTokenPayout = z.object({
  * @property {string} offering - The address of the offering.
  * @property {string} to - The address of the player within the challenge.
  */
-type NonFungibleTokenPayout = z.input<typeof NonFungibleTokenPayout>
+export type NonFungibleTokenPayout = z.input<typeof NonFungibleTokenPayout>
 
 const ResolveChallengeRequest = z.object({
   challengeId: z.number(),
@@ -260,9 +260,9 @@ const ResolveChallengeRequest = z.object({
  * @property {(FungibleTokenPayout[] | NonFungibleTokenPayout[])} payout - The payout of the challenge,
  * which can be an array of fungible or non-fungible token payouts.
  */
-type ResolveChallengeRequest = z.input<typeof ResolveChallengeRequest>
+export type ResolveChallengeRequest = z.input<typeof ResolveChallengeRequest>
 
-interface ResolveChallengeResponse {
+export type ResolveChallengeResponse = {
   /** id of challenge */
   challengeId: number;
   /** payout of the challenge */
@@ -271,12 +271,17 @@ interface ResolveChallengeResponse {
   resolvingAt: string;
 }
 
-interface ResolveChallengeWithOneWinnerRequest {
-  /** challenge id */
-  challengeId: number;
-  /** payout of the challenge */
-  winner: string;
-}
+const ResolveChallengeWithOneWinnerRequest = z.object({
+  challengeId: z.number(),
+  winner: z.string()
+})
+
+/**
+ * Resolve Challenge With One Winner Request
+ * @param {number} challengeId - The ID of the challenge.
+ * @param {string} winner - The winner address of the challenge.
+ */
+export type ResolveChallengeWithOneWinnerRequest = z.input<typeof ResolveChallengeWithOneWinnerRequest>
 
 export class Challenge {
   private readonly apiClient: ApiClient;
