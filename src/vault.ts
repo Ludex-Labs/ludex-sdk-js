@@ -2,7 +2,8 @@ import { z } from "zod";
 import { ApiClient } from "./apiClient";
 import { AxiosOptions, Chain, RedeemType } from "./types";
 import {AxiosResponse} from "axios";
-interface VaultResponse {
+
+export type VaultResponse = {
   /** name of vault */
   name: string;
   /** blockchain address of vault */
@@ -68,14 +69,14 @@ const GenerateTransactionRequest = z.object({
 export type GenerateTransactionRequest = z.input<typeof GenerateTransactionRequest>
 
 
-interface GenerateTransactionResponse {
+export type GenerateTransactionResponse = {
   /** id of transaction for look up */
   transactionId: number;
   /** base64 encoded transaction ready to be signed and sent */
   transaction: string;
 }
 
-interface TransactionResponse {
+export type TransactionResponse = {
   /** id of transaction */
   id: number;
   /** signature of sent transaction */

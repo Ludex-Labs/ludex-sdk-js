@@ -42,6 +42,9 @@ import {
   CreateVaultRequest,
   UpdateVaultRequest,
   GenerateTransactionRequest,
+  VaultResponse,
+  GenerateTransactionResponse,
+  TransactionResponse,
 } from "./vault";
 import {
   AxiosOptions,
@@ -145,4 +148,11 @@ export {
 export { PayoutListRequest, PayoutResponse, PayoutListResponse };
 
 // type definitions for Vault
-export { CreateVaultRequest, UpdateVaultRequest, GenerateTransactionRequest };
+export {
+  CreateVaultRequest,
+  UpdateVaultRequest,
+  GenerateTransactionRequest,
+  VaultResponse,
+  GenerateTransactionResponse,
+  TransactionResponse,
+};
