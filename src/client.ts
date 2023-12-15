@@ -3,7 +3,7 @@ import { ApiClient } from "./apiClient";
 import { AxiosOptions, Chain } from "./types";
 import {AxiosResponse} from "axios";
 
-interface ClientResponse {
+export type ClientResponse = {
   /** client id */
   id: number;
   /** name of client */
@@ -24,7 +24,7 @@ const CreateClientRequest = z.object({
  */
 export type CreateClientRequest = z.input<typeof CreateClientRequest>
 
-interface OpenChallengeCountResponse {
+export type OpenChallengeCountResponse = {
   /** Current open challenge count */
   count: number;
   /** Open challenge limit */
@@ -43,7 +43,7 @@ const ClientWallet = z.object({
  */
 export type ClientWallet = z.input<typeof ClientWallet>
 
-interface DeleteClientResponse {
+export type DeleteClientResponse = {
   /** id of deleted client */
   id: number;
 }

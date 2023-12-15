@@ -23,7 +23,14 @@ import {
   CancelChallengeResponse,
   ResolveChallengeResponse,
 } from "./challenge";
-import { Client, CreateClientRequest, ClientWallet } from "./client";
+import {
+  Client,
+  CreateClientRequest,
+  ClientWallet,
+  ClientResponse,
+  OpenChallengeCountResponse,
+  DeleteClientResponse,
+} from "./client";
 import { Payout, PayoutListRequest } from "./payout";
 import {
   Vault,
@@ -121,7 +128,13 @@ export {
 };
 
 // type definitions for Client
-export { CreateClientRequest, ClientWallet };
+export {
+  CreateClientRequest,
+  ClientWallet,
+  ClientResponse,
+  OpenChallengeCountResponse,
+  DeleteClientResponse,
+};
 
 // type definitions for Payout
 export { PayoutListRequest };
