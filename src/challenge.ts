@@ -4,7 +4,7 @@ import { queryString } from "./queryString";
 import { AxiosOptions, Chain, PayoutType, Environment, ChallengeState } from "./types";
 import { AxiosResponse } from "axios";
 
-interface ChallengeResponse {
+export type ChallengeResponse = {
   /** challenge id */
   id: number;
   /** limit of players able to join challenge */
@@ -27,7 +27,7 @@ interface ChallengeResponse {
   signatures: Signature[];
 }
 
-interface PayoutResponse {
+export type PayoutResponse = {
   /** payout id */
   id: number;
   /** entry fee per player for the challenge */
@@ -53,7 +53,7 @@ interface PayoutResponse {
   };
 }
 
-interface MintResponse {
+export type MintResponse = {
   /** address of mint */
   blockchainAddress: string;
   /** the decimal position of mint */
@@ -64,7 +64,7 @@ interface MintResponse {
   ticker: string;
 }
 
-interface Pot {
+export type Pot = {
   /** mint of token */
   mint: string;
   /** amount of token */
@@ -73,7 +73,7 @@ interface Pot {
   uiAmount: string;
 }
 
-interface Signature {
+export type Signature = {
   /** what the transaction did ex. CREATING, LOCKING... */
   state: string;
   /** transaction hash */
@@ -82,7 +82,7 @@ interface Signature {
   timestamp: string;
 }
 
-interface WinningResponse {
+export type WinningResponse = {
   /** winning player */
   player: string;
   /** actual amount won */
@@ -91,7 +91,7 @@ interface WinningResponse {
   uiAmount: string;
 }
 
-interface NftPlayer {
+export type NftPlayer = {
   /** player address */
   player: string;
   /** all offerings player has put in nft challenge */
@@ -144,7 +144,7 @@ const CreateChallengeRequest = z.object({
  */
 export type CreateChallengeRequest = z.input<typeof CreateChallengeRequest>
 
-interface CreateChallengeResponse {
+export type CreateChallengeResponse = {
   /** challenge id */
   challengeId: number;
   /** timestamp when challenge has been queued to be created */
@@ -187,7 +187,7 @@ const JoinChallengeRequest = z.object({
  */
 export type JoinChallengeRequest = z.input<typeof JoinChallengeRequest>
 
-interface JoinChallengeResponse {
+export type JoinChallengeResponse = {
   /** base64 encoded transaction ready to be signed and sent */
   transaction: string;
 }
@@ -206,19 +206,19 @@ const LeaveChallengeRequest = z.object({
  */
 export type LeaveChallengeRequest = z.input<typeof LeaveChallengeRequest>
 
-interface LeaveChallengeResponse {
+export type LeaveChallengeResponse = {
   /** base64 encoded transaction ready to be signed and sent */
   transaction: string;
 }
 
-interface LockChallengeResponse {
+export type LockChallengeResponse = {
   /** the challenge id that has been queued to be locked */
   challengeId: number;
   /** timestamp when event has been queued */
   lockingAt: string;
 }
 
-interface CancelChallengeResponse {
+export type CancelChallengeResponse = {
   /** the challenge id that has been queued to be locked */
   challengeId: number;
   /** timestamp when event has been queued */
@@ -262,7 +262,7 @@ const ResolveChallengeRequest = z.object({
  */
 export type ResolveChallengeRequest = z.input<typeof ResolveChallengeRequest>
 
-interface ResolveChallengeResponse {
+export type ResolveChallengeResponse = {
   /** id of challenge */
   challengeId: number;
   /** payout of the challenge */

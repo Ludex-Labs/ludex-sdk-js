@@ -10,6 +10,18 @@ import {
   NonFungibleTokenPayout,
   ResolveChallengeRequest,
   ResolveChallengeWithOneWinnerRequest,
+  ChallengeResponse,
+  PayoutResponse,
+  MintResponse,
+  Pot,
+  Signature,
+  WinningResponse,
+  CreateChallengeResponse,
+  JoinChallengeResponse,
+  LeaveChallengeResponse,
+  LockChallengeResponse,
+  CancelChallengeResponse,
+  ResolveChallengeResponse,
 } from "./challenge";
 import { Client, CreateClientRequest, ClientWallet } from "./client";
 import { Payout, PayoutListRequest } from "./payout";
@@ -94,6 +106,18 @@ export {
   NonFungibleTokenPayout,
   ResolveChallengeRequest,
   ResolveChallengeWithOneWinnerRequest,
+  ChallengeResponse,
+  PayoutResponse,
+  MintResponse,
+  Pot,
+  Signature,
+  WinningResponse,
+  CreateChallengeResponse,
+  JoinChallengeResponse,
+  LeaveChallengeResponse,
+  LockChallengeResponse,
+  CancelChallengeResponse,
+  ResolveChallengeResponse,
 };
 
 // type definitions for Client
