@@ -3,6 +3,7 @@ import { ApiClient } from "./apiClient";
 import { queryString } from "./queryString";
 import { AxiosOptions, Chain, PayoutType, Environment, ChallengeState } from "./types";
 import { AxiosResponse } from "axios";
+import { Transaction } from "@solana/web3.js";
 
 export type ChallengeResponse = {
   /** challenge id */
@@ -349,10 +350,30 @@ export class Challenge {
   ): Promise<AxiosResponse<JoinChallengeResponse>> {
     const joinChallenge = JoinChallengeRequest.parse(_joinChallenge)
     const { challengeId, ...joinChallengeBody } = joinChallenge;
-    return this.apiClient.issuePostRequest<JoinChallengeResponse>(
+    const challenge = await this.getChallenge(challengeId)
+    const challengeChain = challenge.data.payout.chain
+    const tx = await this.apiClient.issuePostRequest<JoinChallengeResponse>(
       `/${challengeId}/join`,
       joinChallengeBody
     );
+
+    let processedTransaction;
+    switch (challengeChain) {
+      case Chain.AVALANCHE:
+        processedTransaction = JSON.parse(Buffer.from(tx.data.transaction, "base64").toString("utf-8"));
+        break;
+      case Chain.SOLANA:
+        processedTransaction = Transaction.from(Buffer.from(tx.data.transaction, "base64"));
+        break;
+    }
+
+    return {
+      ...tx,
+      data: {
+        ...tx.data,
+        transaction: processedTransaction
+      }
+    };
   }
 
   /**
