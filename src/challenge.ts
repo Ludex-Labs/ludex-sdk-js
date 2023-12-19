@@ -386,10 +386,30 @@ export class Challenge {
   ): Promise<AxiosResponse<LeaveChallengeResponse>> {
     const leaveChallenge = LeaveChallengeRequest.parse(_leaveChallenge);
     const { challengeId, ...leaveChallengeBody } = leaveChallenge;
-    return this.apiClient.issuePostRequest<LeaveChallengeResponse>(
+    const challenge = await this.getChallenge(challengeId)
+    const challengeChain = challenge.data.payout.chain
+    const tx = await this.apiClient.issuePostRequest<LeaveChallengeResponse>(
       `/${challengeId}/leave`,
       leaveChallengeBody
     );
+
+    let processedTransaction;
+    switch (challengeChain) {
+      case Chain.AVALANCHE:
+        processedTransaction = JSON.parse(Buffer.from(tx.data.transaction, "base64").toString("utf-8"));
+        break;
+      case Chain.SOLANA:
+        processedTransaction = Transaction.from(Buffer.from(tx.data.transaction, "base64"));
+        break;
+    }
+
+    return {
+      ...tx,
+      data: {
+        ...tx.data,
+        transaction: processedTransaction
+      }
+    };
   }
 
   /**
