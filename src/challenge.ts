@@ -319,7 +319,7 @@ export class Challenge {
   public async getChallenges(
     _filters: ChallengeListRequest
   ): Promise<AxiosResponse<ChallengeResponse[]>> {
-    const filters = ChallengeListRequest.parse(_filters)
+    const filters = ChallengeListRequest.parse(_filters);
     return this.apiClient.issueGetRequest<ChallengeResponse[]>(
       `/${queryString(filters)}`
     );
@@ -333,7 +333,7 @@ export class Challenge {
   public async createChallenge(
     _challenge: CreateChallengeRequest
   ): Promise<AxiosResponse<CreateChallengeResponse>> {
-    const challenge = CreateChallengeRequest.parse(_challenge)
+    const challenge = CreateChallengeRequest.parse(_challenge);
     return this.apiClient.issuePostRequest<CreateChallengeResponse>(
       "/",
       challenge
@@ -348,32 +348,12 @@ export class Challenge {
   public async generateJoin(
     _joinChallenge: JoinChallengeRequest
   ): Promise<AxiosResponse<JoinChallengeResponse>> {
-    const joinChallenge = JoinChallengeRequest.parse(_joinChallenge)
+    const joinChallenge = JoinChallengeRequest.parse(_joinChallenge);
     const { challengeId, ...joinChallengeBody } = joinChallenge;
-    const challenge = await this.getChallenge(challengeId)
-    const challengeChain = challenge.data.payout.chain
-    const tx = await this.apiClient.issuePostRequest<JoinChallengeResponse>(
+    return this.apiClient.issuePostRequest<JoinChallengeResponse>(
       `/${challengeId}/join`,
       joinChallengeBody
     );
-
-    let processedTransaction;
-    switch (challengeChain) {
-      case Chain.AVALANCHE:
-        processedTransaction = JSON.parse(Buffer.from(tx.data.transaction, "base64").toString("utf-8"));
-        break;
-      case Chain.SOLANA:
-        processedTransaction = Transaction.from(Buffer.from(tx.data.transaction, "base64"));
-        break;
-    }
-
-    return {
-      ...tx,
-      data: {
-        ...tx.data,
-        transaction: processedTransaction
-      }
-    };
   }
 
   /**
@@ -386,30 +366,10 @@ export class Challenge {
   ): Promise<AxiosResponse<LeaveChallengeResponse>> {
     const leaveChallenge = LeaveChallengeRequest.parse(_leaveChallenge);
     const { challengeId, ...leaveChallengeBody } = leaveChallenge;
-    const challenge = await this.getChallenge(challengeId)
-    const challengeChain = challenge.data.payout.chain
-    const tx = await this.apiClient.issuePostRequest<LeaveChallengeResponse>(
+    return this.apiClient.issuePostRequest<LeaveChallengeResponse>(
       `/${challengeId}/leave`,
       leaveChallengeBody
     );
-
-    let processedTransaction;
-    switch (challengeChain) {
-      case Chain.AVALANCHE:
-        processedTransaction = JSON.parse(Buffer.from(tx.data.transaction, "base64").toString("utf-8"));
-        break;
-      case Chain.SOLANA:
-        processedTransaction = Transaction.from(Buffer.from(tx.data.transaction, "base64"));
-        break;
-    }
-
-    return {
-      ...tx,
-      data: {
-        ...tx.data,
-        transaction: processedTransaction
-      }
-    };
   }
 
   /**
@@ -450,7 +410,7 @@ export class Challenge {
   public async resolveChallenge(
     _resolveChallenge: ResolveChallengeRequest
   ): Promise<AxiosResponse<ResolveChallengeResponse>> {
-    const resolveChallenge = ResolveChallengeRequest.parse(_resolveChallenge)
+    const resolveChallenge = ResolveChallengeRequest.parse(_resolveChallenge);
     const { challengeId, ...resolveChallengeBody } = resolveChallenge;
     return this.apiClient.issuePatchRequest<ResolveChallengeResponse>(
       `/${challengeId}/resolve`,
@@ -493,5 +453,19 @@ export class Challenge {
       `/${challengeId}/resolve`,
       { payout: payout }
     );
+  }
+
+  public async parseTransaction(
+    txn: JoinChallengeResponse | LeaveChallengeResponse,
+    chain: Chain
+  ) {
+    switch (chain) {
+      case Chain.AVALANCHE:
+        return JSON.parse(
+          Buffer.from(txn.transaction, "base64").toString("utf-8")
+        );
+      case Chain.SOLANA:
+        return Transaction.from(Buffer.from(txn.transaction, "base64"));
+    }
   }
 }
