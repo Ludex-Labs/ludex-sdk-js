@@ -3,7 +3,6 @@ import { ApiClient } from "./apiClient";
 import { queryString } from "./queryString";
 import { AxiosOptions, Chain, PayoutType, Environment, ChallengeState } from "./types";
 import { AxiosResponse } from "axios";
-import { Transaction } from "@solana/web3.js";
 
 export type ChallengeResponse = {
   /** challenge id */
@@ -453,19 +452,5 @@ export class Challenge {
       `/${challengeId}/resolve`,
       { payout: payout }
     );
-  }
-
-  public async parseTransaction(
-    txn: JoinChallengeResponse | LeaveChallengeResponse,
-    chain: Chain
-  ) {
-    switch (chain) {
-      case Chain.AVALANCHE:
-        return JSON.parse(
-          Buffer.from(txn.transaction, "base64").toString("utf-8")
-        );
-      case Chain.SOLANA:
-        return Transaction.from(Buffer.from(txn.transaction, "base64"));
-    }
   }
 }

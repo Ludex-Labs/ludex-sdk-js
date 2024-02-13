@@ -4,6 +4,7 @@ import { Client } from "./client";
 import { Payout } from "./payout";
 import { Vault } from "./vault";
 import { AxiosOptions } from "./types";
+export { parseTransaction } from "./utilities";
 
 class OrganizationScoped {
   client: Client;
