@@ -13,7 +13,7 @@ type parseTransactionResponse = Object | Transaction;
  * @param {Chain} chain - The blockchain chain identifier (AVALANCHE or SOLANA) determining the parsing
  *        method and format of the returned object.
  * @returns {Promise<Object | Transaction>} A Promise that resolves to a parsed transaction, which is
- *          either an JSON object for Avalanche or a Solana Transaction object for Solana.
+ *          either a JSON object for Avalanche or a Solana Transaction object for Solana.
  */
 export const parseTransaction = async (
   txn: String,
