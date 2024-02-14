@@ -1,19 +1,17 @@
-import { Transaction } from "@solana/web3.js";
-import { JoinChallengeResponse, LeaveChallengeResponse } from "./challenge";
 import { Chain } from "./types";
 
-type parseTransactionResponse = Object | Transaction;
+type parseTransactionResponse = Object | Buffer;
 
 /**
  * Parses a transaction encoded in base64 based on the specified blockchain chain.
  * It returns an generic objects to represent a transaction for Avalanche transactions and a
- * Solana Transaction object for Solana transactions.
+ * buffer for Solana transactions.
  *
  * @param {String} txn - The transaction transaction information encoded in base64.
  * @param {Chain} chain - The blockchain chain identifier (AVALANCHE or SOLANA) determining the parsing
  *        method and format of the returned object.
- * @returns {Promise<Object | Transaction>} A Promise that resolves to a parsed transaction, which is
- *          either a JSON object for Avalanche or a Solana Transaction object for Solana.
+ * @returns {Promise<Object | Buffer>} A Promise that resolves to a parsed transaction, which is
+ *          either a JSON object for Avalanche or a Buffer for Solana.
  */
 export const parseTransaction = async (
   txn: String,
@@ -25,6 +23,6 @@ export const parseTransaction = async (
         Buffer.from(txn, "base64").toString("utf-8")
       )[0];
     case Chain.SOLANA:
-      return Transaction.from(Buffer.from(txn, "base64"));
+      return Buffer.from(txn, "base64");
   }
 };
