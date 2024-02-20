@@ -4,7 +4,7 @@ import { Chain } from "./types";
  * Parses a transaction encoded in base64 based on the specified blockchain chain.
  * It returns an generic objects to represent a transaction for Avalanche transactions and a
  * buffer for Solana transactions.
- * 
+ *
  * For Avalanche, it returns a JSON object representing the transaction, suitable for
  * libraries like ethers.js. Example usage:
  * ```
@@ -39,4 +39,46 @@ export const parseTransaction = async (
     case Chain.SOLANA:
       return Buffer.from(txn, "base64");
   }
+};
+
+interface EthersPopulatedTransaction {
+  to?: string;
+  from?: string;
+  nonce?: number;
+
+  gasLimit?: any; //BigNumber;
+  gasPrice?: any; //BigNumber;
+
+  data?: string;
+  value?: any; //BigNumber;
+  chainId?: number;
+
+  type?: number;
+  accessList?: any; //AccessList;
+
+  maxFeePerGas?: any; //BigNumber;
+  maxPriorityFeePerGas?: any; //BigNumber;
+
+  customData?: Record<string, any>;
+  ccipReadEnabled?: boolean;
+}
+
+/** 
+* Our SDK will output a Ethers.js compatible transaction object by default. If you are using Viem, you can use this utility function
+* to convert the object to Viem compatible.
+* @param {Object} ethersTransaction - The ethers transaction object
+* @returns {Object} A Viem compatible tranasaction object
+**/
+export const parseViemTransaction = (
+  ethersTransaction: EthersPopulatedTransaction
+) => {
+  const { gasLimit, ...rest } = ethersTransaction;
+
+  const viemTransaction = {
+    ...rest,
+    // Only add the gas property if gasLimit is defined
+    ...(gasLimit !== undefined && { gas: gasLimit }),
+  };
+
+  return viemTransaction;
 };
