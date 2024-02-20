@@ -76,7 +76,6 @@ export const parseViemTransaction = (
 
   const viemTransaction = {
     ...rest,
-    // Only add the gas property if gasLimit is defined
     ...(gasLimit !== undefined && { gas: gasLimit }),
   };
 
