@@ -318,7 +318,7 @@ export class Challenge {
   public async getChallenges(
     _filters: ChallengeListRequest
   ): Promise<AxiosResponse<ChallengeResponse[]>> {
-    const filters = ChallengeListRequest.parse(_filters)
+    const filters = ChallengeListRequest.parse(_filters);
     return this.apiClient.issueGetRequest<ChallengeResponse[]>(
       `/${queryString(filters)}`
     );
@@ -332,7 +332,7 @@ export class Challenge {
   public async createChallenge(
     _challenge: CreateChallengeRequest
   ): Promise<AxiosResponse<CreateChallengeResponse>> {
-    const challenge = CreateChallengeRequest.parse(_challenge)
+    const challenge = CreateChallengeRequest.parse(_challenge);
     return this.apiClient.issuePostRequest<CreateChallengeResponse>(
       "/",
       challenge
@@ -347,7 +347,7 @@ export class Challenge {
   public async generateJoin(
     _joinChallenge: JoinChallengeRequest
   ): Promise<AxiosResponse<JoinChallengeResponse>> {
-    const joinChallenge = JoinChallengeRequest.parse(_joinChallenge)
+    const joinChallenge = JoinChallengeRequest.parse(_joinChallenge);
     const { challengeId, ...joinChallengeBody } = joinChallenge;
     return this.apiClient.issuePostRequest<JoinChallengeResponse>(
       `/${challengeId}/join`,
@@ -409,7 +409,7 @@ export class Challenge {
   public async resolveChallenge(
     _resolveChallenge: ResolveChallengeRequest
   ): Promise<AxiosResponse<ResolveChallengeResponse>> {
-    const resolveChallenge = ResolveChallengeRequest.parse(_resolveChallenge)
+    const resolveChallenge = ResolveChallengeRequest.parse(_resolveChallenge);
     const { challengeId, ...resolveChallengeBody } = resolveChallenge;
     return this.apiClient.issuePatchRequest<ResolveChallengeResponse>(
       `/${challengeId}/resolve`,
