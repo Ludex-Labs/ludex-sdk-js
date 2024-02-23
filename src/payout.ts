@@ -84,6 +84,6 @@ export class Payout {
     _filters?: PayoutListRequest
   ): Promise<AxiosResponse<PayoutListResponse>> {
     const filters: PayoutListRequest = PayoutListRequest.parse(_filters);
-    return this.apiClient.issueGetRequest(`/?${queryString(filters)}`);
+    return this.apiClient.issueGetRequest(`/${queryString(filters)}`);
   }
 }
