@@ -1,7 +1,13 @@
 import { z } from "zod";
 import { ApiClient } from "./apiClient";
 import { queryString } from "./queryString";
-import { AxiosOptions, Chain, PayoutState, PayoutType } from "./types";
+import {
+  AxiosOptions,
+  Chain,
+  Environment,
+  PayoutState,
+  PayoutType,
+} from "./types";
 import { AxiosResponse } from "axios";
 
 export type PayoutResponse = {
@@ -17,7 +23,7 @@ export type PayoutResponse = {
   providerRake: string;
   /**  Type of the payout (NFT, FT, Native) */
   type: "NFT" | "FT" | "Native";
-}
+};
 
 const PayoutListRequest = z
   .object({
@@ -25,6 +31,8 @@ const PayoutListRequest = z
     state: z.nativeEnum(PayoutState).optional(),
     type: z.nativeEnum(PayoutType).optional(),
     chain: z.nativeEnum(Chain).optional(),
+    limit: z.number().optional(),
+    environment: z.nativeEnum(Environment).optional(),
     cursor: z.number().optional(),
     pageLimit: z.number().optional(),
   })
@@ -48,7 +56,7 @@ export type PayoutListResponse = {
   cursor?: number;
   /** remaining records for pagination */
   remainingRecords?: number;
-}
+};
 
 export class Payout {
   private readonly apiClient: ApiClient;
