@@ -1,8 +1,31 @@
 import { z } from "zod";
 import { ApiClient } from "./apiClient";
 import { queryString } from "./queryString";
-import { AxiosOptions, Chain, PayoutState, PayoutType } from "./types";
+import {
+  AxiosOptions,
+  Chain,
+  Environment,
+  PayoutState,
+  PayoutType,
+} from "./types";
 import { AxiosResponse } from "axios";
+
+export type Mint = {
+  /** Mint id */
+  id: number;
+  /** Mint icon */
+  icon: string;
+  /** Mint ticket */
+  ticker: string;
+  /** Mint blockchain address */
+  blockchainAddress: string;
+  /** Mint decimal position */
+  decimalPosition: number;
+  /** Chain of the mint */
+  chain: Chain;
+  /** Environment of the mint */
+  environment: Environment;
+};
 
 export type PayoutResponse = {
   /** Payout id */
@@ -15,9 +38,19 @@ export type PayoutResponse = {
   mediatorRake: string;
   /**  Provider rake of the payout */
   providerRake: string;
+  /**  Mediator fee of the payout */
+  mediatorFee: string;
+  /**  Provider fee of the payout */
+  providerFee: string;
   /**  Type of the payout (NFT, FT, Native) */
   type: "NFT" | "FT" | "Native";
-}
+  /**  Player number limit of the payout */
+  limit: number;
+  /**  Environment of the payout */
+  environment: Environment;
+  /**  Mint of the payout */
+  Mint: Mint;
+};
 
 const PayoutListRequest = z
   .object({
@@ -48,7 +81,7 @@ export type PayoutListResponse = {
   cursor?: number;
   /** remaining records for pagination */
   remainingRecords?: number;
-}
+};
 
 export class Payout {
   private readonly apiClient: ApiClient;
