@@ -2,6 +2,7 @@ import { z } from "zod";
 import { Challenge } from "./challenge";
 import { Client } from "./client";
 import { Payout } from "./payout";
+import { Mint } from "./mint";
 import { Vault } from "./vault";
 import { AxiosOptions } from "./types";
 export { parseTransaction, parseViemTransaction } from "./utilities";
@@ -9,6 +10,7 @@ export { parseTransaction, parseViemTransaction } from "./utilities";
 class OrganizationScoped {
   client: Client;
   payout: Payout;
+  mint: Mint;
 
   /**
    * Create organization scoped api client
@@ -23,6 +25,7 @@ class OrganizationScoped {
     const organizationApiKey = z.string().parse(_organizationApiKey);
     this.client = new Client(organizationApiKey, options);
     this.payout = new Payout(organizationApiKey, options);
+    this.mint = new Mint(organizationApiKey, options);
   }
 }
 
@@ -74,7 +77,7 @@ export {
   ResolveChallengeWithOneWinnerRequest,
   ChallengeResponse,
   PayoutResponse as ChallengePayoutResponse,
-  MintResponse,
+  MintResponse as ChallengeMintResposne,
   Pot,
   Signature,
   WinningResponse,
@@ -101,6 +104,13 @@ export {
   PayoutResponse,
   PayoutListResponse,
 } from "./payout";
+
+// type definitions for Mint
+export {
+  MintListRequest,
+  MintResponse,
+  MintListResponse,
+} from "./mint";
 
 // type definitions for Vault
 export {

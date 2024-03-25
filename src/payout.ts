@@ -58,6 +58,8 @@ const PayoutListRequest = z
     state: z.nativeEnum(PayoutState).optional(),
     type: z.nativeEnum(PayoutType).optional(),
     chain: z.nativeEnum(Chain).optional(),
+    limit: z.number().optional(),
+    environment: z.nativeEnum(Environment).optional(),
     cursor: z.number().optional(),
     pageLimit: z.number().optional(),
   })
